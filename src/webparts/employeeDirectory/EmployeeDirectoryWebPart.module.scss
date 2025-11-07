@@ -1,0 +1,478 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+// .employeeDirectory {
+//   overflow: hidden;
+//   padding: 1em;
+//   color: "[theme:bodyText, default: #323130]";
+//   color: var(--bodyText);
+//   &.teams {
+//     font-family: $ms-font-family-fallbacks;
+//   }
+// }
+
+// .welcome {
+//   text-align: center;
+// }
+
+// .welcomeImage {
+//   width: 100%;
+//   max-width: 420px;
+// }
+
+// .links {
+//   a {
+//     text-decoration: none;
+//     color: "[theme:link, default:#03787c]";
+//     color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
+
+//     &:hover {
+//       text-decoration: underline;
+//       color: "[theme:linkHovered, default: #014446]";
+//       color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
+//     }
+//   }
+// }
+// @import '~@types/devextreme/dx.light.css';
+
+// .header {
+//   border-bottom: 1px solid #e1dfdd;
+//   position: sticky; top: 0; background: #fff; z-index: 10;
+// }
+// .headerInner { max-width: 1200px; margin: 0 auto; padding: 16px; }
+// .titleRow { display:flex; gap:12px; align-items:center; margin-bottom:12px; }
+// .titleIcon { width:48px; height:48px; border-radius:999px; background:#eef2ff; display:flex; align-items:center; justify-content:center; font-size:22px; }
+// .subtitle { color:#605e5c; }
+
+// .toolbar { display:grid; grid-template-columns: 1fr 180px 180px; gap:8px; }
+// .badgeLite { padding:2px 8px; border-radius:999px; background:#f3f2f1; font-size:12px; }
+
+// .cardsWrap { max-width: 1200px; margin: 24px auto; padding: 0 16px; }
+// .cardsGrid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:16px; }
+// @media (max-width: 1200px) { .cardsGrid { grid-template-columns: repeat(3,1fr); } }
+// @media (max-width: 900px)  { .cardsGrid { grid-template-columns: repeat(2,1fr); } }
+// @media (max-width: 600px)  { .cardsGrid { grid-template-columns: 1fr; } }
+
+// .card {
+//   border-radius: 16px;
+//   box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.10);
+//   background:#fff; overflow:hidden; display:flex; flex-direction:column; border:1px solid #eee;
+// }
+// .cardImg { width:100%; height:190px; object-fit:cover; }
+// .cardBody { padding:14px; }
+// .name { font-weight:600; margin:2px 0; }
+// .title { color:#605e5c; margin-bottom:10px; }
+// .badge { display:inline-block; padding: 4px 8px; border-radius:999px; background:#eef2ff; color:#333; font-size:12px; margin-bottom: 10px; }
+// .meta { color:#605e5c; font-size:13px; display:flex; flex-direction:column; gap:6px; margin:10px 0; }
+// .tagRow { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+// .tag { padding:6px 10px; border-radius:999px; background:#f3f2f1; font-size:12px; white-space:nowrap; }
+// .cardFooter { padding:12px 14px; display:flex; justify-content:flex-end; gap:8px; }
+// .btn {
+//   background:#0b0b0c; color:#fff; border:none; border-radius:10px; padding:8px 14px; cursor:pointer;
+// }
+
+// .iconRow { display:flex; gap:8px; margin-top:10px; opacity:.85; }
+// .iconBtn {
+//   width:30px; height:30px; border-radius:8px; border:1px solid #e5e5e5;
+//   display:flex; align-items:center; justify-content:center; background:#fff;
+// }
+
+// .emptyState { grid-column:1/-1; text-align:center; color:#605e5c; padding:40px; }
+
+// /* RTL tweaks: flip grid/emojis naturally */
+// :global([dir="rtl"]) .meta { align-items:flex-end; }
+// :global([dir="rtl"]) .cardFooter { justify-content:flex-start; }
+
+
+
+.peopleDirectory {
+  background-color: #fafafa;
+  min-height: 500px;
+  width: 1330px;
+  margin-left: -70px;
+  
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  .header {
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 24px;
+    // position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .headerContent {
+    padding: 24px;
+  }
+
+  .titleSection {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      color: #171717;
+    }
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    color: #171717;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #737373;
+    margin: 0;
+  }
+
+  .filters {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .searchBox {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .filterBox {
+    min-width: 200px;
+  }
+
+  .gridContainer {
+    padding: 0 24px 24px;
+
+    :global {
+      .dx-datagrid {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      .dx-datagrid-headers {
+        background-color: #f5f5f5;
+        font-weight: 600;
+      }
+
+      .dx-datagrid-rowsview .dx-row {
+        &:hover {
+          background-color: #f9fafb;
+        }
+      }
+
+      .dx-pager {
+        padding: 16px;
+        border-top: 1px solid #e5e5e5;
+      }
+    }
+  }
+
+  .viewButton {
+    padding: 8px 16px;
+    background-color: #171717;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #404040;
+    }
+  }
+
+  .skillsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .skillBadge {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #525252;
+    white-space: nowrap;
+  }
+
+  .profileContent {
+    padding: 24px;
+  }
+
+  .profileHeader {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .profileImage {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .profileInfo {
+    flex: 1;
+
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: #171717;
+    }
+  }
+
+  .profileRole {
+    font-size: 16px;
+    color: #737373;
+    margin: 0 0 12px 0;
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f5f5f5;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #171717;
+  }
+
+  .messageButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #171717;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #404040;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .separator {
+    height: 1px;
+    background-color: #e5e5e5;
+    margin: 24px 0;
+  }
+
+  .tabContent {
+    padding: 20px 0;
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+      color: #171717;
+    }
+
+    p {
+      margin: 0 0 12px 0;
+      line-height: 1.6;
+    }
+  }
+
+  .bio {
+    color: #525252;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .contactInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contactItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    svg {
+      flex-shrink: 0;
+      color: #737373;
+      margin-top: 2px;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+
+  .label {
+    font-size: 12px;
+    color: #737373;
+    font-weight: 500;
+  }
+
+  .skillsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .skillBadge {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+  }
+
+  .contactDetails {
+    p {
+      margin-bottom: 16px;
+      font-size: 14px;
+
+      strong {
+        font-weight: 600;
+        margin-right: 8px;
+      }
+
+      a {
+        color: #2563eb;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  // DevExtreme overrides
+  :global {
+    .dx-popup-wrapper .dx-popup-content {
+      padding: 0;
+    }
+
+    .dx-tabpanel {
+      .dx-tabs {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        padding: 4px;
+      }
+
+      .dx-tab {
+        background-color: transparent;
+        border: none;
+        margin: 0 4px;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+
+        &.dx-tab-selected {
+          background-color: white;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+
+    .dx-textbox,
+    .dx-selectbox {
+      .dx-texteditor-input {
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+    }
+
+    .dx-textbox {
+      border-radius: 6px;
+    }
+
+    .dx-selectbox {
+      border-radius: 6px;
+    }
+  }
+
+  // Responsive
+  @media (max-width: 768px) {
+    .headerContent {
+      padding: 16px;
+    }
+
+    .titleSection {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .filters {
+      flex-direction: column;
+
+      .searchBox,
+      .filterBox {
+        width: 100%;
+        min-width: 100%;
+      }
+    }
+
+    .gridContainer {
+      padding: 0 16px 16px;
+
+      :global {
+        .dx-datagrid-content {
+          overflow-x: auto;
+        }
+      }
+    }
+
+    .profileHeader {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .profileImage {
+      width: 100px;
+      height: 100px;
+    }
+  }
+}

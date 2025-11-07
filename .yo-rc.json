@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "whichFolder": "subdir",
+    "solutionName": "SAA-Tawasol",
+    "componentType": "webpart",
+    "template": "none",
+    "componentName": "MCC-Service-Actions",
+    "plusBeta": false,
+    "isCreatingSolution": false,
+    "nodeVersion": "22.21.0",
+    "sdksVersions": {},
+    "version": "1.21.1",
+    "libraryName": "saa-tawasol",
+    "libraryId": "891d96c1-e19e-4fcc-8da7-5be7b2b52085",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionShortDescription": "SAA-Tawasol description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false
+  }
+}
