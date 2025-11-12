@@ -25,6 +25,14 @@
           "manifest": "./src/webparts/mccServiceActions/MccServiceActionsWebPart.manifest.json"
         }
       ]
+    },
+    "mcc-requester-view-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/mccRequesterView/MccRequesterViewWebPart.js",
+          "manifest": "./src/webparts/mccRequesterView/MccRequesterViewWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -47,6 +55,7 @@
   "localizedResources": {
     "EmployeeDirectoryWebPartStrings": "lib/webparts/employeeDirectory/loc/{locale}.js",
     "MccServiceRequestWebPartStrings": "lib/webparts/mccServiceRequest/loc/{locale}.js",
-    "MccServiceActionsWebPartStrings": "lib/webparts/mccServiceActions/loc/{locale}.js"
+    "MccServiceActionsWebPartStrings": "lib/webparts/mccServiceActions/loc/{locale}.js",
+    "MccRequesterViewWebPartStrings": "lib/webparts/mccRequesterView/loc/{locale}.js"
   }
 }

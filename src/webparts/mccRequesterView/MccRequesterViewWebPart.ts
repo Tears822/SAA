@@ -6,6 +6,7 @@ import {
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+
 import * as strings from 'MccServiceActionsWebPartStrings';
 import "devextreme";
 import * as $ from "jquery";
@@ -20,18 +21,10 @@ import '@pnp/sp/profiles';
 import type { IAttachmentInfo } from '@pnp/sp/attachments';
 import "@pnp/sp/site-users/web";
 import "@pnp/sp/site-groups/web";
-import * as splist from "../../util";
 
-export interface IMccServiceActionsWebPartProps {
+export interface IMccRequesterViewWebPartProps {
   description: string;
 }
-
-// interface IAssignee {
-//   Id: number;           // SharePoint user Id
-//   Title: string;        // Display name
-//   Email: string;
-//   LoginName: string;
-// }
 
 type ListContentReadyEvent = DevExpress.ui.dxList.ContentReadyEvent;
 
@@ -65,16 +58,11 @@ interface MccRequestItem {
   Created?: string;
   Modified?: string;
   [key: string]: unknown;
-  Assignee?: { Id: number; Title: string; EMail: string } | null;
 }
 
+export default class MccRequesterViewWebPart extends BaseClientSideWebPart<IMccRequesterViewWebPartProps> {
 
-
-export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMccServiceActionsWebPartProps> {
-  private sp: SPFI;
-  private currentUser!: splist.IAssignee;
-  private assignees: splist.IAssignee[] = [];
-  private isViewMode = false;
+  private _sp: SPFI;
 
   public async render(): Promise<void> {
     this.domElement.innerHTML = `
@@ -82,33 +70,15 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
     await this._initGrid();
   }
 
-/** Claim current item to current user: updates form + (optionally) the list item immediately. */
-  
-  private getperformanceRecognitions = (sp: SPFI): DevExpress.data.DataSource<MccRequestItem, number> => {
+  private getperformanceRecognitions = (): DevExpress.data.DataSource<MccRequestItem, number> => {
     const dataSource = new DevExpress.data.DataSource({
       loadMode: "raw",
       key: "Id",
       load: async (): Promise<MccRequestItem[]> => {
-        const raw = await splist.loadMccItems(this.sp, this.TARGET_GROUP_TITLES);
-        console.log('Loaded MCC Items:', raw);
-        // keep your existing mapping (DateRange/ProposedDateRange normalization)
-        return (raw as MccRequestItem[]).map((item) => ({
-          ...item,
-          DateRange: [
-            item.StartDate ? splist.toLocalDateOnly(item.StartDate) : undefined,
-            item.EndDate ? splist.toLocalDateOnly(item.EndDate) : undefined
-          ],
-          ProposedDateRange: [
-            item.ProposedStartDate ? splist.toLocalDateOnly(item.ProposedStartDate) : undefined,
-            item.ProposedEndDate ? splist.toLocalDateOnly(item.ProposedEndDate) : undefined
-          ],
-          // AssigneeId: item.AssigneeId ? item.AssigneeId : null,
-          SpecialistName: item.SpecialistName ? item.SpecialistName : "",
-          SpecialistEmail: item.SpecialistEmail ? item.SpecialistEmail : ""
-        }));
-        // const items = await this.sp.web.lists.getByTitle('MCC_Requests').items();
-        // const typedItems = items as MccRequestItem[];
-        // return typedItems.map((item) => ({
+        // const raw = await this.loadMccItems(this._sp);
+        // console.log('Loaded MCC Items:', raw);
+        // // keep your existing mapping (DateRange/ProposedDateRange normalization)
+        // return (raw as MccRequestItem[]).map((item) => ({
         //   ...item,
         //   DateRange: [
         //     item.StartDate ? this.toLocalDateOnly(item.StartDate) : undefined,
@@ -119,38 +89,99 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
         //     item.ProposedEndDate ? this.toLocalDateOnly(item.ProposedEndDate) : undefined
         //   ],
         // }));
+        const me = await this._sp.web.currentUser();       // has Id/Title/Email
+        const myId = (me as any).Id ?? (me as any).ID;
+        const items = (await this._sp.web.lists.getByTitle('MCC_Requests').items()).filter(i => i.AuthorId === myId);
+        const typedItems = items as MccRequestItem[];
+        return typedItems.map((item) => ({
+          ...item,
+          DateRange: [
+            item.StartDate ? this.toLocalDateOnly(item.StartDate) : undefined,
+            item.EndDate ? this.toLocalDateOnly(item.EndDate) : undefined
+          ],
+          ProposedDateRange: [
+            item.ProposedStartDate ? this.toLocalDateOnly(item.ProposedStartDate) : undefined,
+            item.ProposedEndDate ? this.toLocalDateOnly(item.ProposedEndDate) : undefined
+          ],
+        }));
       },
       update: async (key: number, values: Partial<MccRequestItem>) => {
-        return sp.web.lists.getByTitle('MCC_Requests').items.getById(key).update(values);
+        return this._sp.web.lists.getByTitle('MCC_Requests').items.getById(key).update(values);
       },
     });
 
     return dataSource as DevExpress.data.DataSource<MccRequestItem, number>;
   };
 
-  private TARGET_GROUP_TITLES = ["Corporate Communication Section", "Creative Design Section", "Events & Exhibition Section", "Marketing Unit"];
+  // private TARGET_GROUP_TITLES = ["Corporate Communication Section", "Creative Design Section", "Events & Exhibition Section", "Marketing Unit"];
+
+  // private async getUserGroupIfExists(sp: SPFI): Promise<string | null> {
+  //   // Get all site groups the current user belongs to
+  //   const userGroups = await sp.web.currentUser.groups.select("Id", "Title")();
+
+  //   // Find if the user is in one of the target groups
+  //   const match = userGroups.find(g =>
+  //     this.TARGET_GROUP_TITLES.some(t => g.Title.toLowerCase() === t.toLowerCase())
+  //   );
+
+  //   // Return the matching group name or null
+  //   return match ? match.Title : null;
+  // }
 
   //titles of the target groups
-  private Manager_GROUP_TITLES = ["Corporate Communication Section Manager", "Creative Design Section Manager", "Events & Exhibition Section Manager", "Marketing Unit Manager"];
+  // private Manager_GROUP_TITLES = ["Corporate Communication Section Manager", "Creative Design Section Manager", "Events & Exhibition Section Manager", "Marketing Unit Manager"];
+
+  // private async isUserInManagersGroup(sp: SPFI): Promise<boolean> {
+  //   // current user’s site groups
+  //   const groups = await sp.web.currentUser.groups();
+  //   if (!groups?.length) return false;
+
+  //   // fallback: check by Title (case-insensitive)
+  //   const titleSet = new Set(this.Manager_GROUP_TITLES.map(t => t.toLowerCase()));
+  //   return groups.some(g => titleSet.has(g.Title?.toLowerCase()));
+  // }
 
   // private async isCreatedByCurrentUser(sp: SPFI, currentItemId: number): Promise<boolean> {
   //   const me = await sp.web.currentUser();       // has Id/Title/Email
   //   return me.Id === currentItemId;
   // }
 
+  // private async loadMccItems(sp: SPFI): Promise<any[]> {
+  //   const me = await sp.web.currentUser();       // has Id/Title/Email
+  //   const myId = (me as any).Id ?? (me as any).ID;
+
+  //     // const inAny = await this.isUserInAnyTargetGroup(sp);
+  //     const userGroup = await this.getUserGroupIfExists(sp);
+
+  //   const list = sp.web.lists.getByTitle("MCC_Requests").items;
+
+  //   if (userGroup) {
+  //     // Member of one of the groups → load the related items
+  //     return await list
+  //       .filter(i => i.text('Section').equals(userGroup).or().number('AuthorId').equals(myId))();
+  //       // .filter(i => i.text('Section').equals(userGroup))();
+  //   } else {
+  //     // Not a member → only items I created (AuthorId == myId)
+  //     return await list
+  //       .filter(i => i.number('AuthorId').equals(myId))();
+  //   }
+  // }
+
+
+  private getAttachedFiles = async (Id: number): Promise<IAttachmentInfo[]> => {
+    return this._sp.web.lists.getByTitle('MCC_Requests').items.getById(Id).attachmentFiles();
+  }
+
   private async _initGrid(): Promise<void> {
     let currentItemId = 0;
     const sp = spfi().using(SPFx(this.context));
     
-    // const myId = (await this.sp.web.currentUser()).Id;      
-    const isManager = await splist.isUserInManagersGroup(sp, this.Manager_GROUP_TITLES);
-    this.currentUser = await splist.loadCurrentUser(sp);
-    const sectionGroup = await splist.getUserGroupIfExists(sp, this.TARGET_GROUP_TITLES);
-    this.assignees = await splist.loadAssigneesFromGroup(sectionGroup? sectionGroup : '', sp);
+    // const myId = (await this._sp.web.currentUser()).Id;      
+    // const isManager = await this.isUserInManagersGroup(this._sp)
 
     $('#dxDataGridContainer').dxDataGrid({
-        dataSource: this.getperformanceRecognitions(sp),
-        keyExpr: "Id",
+        dataSource: this.getperformanceRecognitions(),
+        keyExpr: "ID",
         showBorders: true,
         // focusedRowEnabled: true,
         allowColumnResizing: true,
@@ -181,21 +212,7 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
         filterRow: {
           visible: true
         },
-        // onInitialized: (btn: any) => {
-        //   const $formEl = $(btn.element).closest(".dx-form");
-        //   const form = ($formEl as any).data("dxForm") as DevExpress.ui.dxForm;
-        //   const fd = form?.option("formData") || {};
-        //   const alreadyMine = fd.AssigneeId === this.currentUser.id;
-        //   btn.component.option("disabled", alreadyMine || fd.Status === "Closed");
-        // },
         onEditorPreparing: (e: any) => {
-          if (e.parentType === "dataRow" && e.row && e.row.isEditing && this.isViewMode) {
-            e.editorOptions.readOnly = this.isViewMode;
-            e.editorOptions.focusStateEnabled = !this.isViewMode; // UX: no focus ring
-            e.editorOptions.hoverStateEnabled = !this.isViewMode; // UX: no hover visual
-            // If you use custom templates, also guard them to render as read-only
-          }
-
           if (e.dataField === "SpecialistDecision" && e.parentType === "dataRow") {
             // e.editorOptions = e.editorOptions || {};
             const defaultValueChangeHandler = e.editorOptions.onValueChanged;
@@ -220,19 +237,12 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
               }
            }
           }
-
-          // if (e.dataField === "AssigneeId" && e.parentType === "dataRow") {
-          //   // Disable Assignee select if already assigned to someone
-          //   const currentAssigneeId = e.value;
-            
-          //   e.dataField. = currentAssigneeId;
-          // }
         },
         async onEditingStart(e) {
           currentItemId = e.key;
           // const authorId = e.data.AuthorId;
-          // const myId = await sp.web.currentUser();
-          // this.isCreatedByCurrentUser =  myId.Id === e.data.AuthorId;
+          const myId = await sp.web.currentUser();
+          this.isCreatedByCurrentUser =  myId.Id === e.data.AuthorId;
           const form = $('#requestForm').dxForm('instance');
           // const readOnly = e.data.AuthorId === myId.Id;
           // form.itemOption("SpecialistDecisionGroup.SpecialistDecision", "editorOptions.readOnly", readOnly);
@@ -251,61 +261,56 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
             form.updateData("ProposedDateRange", [null, null]); // use dataField (no group prefix)
             form.getEditor("ProposedDateRange")?.reset();       // use dataField (no group prefix)
           }
-
-          // Ensure the form has helper fields in its formData (for first open)
-          // e.data.SpecialistName = e.data.SpecialistName || "";
-          // e.data.SpecialistEmail = e.data.SpecialistEmail || "";
-          
         },
         onRowUpdating: (e) => {
           
-          if ("SpecialistDecision" in e.newData) {
-            e.newData.SpecialistApprovalDate = new Date().toISOString();
-            if (e.newData.SpecialistDecision === 'Reject') {
-              e.newData.Status = 'Specialist Rejected';
-            } else if (e.newData.SpecialistDecision === 'Conditional') {
-              e.newData.Status = 'Pending Requester';
-            } else if (e.newData.SpecialistDecision === 'Approve'){
-              e.newData.Status = 'Pending Manager';
-            }
-          }
-
-          // if ("RequesterDecision" in e.newData) {
-          //   if (e.newData.RequesterDecision === 'Decline') {
-          //     e.newData.Status = 'Requester Declined';
-          //   } else if (e.newData.RequesterDecision === 'Agree') {
+          // if ("SpecialistDecision" in e.newData) {
+          //   e.newData.SpecialistApprovalDate = new Date().toISOString();
+          //   if (e.newData.SpecialistDecision === 'Reject') {
+          //     e.newData.Status = 'Specialist Rejected';
+          //   } else if (e.newData.SpecialistDecision === 'Conditional') {
+          //     e.newData.Status = 'Pending Requester';
+          //   } else if (e.newData.SpecialistDecision === 'Approve'){
           //     e.newData.Status = 'Pending Manager';
           //   }
           // }
 
-          if ("ManagerDecision" in e.newData) {
-            e.newData.ManagerApprovalDate = new Date().toISOString();
-            if (e.newData.ManagerDecision === 'Reject') {
-              e.newData.Status = 'Manager Rejected';
-            } else if (e.newData.ManagerDecision === 'Rework') {
-              e.newData.Status = 'Amended';
-            } else if (e.newData.ManagerDecision === 'Approve'){
-              e.newData.Status = 'Completed';
-            } 
+          if ("RequesterDecision" in e.newData) {
+            if (e.newData.RequesterDecision === 'Decline') {
+              e.newData.Status = 'Requester Declined';
+            } else if (e.newData.RequesterDecision === 'Agree') {
+              e.newData.Status = 'Pending Manager';
+            }
           }
 
-          if ("ProposedDateRange" in e.newData) {
-            const [proposedStartDate, proposedEndDate] = e.newData.ProposedDateRange ?? [undefined, undefined];
-            const normalizedProposedStartDate = splist.toSPDateOnly(proposedStartDate);
-            const normalizedProposedEndDate = splist.toSPDateOnly(proposedEndDate);
-            if (normalizedProposedStartDate !== undefined) {
-              e.newData.ProposedStartDate = normalizedProposedStartDate;
-            } else {
-              delete e.newData.ProposedStartDate;
-            }
+          // if ("ManagerDecision" in e.newData) {
+          //   e.newData.ManagerApprovalDate = new Date().toISOString();
+          //   if (e.newData.ManagerDecision === 'Reject') {
+          //     e.newData.Status = 'Manager Rejected';
+          //   } else if (e.newData.ManagerDecision === 'Rework') {
+          //     e.newData.Status = 'Amended';
+          //   } else if (e.newData.ManagerDecision === 'Approve'){
+          //     e.newData.Status = 'Completed';
+          //   } 
+          // }
 
-            if (normalizedProposedEndDate !== undefined) {
-              e.newData.ProposedEndDate = normalizedProposedEndDate;
-            } else {
-              delete e.newData.ProposedEndDate;
-            }
-            delete e.newData.ProposedDateRange;
-          }
+          // if ("ProposedDateRange" in e.newData) {
+          //   const [proposedStartDate, proposedEndDate] = e.newData.ProposedDateRange ?? [undefined, undefined];
+          //   const normalizedProposedStartDate = this.toSPDateOnly(proposedStartDate);
+          //   const normalizedProposedEndDate = this.toSPDateOnly(proposedEndDate);
+          //   if (normalizedProposedStartDate !== undefined) {
+          //     e.newData.ProposedStartDate = normalizedProposedStartDate;
+          //   } else {
+          //     delete e.newData.ProposedStartDate;
+          //   }
+
+          //   if (normalizedProposedEndDate !== undefined) {
+          //     e.newData.ProposedEndDate = normalizedProposedEndDate;
+          //   } else {
+          //     delete e.newData.ProposedEndDate;
+          //   }
+          //   delete e.newData.ProposedDateRange;
+          // }
         },
         editing: {
           mode: 'popup',
@@ -313,7 +318,6 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
           allowDeleting: false,
           allowAdding: false,
           confirmDelete: true,
-          texts: { editRow: "Claim" },
           popup: {
             title: "MCC Service Request",
             showTitle: true,
@@ -410,7 +414,7 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                       itemElement: string | JQuery<HTMLElement> | JQuery.TypeOrArray<Element | DocumentFragment>) => {
                       $("<div/>")
                         .dxList({
-                          dataSource: currentItemId ? await splist.getAttachedFiles(sp, currentItemId) : [], //attachedfiles,
+                          dataSource: currentItemId ? await this.getAttachedFiles(currentItemId) : [], //attachedfiles,
                           height: 100,
                           allowItemDeleting: false,
                           itemDeleteMode: "toggle",
@@ -429,107 +433,6 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                         })
                         .appendTo(itemElement);
                     },
-                  },
-                ]
-              },
-              {
-                itemType: "group",
-                caption: "Assignment",
-                colCount: 2,
-                colSpan: 2,
-                name: "AssignmentGroup",
-                items: [
-                  // Assignee Select
-                  // {
-                  //   dataField: "AssigneeId",
-                  //   label: { text: "Assignee" },
-                  //   editorType: "dxSelectBox",
-                  //   editorOptions: {
-                  //     elementAttr: {
-                  //       id: "selectBoxContainer"
-                  //     },
-                  //     // bind group members
-                  //     dataSource: this.assignees,
-                  //     displayExpr: "title",
-                  //     valueExpr: "id",
-                  //     searchEnabled: true,
-                  //     showClearButton: true,
-                  //     // display template to show email under the name (optional)
-                  //     itemTemplate: (itemData: splist.IAssignee, _: any, element: any) => {
-                  //       element.append(
-                  //         `<div class="dx-item">
-                  //           <div>${itemData.Title}</div>
-                  //           <div style="font-size:12px;opacity:.7">${itemData.Email}</div>
-                  //         </div>`
-                  //       );
-                  //     }
-                  //   },
-                  
-                  // },
-
-                  // // Claim button RIGHT NEXT to the select
-                  // {
-                  //   itemType: "button",
-                  //   horizontalAlignment: "left",
-                  //   buttonOptions: {
-                  //     text: "Claim",
-                  //     stylingMode: "contained",
-                  //     type: "default",
-                  //     onClick: async (btnEvt: any) => {
-                  //       // Access the current Form instance from the button
-                  //       // 1) Find the closest dxForm widget instance:
-                  //       // const $formEl = $(btnEvt.element).closest(".dx-form");
-                  //       // const form = ($formEl as any).data("dxForm") as DevExpress.ui.dxForm;
-                  //       // 2) The current row (if needed) can be fetched from formData:
-                  //       // const fd = form.option("formData") || {};
-                  //       // const currentItemId = fd.Id; // assuming 'Id' is in your formData
-                  //       const user = await sp.web.currentUser();
-                  //       const selectBox = $("#selectBoxContainer").dxSelectBox("instance");
-                  //       selectBox.option("value", user.Email);
-                  //       // await this.claimCurrent(form, this.currentUser);
-                  //     }
-                  //   }
-                  // },
-                  {
-                    dataField: "SpecialistEmail",
-                    label: { text: "Assignee" },
-                    editorType: "dxSelectBox",
-                    editorOptions: {
-                      dataSource: this.assignees,       // IAssignee[]
-                      displayExpr: "Title",
-                      valueExpr: "Email",
-                      searchEnabled: true,
-                      showClearButton: true,
-                      placeholder: "Select assignee...",
-                      elementAttr: {
-                        id: "selectBoxContainer"
-                      },
-                      itemTemplate: (item: splist.IAssignee, _i: any, el: any) => {
-                        el.append(
-                          `<div>
-                            <div>${item.Title}</div>
-                            <div style="font-size:12px;opacity:.7">${item.Email}</div>
-                          </div>`
-                        );
-                      }
-                    }
-                  },
-                  // Claim button RIGHT NEXT to the select
-                  {
-                    itemType: "button",
-                    horizontalAlignment: "left",
-                    buttonOptions: {
-                      text: "Claim",
-                      stylingMode: "contained",
-                      type: "default",
-                      elementAttr: {
-                        id: "claimButton",
-                      },
-                      onClick: async () => {
-                        const selectBox = $("#selectBoxContainer").dxSelectBox("instance");
-                        selectBox.option("value", this.currentUser.Email);
-                      }
-                    }
                   },
                 ]
               },
@@ -554,6 +457,7 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                       valueExpr: "value",
                       displayExpr: "text",
                       layout: "horizontal",
+                      readOnly: true,
                     },
                     colSpan: 1,
                   },
@@ -566,6 +470,7 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                       type: "date",
                       openOnFieldClick: true,
                       displayFormat: "yyyy-MM-dd",
+                      readOnly: true,
                     },
                     colSpan: 1,
                   },
@@ -574,6 +479,9 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                     label: { text: "Comments" },
                     editorType: 'dxTextArea',
                     colSpan: 2,
+                    editorOptions: {
+                      readOnly: true,
+                    }
                   },
                 ]
               },
@@ -598,7 +506,6 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                       valueExpr: "value",
                       displayExpr: "text",
                       layout: "horizontal",
-                      readOnly: true,
                     }
                   },
                 ]
@@ -624,7 +531,7 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                       valueExpr: "value",
                       displayExpr: "text",
                       layout: "horizontal",
-                      readOnly: !isManager,
+                      readOnly: true,
                     }
                   },
                   {
@@ -633,7 +540,7 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                     editorType: 'dxTextArea',
                     colSpan: 2,
                     editorOptions: {
-                      readOnly: !isManager,
+                      readOnly: true,
                     }
                   }
                 ]
@@ -738,10 +645,6 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
             visible: false
           },
           {
-            dataField: "SpecialistEmail",
-            visible: false,
-          },
-          {
             dataField: "Created",
             caption: 'Created',
             dataType: "date",
@@ -753,31 +656,7 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
             dataType: "date",
             format: 'yyyy-MM-dd'
           },
-          {
-            type: "buttons",
-            buttons: [
-              {
-                text: "Claim",
-                // icon: "edit",       // or "user" if you prefer
-                hint: "Claim",
-                onClick: (e: any) => {
-                  this.isViewMode = false; 
-                  e.component.editRow(e.row.rowIndex);
-                }
-              },
-              {
-                text: "View",
-                // icon: "search",
-                hint: "View details (read-only)",
-                onClick: (e: any) => {
-                   this.isViewMode = true;             
-                   e.component.editRow(e.row.rowIndex);
-                   $('#claimButton').hide();
-                   $(".dx-button[aria-label='Save']").hide();
-                }
-              }
-            ]
-          }
+          
         ],
         summary: {
           totalItems: [{
@@ -788,12 +667,25 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
       });
   }
 
-  protected async onInit(): Promise<void> {
-    this.sp = spfi().using(SPFx(this.context));
-    SPComponentLoader.loadCss("https://cdn3.devexpress.com/jslib/23.2.4/css/dx.light.css");
-    await splist.loadCurrentUser(this.sp);
-    return super.onInit();
-  }   
+  protected onInit(): Promise<void> {
+    this._sp = spfi().using(SPFx(this.context));
+        SPComponentLoader.loadCss("https://cdn3.devexpress.com/jslib/23.2.4/css/dx.light.css");
+            return super.onInit();
+  }
+
+
+  private toLocalDateOnly(spDate?: string): Date | undefined {
+    if (!spDate) return undefined;
+    const d = new Date(spDate);
+    return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+  }
+
+  // private toSPDateOnly(d?: Date): string | undefined {
+  //   if (!d) return undefined;
+  //   return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
+  //     .toISOString()
+  //     .split("T")[0]; // e.g. "2025-11-04"
+  // }
 
   protected get dataVersion(): Version {
     return Version.parse('1.0');
