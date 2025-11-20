@@ -27,6 +27,12 @@ export interface IMccRequesterViewWebPartProps {
 }
 
 type ListContentReadyEvent = DevExpress.ui.dxList.ContentReadyEvent;
+type GridEditorPreparingEvent = DevExpress.ui.dxDataGrid.EditorPreparingEvent;
+
+interface ISimpleValueChangedEvent {
+  value?: unknown;
+  previousValue?: unknown;
+}
 
 type DateRangeTuple = [Date | undefined, Date | undefined];
 
@@ -89,8 +95,12 @@ export default class MccRequesterViewWebPart extends BaseClientSideWebPart<IMccR
         //     item.ProposedEndDate ? this.toLocalDateOnly(item.ProposedEndDate) : undefined
         //   ],
         // }));
-        const me = await this._sp.web.currentUser();       // has Id/Title/Email
-        const myId = (me as any).Id ?? (me as any).ID;
+        const me = await this._sp.web.currentUser();
+        const currentUser = me as { Id?: number; ID?: number };
+        const myId = currentUser.Id ?? currentUser.ID;
+        if (typeof myId !== "number") {
+          return [];
+        }
         const items = (await this._sp.web.lists.getByTitle('MCC_Requests').items()).filter(i => i.AuthorId === myId);
         const typedItems = items as MccRequestItem[];
         return typedItems.map((item) => ({
@@ -188,7 +198,7 @@ export default class MccRequesterViewWebPart extends BaseClientSideWebPart<IMccR
         columnResizingMode: 'nextColumn',
         columnAutoWidth: true,
         wordWrapEnabled: true,
-        noDataText: 'No pending requests found',
+        noDataText: `You don't have any requests`,
         searchPanel:{
           visible: true,
           highlightSearchText: true,
@@ -212,18 +222,20 @@ export default class MccRequesterViewWebPart extends BaseClientSideWebPart<IMccR
         filterRow: {
           visible: true
         },
-        onEditorPreparing: (e: any) => {
+        onEditorPreparing: (e: GridEditorPreparingEvent) => {
           if (e.dataField === "SpecialistDecision" && e.parentType === "dataRow") {
             // e.editorOptions = e.editorOptions || {};
             const defaultValueChangeHandler = e.editorOptions.onValueChanged;
-            e.editorOptions.onValueChanged = (args: any) => {
+            e.editorOptions.onValueChanged = (args: ISimpleValueChangedEvent) => {
               const form = $('#requestForm').dxForm('instance');
 
               // Let DevExtreme do its built-in update first
               defaultValueChangeHandler?.(args);
 
-              const isConditional = args.value === "Conditional";
-              const wasConditional = args.previousValue === "Conditional";
+              const newValue = typeof args.value === "string" ? args.value : "";
+              const isConditional = newValue === "Conditional";
+              const previousValue = typeof args.previousValue === "string" ? args.previousValue : "";
+              const wasConditional = previousValue === "Conditional";
 
               // Toggle visibility & requirement
               form.itemOption("SpecialistDecisionGroup.ProposedDateRange", "visible", isConditional);
@@ -232,7 +244,7 @@ export default class MccRequesterViewWebPart extends BaseClientSideWebPart<IMccR
 
               // Only clear the date range when switching AWAY from Conditional
               if (!isConditional && wasConditional) {
-                form.updateData("ProposedDateRange", [null, null]); // use dataField (no group prefix)
+                form.updateData("ProposedDateRange", [undefined, undefined]); // use dataField (no group prefix)
                 form.getEditor("ProposedDateRange")?.reset();       // use dataField (no group prefix)
               }
            }
@@ -258,7 +270,7 @@ export default class MccRequesterViewWebPart extends BaseClientSideWebPart<IMccR
 
           // Only clear the date range when switching AWAY from Conditional
           if (!isConditional) {
-            form.updateData("ProposedDateRange", [null, null]); // use dataField (no group prefix)
+            form.updateData("ProposedDateRange", [undefined, undefined]); // use dataField (no group prefix)
             form.getEditor("ProposedDateRange")?.reset();       // use dataField (no group prefix)
           }
         },

@@ -33,6 +33,46 @@
           "manifest": "./src/webparts/mccRequesterView/MccRequesterViewWebPart.manifest.json"
         }
       ]
+    },
+    "mcc-dashboard-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/mccDashboard/MccDashboardWebPart.js",
+          "manifest": "./src/webparts/mccDashboard/MccDashboardWebPart.manifest.json"
+        }
+      ]
+    },
+    "goraet-saada-app-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/goraetSaadaApp/GoraetSaadaAppWebPart.js",
+          "manifest": "./src/webparts/goraetSaadaApp/GoraetSaadaAppWebPart.manifest.json"
+        }
+      ]
+    },
+    "g-saada-feed-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/gSaadaFeed/GSaadaFeedWebPart.js",
+          "manifest": "./src/webparts/gSaadaFeed/GSaadaFeedWebPart.manifest.json"
+        }
+      ]
+    },
+    "send-g-saada-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/sendGSaada/SendGSaadaWebPart.js",
+          "manifest": "./src/webparts/sendGSaada/SendGSaadaWebPart.manifest.json"
+        }
+      ]
+    },
+    "g-saada-items-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/gSaadaItems/GSaadaItemsWebPart.js",
+          "manifest": "./src/webparts/gSaadaItems/GSaadaItemsWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -56,6 +96,11 @@
     "EmployeeDirectoryWebPartStrings": "lib/webparts/employeeDirectory/loc/{locale}.js",
     "MccServiceRequestWebPartStrings": "lib/webparts/mccServiceRequest/loc/{locale}.js",
     "MccServiceActionsWebPartStrings": "lib/webparts/mccServiceActions/loc/{locale}.js",
-    "MccRequesterViewWebPartStrings": "lib/webparts/mccRequesterView/loc/{locale}.js"
+    "MccRequesterViewWebPartStrings": "lib/webparts/mccRequesterView/loc/{locale}.js",
+    "MccDashboardWebPartStrings": "lib/webparts/mccDashboard/loc/{locale}.js",
+    "GoraetSaadaAppWebPartStrings": "lib/webparts/goraetSaadaApp/loc/{locale}.js",
+    "GSaadaFeedWebPartStrings": "lib/webparts/gSaadaFeed/loc/{locale}.js",
+    "SendGSaadaWebPartStrings": "lib/webparts/sendGSaada/loc/{locale}.js",
+    "GSaadaItemsWebPartStrings": "lib/webparts/gSaadaItems/loc/{locale}.js"
   }
 }

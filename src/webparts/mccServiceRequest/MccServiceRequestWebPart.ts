@@ -126,9 +126,6 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
       EndDate: undefined,
     };
 
-    // const form = $('#dxFormContainer', this.domElement as any);
-
-    // const buildForm = () => {
       $('#dxFormContainer').dxForm({
         formData: vm,
         labelMode: 'floating',
@@ -152,11 +149,9 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
               onValueChanged: async (e: SelectBoxValueChangedEvent) => {
                 const sectionTitle = typeof e.value === 'string' ? e.value : undefined;
 
-                // request sequencing to avoid stale writes
                 vm._serviceReqSeq = (vm._serviceReqSeq ?? 0) + 1;
                 const mySeq = vm._serviceReqSeq;
 
-                // optional: show loading state on service editor
                 const f = $('#dxFormContainer').dxForm('instance');
                 const serviceEditor = f?.getEditor('Service');
                 serviceEditor?.option('disabled', true);
@@ -191,19 +186,6 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
             }
           },
           { dataField: 'Details', colSpan: 2, label: { text: 'Details' }, editorType: 'dxTextArea', editorOptions: { minHeight: 120 } },
-          // {
-          //   dataField: 'EstimatedSubmissionDate',
-          //   label: { text: 'Estimated Submission Date' },
-          //   editorType: 'dxDateBox',
-          //   editorOptions: {
-          //     value: null,
-          //     width: '100%',
-          //   },
-          //   validationRules: [{
-          //     type: 'required',
-          //     message: 'Estimated Submission Date is required',
-          //   }],
-          // },
           {
             dataField: "DateRange",
             isRequired: true,
@@ -212,7 +194,6 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
             editorOptions: {
               // initial value from your view model
               value: [vm.StartDate, vm.EndDate],
-              // date-only picker; use "datetime" if you need time
               type: "date",
               openOnFieldClick: true,
               displayFormat: "yyyy-MM-dd",
@@ -265,45 +246,10 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
                           : [];
                         vm.Files = files;
                       },
-                      // onOptionChanged: (e) => {
-
-                      // },
                     })
                     .dxFileUploader("instance"));
                 },
           },
-          // {
-          //   name: "fileList",
-          //   // visible: Id !== 0,
-          //   colSpan: 2,
-          //   template: async (
-          //     _data: any,
-          //     itemElement:
-          //       | string
-          //       | JQuery<HTMLElement>
-          //       | JQuery.TypeOrArray<Element | DocumentFragment>
-          //   ) => {
-          //     $("<div/>")
-          //       .dxList({
-          //         // dataSource: splist.getAttachments(
-          //         //   sp,
-          //         //   "Performance Recognitions",
-          //         //   currentItemIdPR
-          //         // ), //attachedfiles,
-          //         height: 200,
-          //         allowItemDeleting: true,
-          //         itemDeleteMode: "toggle",
-          //         noDataText: "",
-          //         elementAttr: {
-          //           id: "fileList",
-          //         },
-          //         itemTemplate(e) {
-          //           return `<a href="${e.ServerRelativeUrl}" target="_blank">${e.FileName}</a>`;
-          //         },
-          //       })
-          //       .appendTo(itemElement);
-          //   },
-          // },
           
           { dataField: 'Agree', colSpan: 2, editorType: 'dxCheckBox', isRequired: true, label: {visible: false, text: '' }, editorOptions: { text: 'I agree to Terms & Conditions' } },
           
@@ -331,12 +277,6 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
           },
           ],
     });
-    // };
-
-    // buildForm();
-  //   function labelTemplate(iconName) {
-  //   return (data) => $(`<div><i class='dx-icon dx-icon-${iconName}'></i>${data.text}</div>`);
-  // }
   }
 
   private async _onSubmit(vm: ServiceRequestViewModel): Promise<void> {
@@ -364,7 +304,7 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
 
       const itemId = addRes.Id as number;
 
-      // 2) Attachment (optional)
+      // 2) Attachment 
       if (vm.Files.length > 0) {
         const item = this._sp.web.lists.getByTitle('MCC_Requests').items.getById(itemId);
 
@@ -385,12 +325,6 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
       DevExpress.ui?.notify?.({ message, type: 'error', displayTime: 6000 });
     }
   }
-
-  // private toLocalDateOnly(spDate?: string): Date | null {
-  //   if (!spDate) return null;
-  //   const d = new Date(spDate);
-  //   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  // }
 
   private toSPDateOnly(d?: Date): string | undefined {
     if (!d) return undefined;

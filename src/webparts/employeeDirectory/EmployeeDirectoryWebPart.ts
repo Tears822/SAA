@@ -243,7 +243,7 @@ export default class PeopleDirectoryWebPart extends BaseClientSideWebPart<IPeopl
         columnResizingMode: 'nextColumn',
         columnAutoWidth: true,
         wordWrapEnabled: true,
-        noDataText: 'Add Career Aspiration',
+        // noDataText: 'Add Career Aspiration',
         searchPanel:{
           visible: true,
           highlightSearchText: true,

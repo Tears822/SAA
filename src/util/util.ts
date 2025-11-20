@@ -1,5 +1,38 @@
-import type { SPFI } from "@pnp/sp";
+﻿import type { SPFI } from "@pnp/sp";
 import type { IAttachmentInfo } from '@pnp/sp/attachments';
+
+export type GroupTitleList = readonly string[];
+
+export interface IMccRequestItem {
+  Id: number;
+  ID?: number;
+  Title?: string;
+  EmployeeName?: string;
+  EmployeeEmail?: string;
+  JobTitle?: string;
+  Department?: string;
+  Section?: string;
+  Service?: string;
+  Details?: string;
+  StartDate?: string;
+  EndDate?: string;
+  ProposedStartDate?: string;
+  ProposedEndDate?: string;
+  SpecialistDecision?: string;
+  SpecialistComments?: string;
+  SpecialistApprovalDate?: string;
+  ManagerDecision?: string;
+  ManagerComments?: string;
+  ManagerApprovalDate?: string;
+  RequesterDecision?: string;
+  Status?: string;
+  Created?: string;
+  Modified?: string;
+  SpecialistName?: string;
+  SpecialistEmail?: string;
+  AuthorId?: number;
+  [key: string]: unknown;
+}
 
 export interface IAssignee {
   Id: number;
@@ -57,47 +90,49 @@ export const loadAssigneesFromGroup = async (groupName: string, sp: SPFI): Promi
 //     }
 // }
 
-export const getUserGroupIfExists = async (sp: SPFI, TARGET_GROUP_TITLES: any[]): Promise<string | null> => {
+export const getUserGroupIfExists = async (sp: SPFI, targetGroupTitles: GroupTitleList): Promise<string | undefined> => {
     // Get all site groups the current user belongs to
     const userGroups = await sp.web.currentUser.groups.select("Id", "Title")();
 
     // Find if the user is in one of the target groups
     const match = userGroups.find(g =>
-      TARGET_GROUP_TITLES.some(t => g.Title.toLowerCase() === t.toLowerCase())
+      targetGroupTitles.some(t => g.Title.toLowerCase() === t.toLowerCase())
     );
 
-    // Return the matching group name or null
-    return match ? match.Title : null;
+    // Return the matching group name or undefined
+    return match?.Title;
   }
 
-  export const isUserInManagersGroup = async (sp: SPFI, Manager_GROUP_TITLES: any[]): Promise<boolean> => {
-    // current user’s site groups
+export const isUserInManagersGroup = async (sp: SPFI, managerGroupTitles: GroupTitleList): Promise<boolean> => {
+    // current user's site groups
     const groups = await sp.web.currentUser.groups();
     if (!groups?.length) return false;
 
     // fallback: check by Title (case-insensitive)
-    const titleSet = new Set(Manager_GROUP_TITLES.map(t => t.toLowerCase()));
+    const titleSet = new Set(managerGroupTitles.map(t => t.toLowerCase()));
     return groups.some(g => titleSet.has(g.Title?.toLowerCase()));
   }
 
-  export const loadMccItems = async (sp: SPFI, TARGET_GROUP_TITLES: any[]): Promise<any[]> => {
-    const me = await sp.web.currentUser();       // has Id/Title/Email
-    const myId = (me as any).Id ?? (me as any).ID;
+export const loadMccItems = async (sp: SPFI, targetGroupTitles: GroupTitleList): Promise<IMccRequestItem[]> => {
+    const currentUser = await loadCurrentUser(sp);
+    const myId = currentUser.Id;
 
       // const inAny = await this.isUserInAnyTargetGroup(sp);
-      const userGroup = await getUserGroupIfExists(sp, TARGET_GROUP_TITLES);
+      const userGroup = await getUserGroupIfExists(sp, targetGroupTitles);
 
     const list = sp.web.lists.getByTitle("MCC_Requests").items;
 
     if (userGroup) {
-      // Member of one of the groups → load the related items
-      return await list
-        .filter(i => i.text('Section').equals(userGroup).or().number('AuthorId').equals(myId))();
-    } else {
-      // Not a member → only items I created (AuthorId == myId)
-      return await list
-        .filter(i => i.number('AuthorId').equals(myId))();
+      // Member of one of the groups - load the related items
+      const items = await list
+        .filter(i => i.text('Section').equals(userGroup).or().number('AuthorId').equals(myId))() as IMccRequestItem[];
+      return items;
     }
+
+    // Not a member - only items I created (AuthorId == myId)
+    const items = await list
+      .filter(i => i.number('AuthorId').equals(myId))() as IMccRequestItem[];
+    return items;
   }
 
 

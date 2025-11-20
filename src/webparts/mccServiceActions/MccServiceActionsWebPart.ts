@@ -34,6 +34,14 @@ export interface IMccServiceActionsWebPartProps {
 // }
 
 type ListContentReadyEvent = DevExpress.ui.dxList.ContentReadyEvent;
+type GridEditorPreparingEvent = DevExpress.ui.dxDataGrid.EditorPreparingEvent;
+type GridColumnButtonClickEvent = DevExpress.ui.dxDataGrid.ColumnButtonClickEvent;
+type DxElement = DevExpress.core.dxElement;
+
+interface ISimpleValueChangedEvent {
+  value?: unknown;
+  previousValue?: unknown;
+}
 
 type DateRangeTuple = [Date | undefined, Date | undefined];
 
@@ -65,7 +73,7 @@ interface MccRequestItem {
   Created?: string;
   Modified?: string;
   [key: string]: unknown;
-  Assignee?: { Id: number; Title: string; EMail: string } | null;
+  Assignee?: { Id: number; Title: string; EMail: string };
 }
 
 
@@ -188,7 +196,7 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
         //   const alreadyMine = fd.AssigneeId === this.currentUser.id;
         //   btn.component.option("disabled", alreadyMine || fd.Status === "Closed");
         // },
-        onEditorPreparing: (e: any) => {
+        onEditorPreparing: (e: GridEditorPreparingEvent) => {
           if (e.parentType === "dataRow" && e.row && e.row.isEditing && this.isViewMode) {
             e.editorOptions.readOnly = this.isViewMode;
             e.editorOptions.focusStateEnabled = !this.isViewMode; // UX: no focus ring
@@ -199,14 +207,16 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
           if (e.dataField === "SpecialistDecision" && e.parentType === "dataRow") {
             // e.editorOptions = e.editorOptions || {};
             const defaultValueChangeHandler = e.editorOptions.onValueChanged;
-            e.editorOptions.onValueChanged = (args: any) => {
+            e.editorOptions.onValueChanged = (args: ISimpleValueChangedEvent) => {
               const form = $('#requestForm').dxForm('instance');
 
               // Let DevExtreme do its built-in update first
               defaultValueChangeHandler?.(args);
 
-              const isConditional = args.value === "Conditional";
-              const wasConditional = args.previousValue === "Conditional";
+              const newValue = typeof args.value === "string" ? args.value : "";
+              const isConditional = newValue === "Conditional";
+              const previousValue = typeof args.previousValue === "string" ? args.previousValue : "";
+              const wasConditional = previousValue === "Conditional";
 
               // Toggle visibility & requirement
               form.itemOption("SpecialistDecisionGroup.ProposedDateRange", "visible", isConditional);
@@ -215,7 +225,7 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
 
               // Only clear the date range when switching AWAY from Conditional
               if (!isConditional && wasConditional) {
-                form.updateData("ProposedDateRange", [null, null]); // use dataField (no group prefix)
+                form.updateData("ProposedDateRange", [undefined, undefined]); // use dataField (no group prefix)
                 form.getEditor("ProposedDateRange")?.reset();       // use dataField (no group prefix)
               }
            }
@@ -242,13 +252,14 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
 
           const isConditional = e.data.SpecialistDecision === "Conditional";
           // Toggle visibility & requirement
+          // form.itemOption("SpecialistDecisionGroup.ProposedDateRange", "visible", isConditional);
           form.itemOption("SpecialistDecisionGroup.ProposedDateRange", "visible", isConditional);
           form.itemOption("SpecialistDecisionGroup.ProposedDateRange", "isRequired", isConditional);
           form.itemOption("RequesterDecisionGroup", "visible", isConditional);
 
           // Only clear the date range when switching AWAY from Conditional
           if (!isConditional) {
-            form.updateData("ProposedDateRange", [null, null]); // use dataField (no group prefix)
+            form.updateData("ProposedDateRange", [undefined, undefined]); // use dataField (no group prefix)
             form.getEditor("ProposedDateRange")?.reset();       // use dataField (no group prefix)
           }
 
@@ -504,8 +515,8 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                       elementAttr: {
                         id: "selectBoxContainer"
                       },
-                      itemTemplate: (item: splist.IAssignee, _i: any, el: any) => {
-                        el.append(
+                      itemTemplate: (item: splist.IAssignee, _index: number, element: DxElement) => {
+                        $(element).append(
                           `<div>
                             <div>${item.Title}</div>
                             <div style="font-size:12px;opacity:.7">${item.Email}</div>
@@ -684,9 +695,9 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
           {
             dataField: "Status",
             caption: 'Status',
-            editorOptions: {
-              readOnly: true,
-            },
+            // editorOptions: {
+            //   readOnly: true,
+            // },
           },
           {
             dataField: 'SpecialistApprovalDate',
@@ -694,9 +705,9 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
             dataType: "date",
             format: 'yyyy-MM-dd',
             // sortOrder: 'desc',
-            editorOptions: {
-              readOnly: true,
-            },
+            // editorOptions: {
+            //   readOnly: true,
+            // },
           },
           {
             dataField: 'ManagerApprovalDate',
@@ -704,9 +715,9 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
             dataType: "date",
             format: 'yyyy-MM-dd',
             // sortOrder: 'desc',
-            editorOptions: {
-              readOnly: true,
-            },
+            // editorOptions: {
+            //   readOnly: true,
+            // },
           },
           {
             dataField: "DateRange",
@@ -760,7 +771,10 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                 text: "Claim",
                 // icon: "edit",       // or "user" if you prefer
                 hint: "Claim",
-                onClick: (e: any) => {
+                onClick: (e: GridColumnButtonClickEvent) => {
+                        if (!e.row) {
+                          return;
+                        }
                   this.isViewMode = false; 
                   e.component.editRow(e.row.rowIndex);
                 }
@@ -769,7 +783,10 @@ export default class MccServiceActionsWebPart extends BaseClientSideWebPart<IMcc
                 text: "View",
                 // icon: "search",
                 hint: "View details (read-only)",
-                onClick: (e: any) => {
+                onClick: (e: GridColumnButtonClickEvent) => {
+                        if (!e.row) {
+                          return;
+                        }
                    this.isViewMode = true;             
                    e.component.editRow(e.row.rowIndex);
                    $('#claimButton').hide();
