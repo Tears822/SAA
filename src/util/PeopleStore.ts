@@ -7,11 +7,11 @@ export interface IRecipientOption {
   email?: string;
 }
 
-export const createPeopleStore = (sp: SPFI) =>
+export const createPeopleStore = (sp: SPFI) : DevExpress.data.CustomStore<IRecipientOption, string> =>
   new DevExpress.data.CustomStore<IRecipientOption, string>({
     key: "id",
     // DevExtreme will call this on typing / search
-    load: async (loadOptions: any): Promise<IRecipientOption[]> => {
+    load: async (loadOptions: DevExpress.data.LoadOptions): Promise<IRecipientOption[]> => {
       const searchValue: string = loadOptions.searchValue || loadOptions.searchExpr || "";
 
       if (!searchValue || searchValue.length < 2) {

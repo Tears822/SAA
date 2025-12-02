@@ -111,7 +111,7 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
         .btn.link{background:transparent;color:#1677ff}
       </style>
       <div class="gs-form">
-        <h3>Give Recognition</h3>
+        <h3>Send Goraet Saada</h3>
         <div id="gs-form"></div>
         <div id="cards-section" class="hide">
           <div style="display:flex;align-items:center;gap:12px;margin:10px 0">

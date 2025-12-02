@@ -4,7 +4,7 @@
     "solutionName": "SAA-Tawasol",
     "componentType": "webpart",
     "template": "none",
-    "componentName": "GSaadaItems",
+    "componentName": "portalTiles",
     "plusBeta": false,
     "isCreatingSolution": false,
     "nodeVersion": "22.21.1",

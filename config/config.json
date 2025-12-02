@@ -73,6 +73,54 @@
           "manifest": "./src/webparts/gSaadaItems/GSaadaItemsWebPart.manifest.json"
         }
       ]
+    },
+    "internal-jobs-feed-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/internalJobsFeed/InternalJobsFeedWebPart.js",
+          "manifest": "./src/webparts/internalJobsFeed/InternalJobsFeedWebPart.manifest.json"
+        }
+      ]
+    },
+    "internal-jobs-list-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/internalJobsList/InternalJobsListWebPart.js",
+          "manifest": "./src/webparts/internalJobsList/InternalJobsListWebPart.manifest.json"
+        }
+      ]
+    },
+    "current-user-card-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/currentUserCard/CurrentUserCardWebPart.js",
+          "manifest": "./src/webparts/currentUserCard/CurrentUserCardWebPart.manifest.json"
+        }
+      ]
+    },
+    "chairman-card-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/chairmanCard/ChairmanCardWebPart.js",
+          "manifest": "./src/webparts/chairmanCard/ChairmanCardWebPart.manifest.json"
+        }
+      ]
+    },
+    "ask-support-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/askSupport/AskSupportWebPart.js",
+          "manifest": "./src/webparts/askSupport/AskSupportWebPart.manifest.json"
+        }
+      ]
+    },
+    "portal-tiles-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/portalTiles/PortalTilesWebPart.js",
+          "manifest": "./src/webparts/portalTiles/PortalTilesWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -101,6 +149,12 @@
     "GoraetSaadaAppWebPartStrings": "lib/webparts/goraetSaadaApp/loc/{locale}.js",
     "GSaadaFeedWebPartStrings": "lib/webparts/gSaadaFeed/loc/{locale}.js",
     "SendGSaadaWebPartStrings": "lib/webparts/sendGSaada/loc/{locale}.js",
-    "GSaadaItemsWebPartStrings": "lib/webparts/gSaadaItems/loc/{locale}.js"
+    "GSaadaItemsWebPartStrings": "lib/webparts/gSaadaItems/loc/{locale}.js",
+    "InternalJobsFeedWebPartStrings": "lib/webparts/internalJobsFeed/loc/{locale}.js",
+    "InternalJobsListWebPartStrings": "lib/webparts/internalJobsList/loc/{locale}.js",
+    "CurrentUserCardWebPartStrings": "lib/webparts/currentUserCard/loc/{locale}.js",
+    "ChairmanCardWebPartStrings": "lib/webparts/chairmanCard/loc/{locale}.js",
+    "AskSupportWebPartStrings": "lib/webparts/askSupport/loc/{locale}.js",
+    "PortalTilesWebPartStrings": "lib/webparts/portalTiles/loc/{locale}.js"
   }
 }
