@@ -121,6 +121,22 @@
           "manifest": "./src/webparts/portalTiles/PortalTilesWebPart.manifest.json"
         }
       ]
+    },
+    "announcements-feed-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/announcementsFeed/AnnouncementsFeedWebPart.js",
+          "manifest": "./src/webparts/announcementsFeed/AnnouncementsFeedWebPart.manifest.json"
+        }
+      ]
+    },
+    "announcements-list-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/announcementsList/AnnouncementsListWebPart.js",
+          "manifest": "./src/webparts/announcementsList/AnnouncementsListWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -155,6 +171,8 @@
     "CurrentUserCardWebPartStrings": "lib/webparts/currentUserCard/loc/{locale}.js",
     "ChairmanCardWebPartStrings": "lib/webparts/chairmanCard/loc/{locale}.js",
     "AskSupportWebPartStrings": "lib/webparts/askSupport/loc/{locale}.js",
-    "PortalTilesWebPartStrings": "lib/webparts/portalTiles/loc/{locale}.js"
+    "PortalTilesWebPartStrings": "lib/webparts/portalTiles/loc/{locale}.js",
+    "AnnouncementsFeedWebPartStrings": "lib/webparts/announcementsFeed/loc/{locale}.js",
+    "AnnouncementsListWebPartStrings": "lib/webparts/announcementsList/loc/{locale}.js"
   }
 }

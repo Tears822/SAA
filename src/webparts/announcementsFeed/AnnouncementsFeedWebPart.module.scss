@@ -1,0 +1,204 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+// .announcementsFeed {
+//   overflow: hidden;
+//   padding: 1em;
+//   color: "[theme:bodyText, default: #323130]";
+//   color: var(--bodyText);
+//   &.teams {
+//     font-family: $ms-font-family-fallbacks;
+//   }
+// }
+
+// .welcome {
+//   text-align: center;
+// }
+
+// .welcomeImage {
+//   width: 100%;
+//   max-width: 420px;
+// }
+
+// .links {
+//   a {
+//     text-decoration: none;
+//     color: "[theme:link, default:#03787c]";
+//     color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
+
+//     &:hover {
+//       text-decoration: underline;
+//       color: "[theme:linkHovered, default: #014446]";
+//       color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
+//     }
+//   }
+// }
+
+.announcements {
+  width: 100%;
+  max-width: 100%;
+  padding: 32px 40px; // match your site padding
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.announcementsheaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #5b4abf; // purple-ish like screenshot
+  margin: 0;
+}
+
+.viewAll {
+  font-size: 12px;
+  color: #5b4abf;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.viewAll:hover {
+  text-decoration: underline;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px 40px;
+}
+
+/* Responsive: 2 columns then 1 column */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  display: flex;
+  gap: 16px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e5f0;
+  box-shadow: 0 4px 14px rgba(25, 39, 52, 0.04);
+  padding: 16px 20px;
+  box-sizing: border-box;
+
+  height: 100%;
+  max-height: 240px;        /* adjust as needed */
+  overflow: hidden;
+}
+
+.cardImageWrapper {
+  flex: 0 0 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.cardBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+// .cardTitle {
+//   font-size: 14px;
+//   font-weight: 600;
+//   color: #444a69;
+//   margin-bottom: 4px;
+// }
+
+// .cardDescription {
+//   font-size: 11px;
+//   line-height: 1.4;
+//   color: #6a7189;
+//   margin-bottom: 8px;
+// }
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444a69;
+  margin-bottom: 4px;
+  white-space: nowrap;          /* keep single line */
+  overflow: hidden;             /* hide overflow */
+  text-overflow: ellipsis;      /* add … */
+}
+
+.cardDescription {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #6a7189;
+  margin-bottom: 8px;
+  display: -webkit-box;         /* enable multi-line clamp */
+  -webkit-line-clamp: 3;        /* show only 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardButtonWrapper {
+  margin-top: 8px;
+}
+
+/* Make DevExtreme button look like screenshot (outlined) */
+:global(.dx-button.happinessButton) {
+  border-radius: 16px;
+  border-width: 1px;
+  font-size: 11px;
+  padding: 0 16px;
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr {
+  direction: ltr !important;
+  // text-align: right;
+}
+
+.rtl .headerRow {
+  flex-direction: row-reverse;
+}
+
+.rtl .viewAll {
+  /* make sure link is on the left in RTL (since we reversed row) */
+  justify-content: flex-start;
+}
+
+.rtl .card {
+  direction: rtl;
+}
+
+.rtl .cardImageWrapper {
+  /* move image to the other side in RTL */
+  order: 2;
+}
+
+.rtl .cardBody {
+  order: 1;
+  text-align: right;
+}

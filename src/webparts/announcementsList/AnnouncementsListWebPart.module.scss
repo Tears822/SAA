@@ -1,0 +1,230 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+// .announcementsList {
+//   overflow: hidden;
+//   padding: 1em;
+//   color: "[theme:bodyText, default: #323130]";
+//   color: var(--bodyText);
+//   &.teams {
+//     font-family: $ms-font-family-fallbacks;
+//   }
+// }
+
+// .welcome {
+//   text-align: center;
+// }
+
+// .welcomeImage {
+//   width: 100%;
+//   max-width: 420px;
+// }
+
+// .links {
+//   a {
+//     text-decoration: none;
+//     color: "[theme:link, default:#03787c]";
+//     color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
+
+//     &:hover {
+//       text-decoration: underline;
+//       color: "[theme:linkHovered, default: #014446]";
+//       color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
+//     }
+//   }
+// }
+
+.recognitionsFeed {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 16px 32px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* FILTER TABS */
+
+.filtersBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filterTab {
+  border-radius: 20px;
+  padding: 6px 18px;
+  border: 1px solid #ddd;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.filterTab:hover {
+  border-color: #ff725e;
+}
+
+.active {
+  background: #ff725e;
+  color: #ffffff;
+  border-color: #ff725e;
+}
+
+/* STATUS */
+
+.statusMessage {
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+.error {
+  color: #a80000;
+}
+
+/* GRID & CARD LAYOUT */
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 24px 32px;
+}
+
+.card {
+  display: flex;
+  flex-direction: row;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  padding: 16px;
+  box-sizing: border-box;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+  min-height: 130px;
+}
+
+.cardImageWrapper {
+  flex: 0 0 90px;
+  height: 90px;
+  margin-right: 16px;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.cardBody {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.favoriteBtn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+  color: #ccc;
+}
+
+.favoriteBtn:hover {
+  color: #ffb400;
+}
+
+.cardDescription {
+  font-size: 12px;
+  color: #666;
+  margin: 0 0 10px;
+}
+
+/* "Happiness Dose" button */
+
+.happinessBtn {
+  align-self: flex-start;
+  border-radius: 18px;
+  padding: 6px 16px;
+  border: 1px solid #ff725e;
+  background: #ffffff;
+  color: #ff725e;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.happinessBtn:hover {
+  background: #ff725e;
+  color: #ffffff;
+}
+
+/* PAGER */
+
+.pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 24px;
+}
+
+.pager > button {
+  border-radius: 18px;
+  padding: 4px 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.pager > button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.pageBtn {
+  border-radius: 18px;
+  padding: 4px 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.currentPage {
+  background: #ff725e;
+  border-color: #ff725e;
+  color: #ffffff;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 640px) {
+  .recognitionsFeed {
+    padding: 12px;
+  }
+
+  .card {
+    flex-direction: column;
+  }
+
+  .cardImageWrapper {
+    margin-right: 0;
+    margin-bottom: 8px;
+    width: 100px;
+    height: 100px;
+  }
+}
