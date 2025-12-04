@@ -11,16 +11,29 @@
   display: none !important;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+small,
+div {
+  font-family: $font-primary;
+}
+
 // Portal style
 body {
-  background: $bg-100;
+  background: #fff;
   font-family: $font-primary;
   font-size: $body;
 }
 
 .tawasolPortal {
   position: relative;
-  background: $bg-100;
+  background: #fff;
 }
 
 #appMaster {
@@ -105,31 +118,6 @@ body {
     font-family: $ms-font-family-fallbacks;
   }
 }
-
-.welcome {
-  text-align: center;
-}
-
-.welcomeImage {
-  width: 100%;
-  max-width: 420px;
-}
-
-.links {
-  a {
-    text-decoration: none;
-    color: "[theme:link, default:#03787c]";
-    color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
-
-    &:hover {
-      text-decoration: underline;
-      color: "[theme:linkHovered, default: #014446]";
-      color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
-    }
-  }
-}
-
-
 
 
 .userCard {
@@ -294,9 +282,11 @@ body {
     }
   }
 }
+
 .slick-dotted.slick-slider {
   margin-bottom: 0 !important;
 }
+
 .slick-wrapper {
   .card {
     padding: 20px;
@@ -322,7 +312,7 @@ body {
 //Ask support
 
 .fullWidthWrapper {
-width: 100%;
+  width: 100%;
 
 }
 
@@ -330,7 +320,7 @@ width: 100%;
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 100px; 
+  height: 100px;
 }
 
 .askSupporttile {
@@ -357,11 +347,11 @@ width: 100%;
 }
 
 .askIt {
-  background-color: #3b7c95;  
+  background-color: #3b7c95;
 }
 
 .askAdmin {
-  background-color: #88b7cf;  
+  background-color: #88b7cf;
 }
 
 
@@ -372,6 +362,7 @@ width: 100%;
   padding: 1em;
   color: "[theme:bodyText, default: #323130]";
   color: var(--bodyText);
+
   &.teams {
     font-family: $ms-font-family-fallbacks;
   }
@@ -437,19 +428,19 @@ width: 100%;
 }
 
 .appTileInner {
-  width: 64px;
-  height: 64px;
-  background: #ffffff;
-  border-radius: 6px;
-  display: flex;
   align-items: center;
+  background: #fff;
+  display: flex;
+  height: 85px;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+  width: 85px;
 }
 
 .appIcon {
-  max-width: 56px;
-  max-height: 56px;
+  height: 47px;
+  width: 60px;
+  object-fit: contain;
+  display: block;
 }
 
 .appInitials {
@@ -464,29 +455,31 @@ width: 100%;
 }
 
 .serviceTileInner {
-  // min-width: 96px;
-  // min-height: 96px;
-  // padding: 10px 18px;
-  // border-radius: 6px;
-  // box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
-  // display: flex;
-  // align-items: flex-end;
-
   align-items: center;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
-    display: flex;
-    min-height: 64px;
-    min-width: 64px;
-    // padding: 10px 18px;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 85px;
+  width: 85px;
+
+  i {
+    font-size: 29px;
+    color: #fff;
+    height: 34px;
+  }
+}
+
+.serviceIcon {
+  width: 34px;
+  object-fit: contain;
+  height: 34px;
 }
 
 .serviceTitle {
-  font-size: 9px;
+  color: #fff;
+  font-size: 10px;
   font-weight: 500;
-  color: #ffffff;
+  margin-top: 10px;
 }
 
 /* Simple responsiveness */
@@ -503,5 +496,342 @@ width: 100%;
   .serviceTileInner {
     min-width: 80px;
     min-height: 80px;
+  }
+}
+
+
+//news 
+.newsBigImg {
+  width: 92%;
+  object-fit: cover;
+  height: 100%;
+}
+
+.News-home {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  .news-home-big {
+    padding: 0;
+    width: 50%;
+
+    h3 {
+      color: #8478b7;
+      font-size: 23px;
+      margin: 10px 0;
+    }
+
+    h5 {
+      color: #8478B7;
+      font-size: 13px;
+      margin: 0;
+      font-weight: normal;
+    }
+
+    p {
+      color: #333;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    small {
+      color: #888;
+      font-weight: bold;
+    }
+  }
+
+  .news-list-home {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 40%;
+    border-left: 1px solid #C9E4F4;
+
+    .news-item-home {
+      align-items: flex-start;
+      border-bottom: 1px solid #c9e4f4;
+      display: flex;
+      gap: 15px;
+      padding: 10px;
+      transition: box-shadow .2s;
+      width: 90%;
+      margin: 0 auto;
+
+      &:last-child {
+        border: none;
+      }
+
+      img {
+        border-radius: 6px;
+        height: 68px;
+        object-fit: cover;
+        width: 90px;
+      }
+
+      div {
+        display: flex;
+        flex-direction: column;
+
+        h5 {
+          color: #8478b7;
+          font-size: 12px;
+          margin: 0;
+          font-weight: normal;
+        }
+
+        a {
+          color: #8478b7;
+          font-size: .9rem;
+          text-decoration: none;
+          font-weight: bold;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Header */
+.component-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  margin-top: 30px;
+  padding: 0;
+  width: 90%;
+
+  h2 {
+    font-size: 1.7rem;
+    margin: 0;
+    color: #8478B7;
+  }
+
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .News-home {
+    .news-home-big {
+      h3 {
+        font-size: 1.5rem;
+      }
+    }
+
+    .news-list-home {
+      .news-item-home {
+        flex-direction: column;
+        align-items: flex-start;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+}
+
+.viewAllBtn {
+
+  font-size: 14px;
+  color: #44849E;
+  text-decoration: none;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+  transition: all ease 500ms;
+
+  i {
+    color: #F58B6E;
+  }
+
+  &:hover {
+    font-weight: bold;
+  }
+}
+
+//events
+
+/* Calendar container with border */
+.brdr-lft-rgt {
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  padding: 10px;
+
+  .react-calendar {
+    width: 100%;
+    border: none;
+    font-family: inherit;
+
+    .react-calendar__tile {
+      height: 50px;
+      max-width: 100%;
+      padding: 5px;
+      text-align: center;
+      background: #fff;
+      border-radius: 4px;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+
+    .react-calendar__tile--active {
+      background: #0078d4;
+      color: #fff;
+      border-radius: 4px;
+    }
+
+    .react-calendar__tile--now {
+      border: 1px solid #0078d4;
+    }
+  }
+}
+
+/* Events List */
+.events-list-home {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .event-item-home {
+    display: flex;
+    gap: 15px;
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: #0078d4;
+      min-width: 50px;
+
+      strong {
+        display: block;
+        font-size: 1.3rem;
+        color: #333;
+      }
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+
+      h3 {
+        font-size: 1rem;
+        margin: 0 0 5px 0;
+        color: #333;
+      }
+
+      p {
+        font-size: 0.85rem;
+        margin: 0;
+        color: #666;
+      }
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .brdr-lft-rgt {
+    border-left: none;
+    border-right: none;
+    margin-bottom: 20px;
+  }
+
+  .events-list-home {
+    .event-item-home {
+      flex-direction: column;
+
+      label {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
+
+
+//survey
+.survey-home-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 450px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+
+  h3 {
+    font-size: 1.5rem;
+    color: #0078d4;
+    margin-bottom: 15px;
+  }
+
+  .ms-Stack {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    div {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+      color: #333;
+
+      span:first-child {
+        min-width: 120px;
+      }
+
+      span:last-child {
+        display: flex;
+        gap: 5px;
+
+        span {
+          transition: color 0.2s;
+          cursor: pointer;
+          font-size: 24px;
+
+          &:hover {
+            color: #ffb300;
+          }
+        }
+      }
+    }
+  }
+
+  .ms-Button {
+    margin-top: 15px;
+    max-width: 150px;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .survey-home-box {
+    padding: 15px;
+
+    .ms-Stack div {
+      flex-direction: column;
+      align-items: flex-start;
+
+      span:first-child {
+        margin-bottom: 5px;
+      }
+    }
   }
 }
