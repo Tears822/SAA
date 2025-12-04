@@ -253,7 +253,7 @@ body {
 
   .left {
     width: 55%;
-    padding: 3rem;
+    padding: 3rem 3rem 3rem 0;
     display: flex;
     flex-direction: column;
     gap: 22px;
@@ -362,4 +362,146 @@ width: 100%;
 
 .askAdmin {
   background-color: #88b7cf;  
+}
+
+
+//Portal tiles
+
+.portalTiles {
+  overflow: hidden;
+  padding: 1em;
+  color: "[theme:bodyText, default: #323130]";
+  color: var(--bodyText);
+  &.teams {
+    font-family: $ms-font-family-fallbacks;
+  }
+}
+
+
+.outer {
+  /* Make the web part stretch beyond the page padding to full viewport width */
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Common band style */
+.band {
+  display: flex;
+  align-items: center;
+  padding: 16px 40px;
+  justify-content: center;
+}
+
+.bandApps {
+  background: #a6c9dc; // light blue similar to screenshot
+}
+
+.bandServices {
+  background: #4f8fa2; // darker blue
+}
+
+.bandLabel {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 15px;
+  margin-right: 32px;
+  white-space: nowrap;
+  width: 130px;
+}
+
+.tilesRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Apps row specific tweaks */
+.tilesRowApps {
+  align-items: center;
+}
+
+/* Services row specific tweaks */
+.tilesRowServices {
+  align-items: center;
+}
+
+/* App tiles (top row white squares) */
+.appTile {
+  text-decoration: none;
+}
+
+.appTileInner {
+  width: 64px;
+  height: 64px;
+  background: #ffffff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+}
+
+.appIcon {
+  max-width: 56px;
+  max-height: 56px;
+}
+
+.appInitials {
+  font-size: 16px;
+  font-weight: 600;
+  color: #666666;
+}
+
+/* Service tiles (bottom row color blocks) */
+.serviceTile {
+  text-decoration: none;
+}
+
+.serviceTileInner {
+  // min-width: 96px;
+  // min-height: 96px;
+  // padding: 10px 18px;
+  // border-radius: 6px;
+  // box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+  // display: flex;
+  // align-items: flex-end;
+
+  align-items: center;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+    display: flex;
+    min-height: 64px;
+    min-width: 64px;
+    // padding: 10px 18px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.serviceTitle {
+  font-size: 9px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* Simple responsiveness */
+@media (max-width: 640px) {
+  .band {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bandLabel {
+    margin-bottom: 12px;
+  }
+
+  .serviceTileInner {
+    min-width: 80px;
+    min-height: 80px;
+  }
 }
