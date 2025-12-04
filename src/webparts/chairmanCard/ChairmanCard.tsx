@@ -92,7 +92,7 @@ const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) =
     loadLeaders();
   }, []);
 
-  if (!leaders.length) return <div>Loading...</div>;
+  if (!leaders.length) return <div className="loading-spinner"><div></div><div></div><div></div><div></div></div>;
 
   return (
     <div className="chairmanCard">

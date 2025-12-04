@@ -57,13 +57,13 @@ const CurrentUserCard: React.FC<ICurrentUserCardProps> = ({ sp, webUrl }) => {
         loadUser();
     }, []);
 
-    if (!user) return <div>Loading...</div>;
+    if (!user) return <div className="loading-spinner"><div></div><div></div><div></div><div></div></div>;
 
     return (
         <div className="userCard">
             <div className="header">
                 <div className="avatarCircle">
-                    <img src={user.photoUrl} alt="User" />
+                    <img src={require('../../theme/images/default-user.jpg')}alt="User" />
                 </div>
 
                 <div className="textArea">
