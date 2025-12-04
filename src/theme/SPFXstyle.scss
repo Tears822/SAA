@@ -211,7 +211,9 @@ body {
   .tilePurple {
     background-color: #9b8bc6;
   }
-
+  .tileBlue {
+    background-color: #89C8E3;
+  }
   .tileGreen {
     background-color: #a8c7a1;
   }
@@ -608,9 +610,9 @@ body {
   width: 90%;
 
   h2 {
-    font-size: 1.7rem;
+    color: #8478b7;
+    font-size: 28px;
     margin: 0;
-    color: #8478B7;
   }
 
 }
@@ -654,7 +656,7 @@ body {
   }
 
   &:hover {
-    font-weight: bold;
+    color: #F58B6E;
   }
 }
 
@@ -662,14 +664,55 @@ body {
 
 /* Calendar container with border */
 .brdr-lft-rgt {
-  border-left: 1px solid #e0e0e0;
-  border-right: 1px solid #e0e0e0;
-  padding: 10px;
+  margin: 46px auto;
+  width: 90%;
+  position: relative;
+
+  &::before {
+    content: "";
+    width: 6px;
+    height: 100%;
+    background: #C9E4F4;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 5px;
+  }
+
+  &::after {
+    content: "";
+    width: 6px;
+    height: 100%;
+    background: #C9E4F4;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 5px;
+  }
 
   .react-calendar {
-    width: 100%;
+    width: 82%;
+    margin: 0 auto;
     border: none;
     font-family: inherit;
+
+    .react-calendar__month-view__weekdays__weekday {
+    padding: .5em;
+    text-decoration: none;
+    color: #B5BEC6;
+}
+
+
+    .react-calendar__navigation button {
+      background: transparent !important;
+      min-width: 44px;
+      font-size: 15px;
+    }
+
+    .react-calendar__navigation__label {
+      color: #8478B7;
+      font-weight: bold;
+    }
 
     .react-calendar__tile {
       height: 50px;
@@ -677,7 +720,7 @@ body {
       padding: 5px;
       text-align: center;
       background: #fff;
-      border-radius: 4px;
+      border-radius: 50%;
       transition: background 0.2s;
 
       &:hover {
@@ -686,13 +729,29 @@ body {
     }
 
     .react-calendar__tile--active {
-      background: #0078d4;
+      background: #44849E;
       color: #fff;
-      border-radius: 4px;
+      border-radius: 50%;
     }
 
     .react-calendar__tile--now {
-      border: 1px solid #0078d4;
+    border: none;
+    }
+  }
+}
+
+.list-events-types {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  li {  
+    span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
     }
   }
 }
@@ -701,30 +760,32 @@ body {
 .events-list-home {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-
+    margin-top: 33px;
   .event-item-home {
     display: flex;
     gap: 15px;
-    background: #fff;
     padding: 12px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    transition: box-shadow 0.2s;
+    justify-content: flex-start;
+    align-items: center;
 
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
 
     label {
-      font-size: 0.85rem;
-      color: #0078d4;
-      min-width: 50px;
+    color: #8AB7CF;
+    font-size: 14px;
+    width: 70px;
+    height: 60px;
+    background: #F1F8FC;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
 
       strong {
-        display: block;
-        font-size: 1.3rem;
-        color: #333;
+    display: block;
+    font-size: 21px;
       }
     }
 
@@ -747,55 +808,41 @@ body {
   }
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .brdr-lft-rgt {
-    border-left: none;
-    border-right: none;
-    margin-bottom: 20px;
-  }
-
-  .events-list-home {
-    .event-item-home {
-      flex-direction: column;
-
-      label {
-        margin-bottom: 5px;
-      }
-    }
-  }
-}
 
 
 //survey
 .survey-home-box {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 450px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
+  padding: 40px 20px;
+  width: 80%;
 
   h3 {
-    font-size: 1.5rem;
-    color: #0078d4;
-    margin-bottom: 15px;
+    color: #000;
+    font-size: 28px;
+    margin: 0;
   }
 
   .ms-Stack {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding: 0;
+    margin-top: 20px;
+
+    h3 {
+      color: #000;
+      font-size: 17px;
+      margin: 0;
+      font-weight: normal;
+    }
 
     div {
+      align-items: flex-start;
       display: flex;
-      align-items: center;
-      font-size: 1rem;
-      color: #333;
-
-      span:first-child {
-        min-width: 120px;
-      }
+      font-size: 16px;
+      flex-direction: column;
+      color: #F58B6E;
+      margin: 0;
 
       span:last-child {
         display: flex;
@@ -817,21 +864,5 @@ body {
   .ms-Button {
     margin-top: 15px;
     max-width: 150px;
-  }
-}
-
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  .survey-home-box {
-    padding: 15px;
-
-    .ms-Stack div {
-      flex-direction: column;
-      align-items: flex-start;
-
-      span:first-child {
-        margin-bottom: 5px;
-      }
-    }
   }
 }

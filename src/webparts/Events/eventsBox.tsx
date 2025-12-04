@@ -65,6 +65,15 @@ const EventsBox: FC<IEventsProps> = ({ events = sampleEvents }) => {
                         tileContent={tileContent}
                     />
 
+                    <ul className="list-events-types">
+                        <li>
+                            <span className="tileBlue"></span>National holidays
+                        </li>
+                        <li>
+                            <span className="tileOrange"></span>SAA Events
+                        </li>
+                    </ul>
+
                 </div>
             </div>
             <div className="col-4 col-md-4">

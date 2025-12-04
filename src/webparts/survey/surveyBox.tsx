@@ -1,6 +1,7 @@
 import * as React from "react";
 import { FC, useState } from "react";
-import { Stack, PrimaryButton } from "@fluentui/react";
+import { Stack, Icon } from "@fluentui/react";
+import { Link } from "react-router-dom";
 
 interface OptionRating {
   key: string;
@@ -24,10 +25,7 @@ const SurveyBox: FC<{}> = () => {
     setOptions(updatedOptions);
   };
 
-  const handleSubmit = () => {
-    const result = options.map((opt) => `${opt.text}: ${opt.rating} stars`).join("\n");
-    alert(`Your ratings:\n${result}`);
-  };
+
 
   return (
     <div className="survey-home-box">
@@ -37,7 +35,7 @@ const SurveyBox: FC<{}> = () => {
 
         {options.map((option) => (
           <div key={option.key}>
-            <span>{option.text}:</span>
+            <span>{option.text}</span>
             <span style={{ marginLeft: 10 }}>
               {[1, 2, 3, 4, 5].map((star) => (
                 <span
@@ -56,11 +54,10 @@ const SurveyBox: FC<{}> = () => {
           </div>
         ))}
 
-        <PrimaryButton
-          text="Submit"
-          onClick={handleSubmit}
-          disabled={options.some((o) => o.rating === 0)}
-        />
+        <Link to="/" className="viewAllBtn">
+          View all
+          <Icon iconName="ChevronRightMed" />
+        </Link>
       </Stack>
     </div>
   );
