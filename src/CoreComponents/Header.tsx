@@ -84,6 +84,15 @@ class HeaderPageComponent extends React.Component<IHeaderProps & WithTranslation
       }
    }
 
+   private openWaffle = (): void => {
+      const anyWindow = window as any;
+
+      if (anyWindow._spLaunchWaffle) {
+         anyWindow._spLaunchWaffle();
+      } else {
+         console.warn("Waffle API not found. SuiteNav may be disabled.");
+      }
+   };
    public render(): React.ReactElement<{}> {
       const { t } = this.props;
 
@@ -93,6 +102,13 @@ class HeaderPageComponent extends React.Component<IHeaderProps & WithTranslation
 
             <div className="container">
                <div className='top-Bar'>
+
+                  <Icon
+                     iconName="WaffleOffice365"
+                     className='openAppsIcon'
+                     onClick={this.openWaffle}
+                  />
+
                   <Link to="/" className="brand">
                      <img src={require('../theme/images/logo.svg')} alt="Logo" />
                   </Link>
@@ -107,10 +123,10 @@ class HeaderPageComponent extends React.Component<IHeaderProps & WithTranslation
                            <img
                               src={this.state.user.pictureUrl
                                  ? this.state.user.pictureUrl
-                                 : require('../theme/images/default-user.png')}
+                                 : require('../theme/images/default-user.jpg')}
                               alt={this.state.user.displayName || "User"}
                               onError={(e) => {
-                                 (e.target as HTMLImageElement).src = require('../theme/images/default-user.png');
+                                 (e.target as HTMLImageElement).src = require('../theme/images/default-user.jpg');
                               }}
                               onClick={this.toggleUserBox}
                            />
@@ -126,10 +142,10 @@ class HeaderPageComponent extends React.Component<IHeaderProps & WithTranslation
                                  <img
                                     src={this.state.user.pictureUrl
                                        ? this.state.user.pictureUrl
-                                       : require('../theme/images/default-user.png')}
+                                       : require('../theme/images/default-user.jpg')}
                                     alt={this.state.user.displayName || "User"}
                                     onError={(e) => {
-                                       (e.target as HTMLImageElement).src = require('../theme/images/default-user.png');
+                                       (e.target as HTMLImageElement).src = require('../theme/images/default-user.jpg');
                                     }}
                                  />
                                  <div>

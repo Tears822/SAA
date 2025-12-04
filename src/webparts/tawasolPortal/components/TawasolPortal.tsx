@@ -28,10 +28,10 @@ const TawasolPortal: React.FC<ITawasolPortalWebPartProps> = (props) => {
           rel="stylesheet"
         />
         <Router>
-          <HeaderPageComponent sp={sp}/>
+          <HeaderPageComponent sp={sp} contextProp={props.context}/>
 
           <Routes>
-            <Route path="/" element={<Homepage />} />
+            <Route path="/" element={<Homepage sp={sp} contextProp={props.context} />} />
             <Route path="*" element={<Error404Component />} />
           </Routes>
 
