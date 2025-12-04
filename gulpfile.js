@@ -12,5 +12,23 @@ build.rig.getTasks = function () {
 
   return result;
 };
-
+build.configureWebpack.mergeConfig({
+    additionalConfiguration: (generatedConfiguration) => {
+      generatedConfiguration.module.rules.push(
+        {
+          test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+          use: [
+            {
+              loader: 'url-loader'
+            }
+          ]
+        }
+      );
+  
+      return generatedConfiguration;
+    }
+  });
 build.initialize(require('gulp'));
+
+
+

@@ -1,0 +1,59 @@
+// grid.scss
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Container
+.container {
+  width: 100%;
+  padding: 0 1rem;
+  margin: 0 auto;
+
+  @media (min-width: $breakpoint-sm) { max-width: 540px; }
+  @media (min-width: $breakpoint-md) { max-width: 720px; }
+  @media (min-width: $breakpoint-lg) { max-width: 960px; }
+  @media (min-width: $breakpoint-xl) { max-width: 1140px; }
+}
+
+.container-fluid {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+// Row
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -0.5rem;
+}
+
+// Columns
+.col {
+  padding: 0 0.5rem;
+  flex: 1 0 0%;
+}
+
+// Generate columns 1–12
+@for $i from 1 through 12 {
+  $w: ($i / 12) * 100%; // convert to percent manually
+
+  .col-#{$i} {
+    flex: 0 0 $w;
+    max-width: $w;
+  }
+
+  @media (min-width: $breakpoint-sm) {
+    .col-sm-#{$i} { flex: 0 0 $w; max-width: $w; }
+  }
+  @media (min-width: $breakpoint-md) {
+    .col-md-#{$i} { flex: 0 0 $w; max-width: $w; }
+  }
+  @media (min-width: $breakpoint-lg) {
+    .col-lg-#{$i} { flex: 0 0 $w; max-width: $w; }
+  }
+  @media (min-width: $breakpoint-xl) {
+    .col-xl-#{$i} { flex: 0 0 $w; max-width: $w; }
+  }
+}

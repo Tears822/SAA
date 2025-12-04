@@ -1,0 +1,89 @@
+@import './variables';
+
+// SharePoint hide
+[data-sp-feature-instance-id="_Site header host"],
+[data-sp-feature-tag="Site header host"],
+[aria-label="Get the mobile app"],
+#sp-appBar,
+.commandBarWrapper {
+  display: none !important;
+}
+
+// Portal style
+body {
+  background: $bg-100;
+  font-family: $font-primary;
+  font-size: $body;
+}
+
+.tawasolPortal {
+  position: relative;
+  background: $bg-100;
+}
+
+#appMaster {
+  position: relative;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+.footer {
+  bottom: 0 !important;
+  background: $brand-blue-600;
+  border: none;
+  z-index: 2;
+  width: 100%;
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    align-items: center;
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+  }
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  a {
+    color: #44849E;
+    height: 20px;
+    justify-content: center;
+    transition: all .2s;
+    width: 20px;
+    background: #fff;
+    border-radius: 50%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background: #bce2f1;
+    }
+
+    img {
+      width: 12px;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}
+
+
+
+.sectionContent {
+  padding: 2.75rem 0; 
+  min-height: 700px;
+}

@@ -121,6 +121,14 @@
           "manifest": "./src/webparts/portalTiles/PortalTilesWebPart.manifest.json"
         }
       ]
+    },
+    "tawasol-portal-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/tawasolPortal/TawasolPortalWebPart.js",
+          "manifest": "./src/webparts/tawasolPortal/TawasolPortalWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -155,6 +163,7 @@
     "CurrentUserCardWebPartStrings": "lib/webparts/currentUserCard/loc/{locale}.js",
     "ChairmanCardWebPartStrings": "lib/webparts/chairmanCard/loc/{locale}.js",
     "AskSupportWebPartStrings": "lib/webparts/askSupport/loc/{locale}.js",
-    "PortalTilesWebPartStrings": "lib/webparts/portalTiles/loc/{locale}.js"
+    "PortalTilesWebPartStrings": "lib/webparts/portalTiles/loc/{locale}.js",
+    "TawasolPortalWebPartStrings": "lib/webparts/tawasolPortal/loc/{locale}.js"
   }
 }
