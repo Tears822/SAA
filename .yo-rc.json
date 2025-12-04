@@ -2,7 +2,6 @@
   "@microsoft/generator-sharepoint": {
     "whichFolder": "subdir",
     "solutionName": "SAA-Tawasol",
-    "componentType": "webpart",
     "template": "none",
     "componentName": "AnnouncementsList",
     "plusBeta": false,
@@ -16,6 +15,7 @@
     "packageManager": "npm",
     "solutionShortDescription": "SAA-Tawasol description",
     "skipFeatureDeployment": true,
-    "isDomainIsolated": false
+    "isDomainIsolated": false,
+    "componentType": "webpart"
   }
 }
