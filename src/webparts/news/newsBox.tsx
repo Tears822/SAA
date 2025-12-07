@@ -44,14 +44,14 @@ const NewsBox: FC<{}> = ({ }) => {
                             </div>
                         </div>
                         <div className="news-item-home">
-                            <img src={require("../../theme/images/news2.jpg")} alt="news" />
+                            <img src={require("../../theme/images/news1.jpg")} alt="news" />
                             <div>
                                 <h5>HR Announcement - Meet Our New Colleagues</h5>
                                 <Link to="/">Safety Department</Link>
                             </div>
                         </div>
                         <div className="news-item-home">
-                            <img src={require("../../theme/images/news3.jpg")} alt="news" />
+                            <img src={require("../../theme/images/news1.jpg")} alt="news" />
                             <div>
                                 <h5>Events Announcement - Join Us in Celebrating</h5>
                                 <Link to="/">UAE National Day</Link>
