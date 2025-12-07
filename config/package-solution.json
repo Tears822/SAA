@@ -30,7 +30,13 @@
         "title": "saa-tawasol Feature",
         "description": "The feature that activates elements of the saa-tawasol solution.",
         "id": "e2e873a4-801f-4e70-ae43-ce7681c61ff6",
-        "version": "1.0.0.0"
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml",
+            "ClientSideInstance.xml"
+          ]
+        }
       }
     ],
     "webApiPermissionRequests": [

@@ -1,24 +1,25 @@
 import * as React from 'react';
-import { Link } from "react-router-dom";
-import { withTranslation, WithTranslation } from 'react-i18next';
 import { IconButton } from '@fluentui/react/lib/Button';
 import "./componets.scss";
 import SearchComponent from './searchbox';
-import type { SPFI } from "@pnp/sp";
 import { Icon } from '@fluentui/react';
-
+import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
+import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
 
 export interface IHeaderState {
    menuOpen: boolean;
    userBoxOpen: boolean;
    langOpen: boolean;
-   selectedLang: 'en' | 'ar';
    user?: IUserInfo | null;
+   siteLogo: string;
+   navigationNodes: INavigationNode[];
+   loading: boolean;
 }
 
 export interface IHeaderProps {
-   sp: SPFI;
+    context: ApplicationCustomizerContext;
 }
+
 export interface IUserInfo {
    displayName: string;
    email: string;
@@ -26,24 +27,132 @@ export interface IUserInfo {
    pictureUrl?: string;
 }
 
+export interface INavigationNode {
+   Id: number;
+   Title: string;
+   Url: string;
+   IsExternal: boolean;
+   Children?: INavigationNode[];
+}
 
-class HeaderPageComponent extends React.Component<IHeaderProps & WithTranslation, IHeaderState> {
+class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
 
-   constructor(props: any) {
+   constructor(props: IHeaderProps) {
       super(props);
 
       this.state = {
          langOpen: false,
-         selectedLang: 'en',
          menuOpen: false,
          userBoxOpen: false,
-         user: null
+         user: null,
+         siteLogo: require('../theme/images/logo.svg'), // Fallback logo
+         navigationNodes: [],
+         loading: true
       };
    }
 
-   componentDidMount() {
-      this.fetchUser();
+   async componentDidMount() {
+      await this.loadSiteLogo();
+      await this.loadNavigation();
+      await this.loadUserInfo();
    }
+
+   /**
+    * Load site logo from SharePoint site settings
+    */
+   private loadSiteLogo = async (): Promise<void> => {
+      try {
+         const { context } = this.props;
+         const siteUrl = context.pageContext.web.absoluteUrl;
+         
+         // Get site logo URL from web properties
+         const response: SPHttpClientResponse = await context.spHttpClient.get(
+            `${siteUrl}/_api/web?$select=SiteLogoUrl`,
+            SPHttpClient.configurations.v1
+         );
+
+         if (response.ok) {
+            const data = await response.json();
+            if (data.SiteLogoUrl) {
+               this.setState({ siteLogo: data.SiteLogoUrl });
+            }
+         }
+      } catch (error) {
+         console.error('Error loading site logo:', error);
+         // Keep fallback logo
+      }
+   };
+
+   /**
+    * Load navigation from SharePoint top navigation
+    */
+   private loadNavigation = async (): Promise<void> => {
+      try {
+         const { context } = this.props;
+         const siteUrl = context.pageContext.web.absoluteUrl;
+         
+         // Get top navigation nodes
+         const response: SPHttpClientResponse = await context.spHttpClient.get(
+            `${siteUrl}/_api/web/navigation/topnavigationbar?$expand=Children`,
+            SPHttpClient.configurations.v1
+         );
+
+         if (response.ok) {
+            const data = await response.json();
+            const nodes: INavigationNode[] = data.value.map((node: any) => ({
+               Id: node.Id,
+               Title: node.Title,
+               Url: node.Url,
+               IsExternal: node.IsExternal,
+               Children: node.Children?.results || []
+            }));
+
+            this.setState({ navigationNodes: nodes, loading: false });
+         }
+      } catch (error) {
+         console.error('Error loading navigation:', error);
+         this.setState({ loading: false });
+      }
+   };
+
+   /**
+    * Load current user information
+    */
+   private loadUserInfo = async (): Promise<void> => {
+      try {
+         const { context } = this.props;
+         const siteUrl = context.pageContext.web.absoluteUrl;
+         
+         // Get current user profile picture
+         const response: SPHttpClientResponse = await context.spHttpClient.get(
+            `${siteUrl}/_api/SP.UserProfiles.PeopleManager/GetMyProperties`,
+            SPHttpClient.configurations.v1
+         );
+
+         if (response.ok) {
+            const data = await response.json();
+            const pictureUrl = data.PictureUrl || null;
+
+            this.setState({
+               user: {
+                  displayName: context.pageContext.user.displayName,
+                  email: context.pageContext.user.email || '',
+                  title: data.Title || '',
+                  pictureUrl: pictureUrl
+               }
+            });
+         }
+      } catch (error) {
+         console.error('Error loading user info:', error);
+         // Set basic user info without picture
+         this.setState({
+            user: {
+               displayName: this.props.context.pageContext.user.displayName,
+               email: this.props.context.pageContext.user.email || '',
+            }
+         });
+      }
+   };
 
    private toggleMenu = (): void => {
       this.setState({ menuOpen: !this.state.menuOpen });
@@ -55,34 +164,14 @@ class HeaderPageComponent extends React.Component<IHeaderProps & WithTranslation
 
    private handleSearch = (value: string) => {
       console.log('Search Value:', value);
+      // Implement search functionality
+      const searchUrl = `${this.props.context.pageContext.web.absoluteUrl}/_layouts/15/search.aspx?q=${encodeURIComponent(value)}`;
+      window.location.href = searchUrl;
    };
 
    private toggleLangDropdown = (): void => {
       this.setState({ langOpen: !this.state.langOpen });
    };
-
-   private changeLang = (lng: 'en' | 'ar'): void => {
-      this.props.i18n.changeLanguage(lng);
-      this.setState({ selectedLang: lng, langOpen: false }); // close dropdown
-   };
-
-   private fetchUser = async () => {
-      try {
-         const { sp } = this.props;
-         const currentUser = await sp.web.currentUser();
-         const pictureUrl = `${sp.web.toUrl()}/_layouts/15/userphoto.aspx?size=M&accountname=${currentUser.Email}`;
-         this.setState({
-            user: {
-               displayName: currentUser.Title,
-               email: currentUser.Email,
-               title: currentUser.Title,
-               pictureUrl
-            }
-         });
-      } catch (err) {
-         console.error("Error fetching user info", err);
-      }
-   }
 
    private openWaffle = (): void => {
       const anyWindow = window as any;
@@ -93,37 +182,62 @@ class HeaderPageComponent extends React.Component<IHeaderProps & WithTranslation
          console.warn("Waffle API not found. SuiteNav may be disabled.");
       }
    };
+
+   /**
+    * Render navigation items recursively
+    */
+   private renderNavigationItems = (nodes: INavigationNode[]): JSX.Element[] => {
+      return nodes.map((node) => (
+         <li key={node.Id}>
+            <a href={node.Url} target={node.IsExternal ? '_blank' : '_self'}>
+               {node.Title}
+            </a>
+            {node.Children && node.Children.length > 0 && (
+               <ul>
+                  {node.Children.map((child: INavigationNode) => (
+                     <li key={child.Id}>
+                        <a href={child.Url} target={child.IsExternal ? '_blank' : '_self'}>
+                           {child.Title}
+                        </a>
+                     </li>
+                  ))}
+               </ul>
+            )}
+         </li>
+      ));
+   };
+
    public render(): React.ReactElement<{}> {
-      const { t } = this.props;
+      const { siteLogo, navigationNodes, loading } = this.state;
 
       return (
          <div className="navigationContainer">
-
-
-            <div className="container">
+            <div className="containerSaa">
                <div className='top-Bar'>
-
                   <Icon
                      iconName="WaffleOffice365"
                      className='openAppsIcon'
                      onClick={this.openWaffle}
                   />
 
-                  <Link to="/" className="brand">
-                     <img src={require('../theme/images/logo.svg')} alt="Logo" />
-                  </Link>
+                  <a href={this.props.context.pageContext.web.absoluteUrl} className="brand">
+                     <img 
+                        src={siteLogo} 
+                        alt="Site Logo"
+                        onError={(e) => {
+                           (e.target as HTMLImageElement).src = require('../theme/images/logo.svg');
+                        }}
+                     />
+                  </a>
                   <img src={require('../theme/images/triangles.svg')} className='traingleBg' />
 
                   <SearchComponent placeholder="Search..." onSearch={this.handleSearch} />
 
-
-                  {this.state.user &&
+                  {this.state.user && (
                      <>
                         <div className='user-box'>
                            <img
-                              src={this.state.user.pictureUrl
-                                 ? this.state.user.pictureUrl
-                                 : require('../theme/images/default-user.jpg')}
+                              src={this.state.user.pictureUrl || require('../theme/images/default-user.jpg')}
                               alt={this.state.user.displayName || "User"}
                               onError={(e) => {
                                  (e.target as HTMLImageElement).src = require('../theme/images/default-user.jpg');
@@ -132,115 +246,102 @@ class HeaderPageComponent extends React.Component<IHeaderProps & WithTranslation
                            />
                         </div>
 
-                        {this.state.userBoxOpen &&
-
-
+                        {this.state.userBoxOpen && (
                            <div className='user-profile-box'>
-
                               <Icon onClick={this.toggleUserBox} iconName='ChromeClose' className='close-user-profile' />
                               <div className='curr-user'>
-                                 <img
-                                    src={this.state.user.pictureUrl
-                                       ? this.state.user.pictureUrl
-                                       : require('../theme/images/default-user.jpg')}
-                                    alt={this.state.user.displayName || "User"}
-                                    onError={(e) => {
-                                       (e.target as HTMLImageElement).src = require('../theme/images/default-user.jpg');
-                                    }}
-                                 />
                                  <div>
                                     <h3>{this.state.user.displayName}</h3>
-                                    <h4>{this.state.user.title}</h4>
+                                    <h4>{this.state.user.email}</h4>
+                                    {this.state.user.title && <p>{this.state.user.title}</p>}
                                  </div>
                               </div>
 
                               <div className="tiles">
-                                 <a id="cucTileProfile" className="tilePurple" target="_blank" rel="noopener">
-                                    <Icon iconName='TeamsLogo' />
+                                 <a 
+                                    id="cucTileProfile" 
+                                    className="tilePurple" 
+                                    href={`${this.props.context.pageContext.web.absoluteUrl}/_layouts/15/me.aspx`}
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                 >
+                                    <Icon iconName='Contact' />
                                     <label>Profile</label>
                                  </a>
-                                 <a id="cucTileEmail" className="tileGreen">
+                                 <a 
+                                    id="cucTileEmail" 
+                                    className="tileGreen"
+                                    href="https://outlook.office.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                 >
                                     <Icon iconName='Mail' />
                                     <label>Email</label>
                                  </a>
-                                 <a id="cucTileOneDrive" className="tileOrange" target="_blank" rel="noopener">
+                                 <a 
+                                    id="cucTileOneDrive" 
+                                    className="tileOrange" 
+                                    href={`${this.props.context.pageContext.web.absoluteUrl}/_layouts/15/onedrive.aspx`}
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                 >
                                     <Icon iconName='OneDriveLogo' />
                                     <label>OneDrive</label>
                                  </a>
-                                 <a id="cucTileTeams" className="tilePeach" target="_blank" rel="noopener">
+                                 <a 
+                                    id="cucTileTeams" 
+                                    className="tilePeach" 
+                                    href="https://teams.microsoft.com"
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                 >
                                     <Icon iconName='TeamsLogo' />
                                     <label>Teams</label>
                                  </a>
-                                 <a id="cucTileFav" className="tileFav" target="_blank" rel="noopener">
+                                 <a 
+                                    id="cucTileFav" 
+                                    className="tileFav" 
+                                    href={`${this.props.context.pageContext.web.absoluteUrl}/_layouts/15/favorites.aspx`}
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                 >
                                     <Icon iconName='FavoriteStar' />
                                     <label>Favorites</label>
                                  </a>
-                                 <a id="cucTileTasks" className="tileMint" target="_blank" rel="noopener">
+                                 <a 
+                                    id="cucTileTasks" 
+                                    className="tileMint" 
+                                    href="https://to-do.office.com"
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                 >
                                     <Icon iconName='BulletedList2' />
                                     <label>My Tasks</label>
                                  </a>
                               </div>
                            </div>
-                        }
+                        )}
                      </>
-                  }
-
+                  )}
 
                   <div className="lang-switcher">
                      <div className="selected-lang" onClick={this.toggleLangDropdown}>
-                        {this.state.selectedLang.toUpperCase()} <Icon iconName='ChevronDownMed' />
+                        EN<Icon iconName='ChevronDownMed' />
                      </div>
-                     {this.state.langOpen && (
-                        <ul className="lang-dropdown">
-                           {['en', 'ar']
-                              .filter(l => l !== this.state.selectedLang)
-                              .map(lang => (
-                                 <li key={lang} onClick={() => this.changeLang(lang as 'en' | 'ar')}>
-                                    {lang.toUpperCase()}
-                                 </li>
-                              ))}
-                        </ul>
-
-                     )}
                   </div>
                </div>
             </div>
+
             <div className="bottom-Bar">
-
-               <div className="container">
+               <div className="containerSaa">
                   <div className="navbar">
-                     <ul className="navLinks">
-                        <li>
-                           <Link to="/">{t('EmployeeHub')}</Link>
-                        </li>
-
-                        <li>
-                           <Link to="/Tawasul">{t('Tawasul')}</Link>
-                           <ul>
-                              <li><Link to="/Tawasul/News">{t('News')}</Link></li>
-                              <li><Link to="/Tawasul/Announcements">{t('Announcements')}</Link></li>
-                              <li><Link to="/Tawasul/Announcements">{t('InternalJobs')}</Link></li>
-                              <li><Link to="/Tawasul/Announcements">{t('Surveys')}</Link></li>
-                           </ul>
-                        </li>
-
-                        <li>
-                           <Link to="/Matari">{t('Matari')}</Link>
-                           <ul>
-                              <li><Link to="/Matari/Item1">{t('Matari Program')}</Link></li>
-                              <li><Link to="/Matari/Item2">{t('Nomination Process')}</Link></li>
-                           </ul>
-                        </li>
-
-                        <li>
-                           <Link to="/About">{t('About')}</Link>
-                           <ul>
-                              <li><Link to="/Matari/Item1">{t('SAA Strategy')}</Link></li>
-                              <li><Link to="/Matari/Item2">{t('SAA Organizational Structure')}</Link></li>
-                           </ul>
-                        </li>
-                     </ul>
-
+                     {loading ? (
+                        <div className="loading">Loading navigation...</div>
+                     ) : (
+                        <ul className="navLinks">
+                           {this.renderNavigationItems(navigationNodes)}
+                        </ul>
+                     )}
 
                      <IconButton
                         className="hamburger"
@@ -253,47 +354,12 @@ class HeaderPageComponent extends React.Component<IHeaderProps & WithTranslation
 
             <div className={this.state.menuOpen ? "mobileMenu open" : "mobileMenu"}>
                <ul>
-                  <li>
-                     <Link to="/">{t('EmployeeHub')}</Link>
-                  </li>
-
-                  <li>
-                     <Link to="/Tawasul">{t('Tawasul')}</Link>
-                     <ul>
-                        <li><Link to="/Tawasul/News">{t('News')}</Link></li>
-                        <li><Link to="/Tawasul/Announcements">{t('Announcements')}</Link></li>
-                        <li><Link to="/Tawasul/Announcements">{t('InternalJobs')}</Link></li>
-                        <li><Link to="/Tawasul/Announcements">{t('Surveys')}</Link></li>
-                     </ul>
-                  </li>
-
-                  <li>
-                     <Link to="/Matari">{t('Matari')}</Link>
-                     <ul>
-                        <li><Link to="/Matari/Item1">{t('Matari Program')}</Link></li>
-                        <li><Link to="/Matari/Item2">{t('Nomination Process')}</Link></li>
-                     </ul>
-                  </li>
-
-                  <li>
-                     <Link to="/About">{t('About')}</Link>
-                     <ul>
-                        <li><Link to="/Matari/Item1">{t('SAA Strategy')}</Link></li>
-                        <li><Link to="/Matari/Item2">{t('SAA Organizational Structure')}</Link></li>
-                     </ul>
-                  </li>
+                  {this.renderNavigationItems(navigationNodes)}
                </ul>
-
-               <div className="mobileLang">
-                  <span onClick={() => this.changeLang('en')}>EN</span> |
-                  <span onClick={() => this.changeLang('ar')}>AR</span>
-               </div>
             </div>
-
          </div>
-
       );
    }
 }
 
-export default withTranslation()(HeaderPageComponent);
+export default HeaderPageComponent;

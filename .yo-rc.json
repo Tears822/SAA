@@ -3,7 +3,6 @@
     "whichFolder": "subdir",
     "solutionName": "SAA-Tawasol",
     "template": "none",
-    "componentName": "AnnouncementsList",
     "plusBeta": false,
     "isCreatingSolution": false,
     "nodeVersion": "22.21.1",
@@ -16,6 +15,7 @@
     "solutionShortDescription": "SAA-Tawasol description",
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
-    "componentType": "webpart"
+    "componentType": "extension",
+    "extensionType": "ApplicationCustomizer"
   }
 }

@@ -1,4 +1,4 @@
-// grid.scss
+
 
 $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
@@ -6,7 +6,7 @@ $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
 
 // Container
-.container {
+.containerSaa {
   width: 100%;
   padding: 0 1rem;
   margin: 0 auto;
@@ -17,44 +17,122 @@ $breakpoint-xl: 1200px;
   @media (min-width: $breakpoint-xl) { max-width: 1140px; }
 }
 
-.container-fluid {
+.containerSaa-fluid {
   width: 100%;
-  // padding: 0 1rem;
   padding: 0 0.5rem;
 }
 
 // Row
-.row {
+.rowSaa{
   display: flex;
   flex-wrap: wrap;
   margin: 0 -0.5rem;
 }
 
 // Columns
-.col {
+.colSaa {
   padding: 0 0.5rem;
   flex: 1 0 0%;
+  min-width: 0; // Prevent overflow
+  
+  > * {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 // Generate columns 1–12
 @for $i from 1 through 12 {
-  $w: ($i / 12) * 100%; // convert to percent manually
+  $w: ($i / 12) * 100%;
 
-  .col-#{$i} {
+  .colSaa-#{$i} {
+    padding: 0 0.5rem;
     flex: 0 0 $w;
     max-width: $w;
+    min-width: 0; // Prevent overflow
+    
+    > * {
+      width: 100%;
+      max-width: 100%;
+    }
   }
 
   @media (min-width: $breakpoint-sm) {
-    .col-sm-#{$i} { flex: 0 0 $w; max-width: $w; }
+    .colSaa-sm-#{$i} {
+      padding: 0 0.5rem;
+      flex: 0 0 $w;
+      max-width: $w;
+      min-width: 0;
+      
+      > * {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
   }
+
   @media (min-width: $breakpoint-md) {
-    .col-md-#{$i} { flex: 0 0 $w; max-width: $w; }
+    .colSaa-md-#{$i} {
+      padding: 0 0.5rem;
+      flex: 0 0 $w;
+      max-width: $w;
+      min-width: 0;
+      
+      > * {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
   }
+
   @media (min-width: $breakpoint-lg) {
-    .col-lg-#{$i} { flex: 0 0 $w; max-width: $w; }
+    .colSaa-lg-#{$i} {
+      padding: 0 0.5rem;
+      flex: 0 0 $w;
+      max-width: $w;
+      min-width: 0;
+      
+      > * {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
   }
+
   @media (min-width: $breakpoint-xl) {
-    .col-xl-#{$i} { flex: 0 0 $w; max-width: $w; }
+    .colSaa-xl-#{$i} {
+      padding: 0 0.5rem;
+      flex: 0 0 $w;
+      max-width: $w;
+      min-width: 0;
+      
+      > * {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
   }
 }
+
+// Force children to respect grid widths
+.rowSaa > [class*="colSaa-"] {
+  > * {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+
+
+
+.align-items-start { align-items: flex-start; }
+.align-items-end { align-items: flex-end; }
+.align-items-center { align-items: center; }
+.align-items-baseline { align-items: baseline; }
+.align-items-stretch { align-items: stretch; }
+
+.align-self-start { align-self: flex-start; }
+.align-self-end { align-self: flex-end; }
+.align-self-center { align-self: center; }
+.align-self-baseline { align-self: baseline; }
+.align-self-stretch { align-self: stretch; }

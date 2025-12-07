@@ -1,3 +1,5 @@
+@import '../theme/grid.scss';
+
 // Colors
 $brand-blue-600: #44849E;
 $brand-teal-500: #4BA8A5;
@@ -22,6 +24,21 @@ $display-h1: 44px;
 $font-primary: 'Montserrat', 'Segoe UI', sans-serif;
 $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
 
+// Breakpoints
+$breakpoint-xs: 480px;
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// SharePoint hide
+[data-sp-feature-instance-id="_Site header host"],
+[data-sp-feature-tag="Site header host"],
+[aria-label="Get the mobile app"],
+#sp-appBar{
+  display: none !important;
+}
+
 .navigationContainer {
   width: 100%;
   background: $brand-blue-600;
@@ -32,6 +49,17 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
     align-items: center;
     gap: 10px;
     width: 100%;
+    padding: 0 10px;
+
+    @media (max-width: $breakpoint-md) {
+      gap: 5px;
+      padding: 5px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
     .brand {
       display: flex;
@@ -39,11 +67,27 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
 
       img {
         height: 55px;
+
+        @media (max-width: $breakpoint-md) {
+          height: 45px;
+        }
+
+        @media (max-width: $breakpoint-sm) {
+          height: 40px;
+        }
       }
     }
 
     .traingleBg {
       height: 95px;
+
+      @media (max-width: $breakpoint-lg) {
+        height: 80px;
+      }
+
+      @media (max-width: $breakpoint-md) {
+        display: none;
+      }
     }
 
     //searchbox
@@ -59,14 +103,35 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
       justify-content: flex-start;
       align-items: center;
       margin-left: -60px;
-    }
 
+      @media (max-width: $breakpoint-lg) {
+        width: 40%;
+        margin-left: -40px;
+      }
+
+      @media (max-width: $breakpoint-md) {
+        width: 35%;
+        margin-left: 0;
+        height: 40px;
+        font-size: 13px;
+      }
+
+      @media (max-width: $breakpoint-sm) {
+        width: 100%;
+        order: 3;
+        margin-top: 10px;
+      }
+    }
 
     //UserBox
     .user-box {
       display: flex;
       justify-content: flex-start;
       align-items: center;
+
+      @media (max-width: $breakpoint-sm) {
+        order: 2;
+      }
 
       img {
         width: 55px;
@@ -75,10 +140,17 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
         object-fit: cover;
         background: #fff;
         cursor: pointer;
+
+        @media (max-width: $breakpoint-md) {
+          width: 45px;
+          height: 45px;
+        }
+
+        @media (max-width: $breakpoint-sm) {
+          width: 40px;
+          height: 40px;
+        }
       }
-
-
-
     }
 
     /* Language buttons */
@@ -86,6 +158,10 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
       position: relative;
       cursor: pointer;
       user-select: none;
+
+      @media (max-width: $breakpoint-sm) {
+        order: 2;
+      }
 
       .selected-lang {
         align-items: center;
@@ -95,11 +171,20 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
         padding: 5px 3px;
         width: 34px;
         font-family: $font-primary;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 14px;
+          width: 30px;
+        }
       }
 
       i {
         font-size: 10px;
         margin-left: 5px;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 8px;
+        }
       }
 
       .lang-dropdown {
@@ -112,6 +197,7 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
         background: #fff;
         border-radius: 4px;
         width: 100%;
+        z-index: 100;
 
         li {
           padding: 5px 10px;
@@ -122,9 +208,7 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
         }
       }
     }
-
   }
-
 
   //nav
   .bottom-Bar {
@@ -136,6 +220,12 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
       justify-content: center;
       align-items: center;
       padding: 15px;
+      position: relative;
+
+      @media (max-width: $breakpoint-md) {
+        justify-content: space-between;
+        padding: 10px 15px;
+      }
 
       .navLinks {
         align-items: center;
@@ -144,6 +234,10 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
         position: relative;
         padding: 0;
         margin: 0;
+
+        @media (max-width: $breakpoint-lg) {
+          gap: 5px;
+        }
 
         li {
           list-style: none;
@@ -159,6 +253,11 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
             display: block;
             transition: color 0.2s;
 
+            @media (max-width: $breakpoint-lg) {
+              font-size: 14px;
+              padding: 5px 8px;
+            }
+
             &:hover {
               color: darken($brand-blue-600, 10%);
             }
@@ -173,6 +272,11 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
             padding: 5px 0;
             min-width: 300px;
             z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+            @media (max-width: $breakpoint-lg) {
+              min-width: 250px;
+            }
 
             li {
               width: 100%;
@@ -184,6 +288,11 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
                 white-space: nowrap;
                 font-size: 14px;
                 display: block;
+
+                @media (max-width: $breakpoint-lg) {
+                  font-size: 13px;
+                  padding: 8px 12px;
+                }
               }
 
               &:last-child {
@@ -197,23 +306,22 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
           }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: $breakpoint-md) {
           display: none;
         }
       }
-
-
-
     }
   }
-
 }
 
 /* Mobile Menu */
 .hamburger {
   display: none;
+  background: transparent !important;
+  border: none;
+  color: $brand-blue-600;
 
-  @media (max-width: 768px) {
+  @media (max-width: $breakpoint-md) {
     display: block;
   }
 }
@@ -224,20 +332,44 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
   padding: 15px 20px;
   border-top: 1px solid #eee;
   background: #fff;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 10px 15px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
   li {
     list-style: none;
     display: flex;
     flex-direction: column;
+    border-bottom: 1px solid #f0f0f0;
 
-    a {
-      padding: 10px 0;
+    &:last-child {
+      border-bottom: none;
+    }
+
+    > a {
+      padding: 12px 0;
       text-decoration: none;
       font-size: 16px;
       color: #333;
+      font-weight: 500;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 15px;
+        padding: 10px 0;
+      }
 
       &:hover {
-        color: #0078d4;
+        color: $brand-blue-600;
       }
     }
 
@@ -246,14 +378,29 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
       display: none;
       flex-direction: column;
       padding-left: 15px;
+      background: #f9f9f9;
 
-      li a {
-        font-size: 15px;
-        padding: 5px 0;
-        color: #555;
+      li {
+        border-bottom: 1px solid #e0e0e0;
 
-        &:hover {
-          color: #0078d4;
+        &:last-child {
+          border-bottom: none;
+        }
+
+        a {
+          font-size: 14px;
+          padding: 8px 0;
+          color: #555;
+          font-weight: normal;
+
+          @media (max-width: $breakpoint-sm) {
+            font-size: 13px;
+            padding: 6px 0;
+          }
+
+          &:hover {
+            color: $brand-blue-600;
+          }
         }
       }
     }
@@ -265,10 +412,13 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
 
   .mobileLang {
     padding: 10px 0;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
 
     span {
-      color: #0078d4;
+      color: $brand-blue-600;
       cursor: pointer;
+      font-size: 14px;
 
       &:hover {
         text-decoration: underline;
@@ -276,7 +426,7 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: $breakpoint-md) {
     display: flex;
   }
 }
@@ -285,6 +435,92 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
   display: flex !important;
 }
 
+.footer {
+  bottom: 0 !important;
+  background: $brand-blue-600;
+  border: none;
+  z-index: 2;
+  width: 100%;
+  padding: 10px 0;
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    align-items: center;
+
+    @media (max-width: $breakpoint-md) {
+      flex-direction: column;
+      gap: 15px;
+      text-align: center;
+      padding: 12px 15px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      padding: 10px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      color: #fff;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 12px;
+      }
+
+      @media (max-width: $breakpoint-xs) {
+        font-size: 11px;
+      }
+    }
+  }
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (max-width: $breakpoint-sm) {
+    gap: 8px;
+  }
+
+  a {
+    color: #44849E;
+    height: 20px;
+    justify-content: center;
+    transition: all .2s;
+    width: 20px;
+    background: #fff;
+    border-radius: 50%;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    @media (max-width: $breakpoint-sm) {
+      height: 18px;
+      width: 18px;
+    }
+
+    &:hover {
+      background: #bce2f1;
+    }
+
+    img {
+      width: 12px;
+      display: block;
+      margin: 0 auto;
+
+      @media (max-width: $breakpoint-sm) {
+        width: 10px;
+      }
+    }
+  }
+}
 
 //404
 .notfoundSection {
@@ -293,6 +529,15 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+
+  @media (max-width: $breakpoint-md) {
+    padding: 2rem 1.5rem;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 1.5rem 1rem;
+  }
 
   h1 {
     font-size: 36px;
@@ -302,6 +547,15 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
     align-items: center;
     gap: 0.5rem;
     font-family: $font-primary;
+    flex-wrap: wrap;
+
+    @media (max-width: $breakpoint-md) {
+      font-size: 30px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 24px;
+    }
   }
 
   p {
@@ -309,6 +563,14 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
     color: #283548;
     margin: 0.5rem 0;
     font-family: $font-primary;
+
+    @media (max-width: $breakpoint-md) {
+      font-size: 15px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 14px;
+    }
 
     a {
       color: #44849E;
@@ -337,6 +599,30 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
   justify-content: flex-start;
   display: flex;
   z-index: 99;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  @media (max-width: $breakpoint-md) {
+    top: 80px;
+    right: 15px;
+    width: 280px;
+    padding: 25px 15px;
+    gap: 20px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    top: 70px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    padding: 20px 12px;
+    gap: 15px;
+  }
 
   .close-user-profile {
     position: absolute;
@@ -345,6 +631,17 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
     font-size: 20px;
     color: #9e9e9e;
     cursor: pointer;
+    transition: color 0.2s;
+
+    @media (max-width: $breakpoint-sm) {
+      right: 15px;
+      top: 10px;
+      font-size: 18px;
+    }
+
+    &:hover {
+      color: #333;
+    }
   }
 
   .curr-user {
@@ -354,6 +651,10 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
     gap: 15px;
     width: 100%;
 
+    @media (max-width: $breakpoint-sm) {
+      gap: 10px;
+    }
+
     img {
       background: #fff;
       border-radius: 50%;
@@ -362,18 +663,32 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
       width: 72px;
       box-shadow: 0 0 5px #00000042;
       border: 1px solid #fff;
+      flex-shrink: 0;
+
+      @media (max-width: $breakpoint-sm) {
+        height: 60px;
+        width: 60px;
+      }
     }
 
     div {
       display: flex;
       flex-direction: column;
       gap: 5px;
+      overflow: hidden;
 
       h3 {
         color: #283548;
         margin: 0;
         font-size: 13px;
         font-family: $font-primary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 12px;
+        }
       }
 
       h4 {
@@ -382,6 +697,13 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
         font-weight: normal;
         font-size: 14px;
         font-family: $font-primary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 12px;
+        }
       }
     }
   }
@@ -393,6 +715,11 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
     gap: 10px;
     align-items: flex-start;
     flex-wrap: wrap;
+
+    @media (max-width: $breakpoint-sm) {
+      gap: 8px;
+      justify-content: center;
+    }
 
     a {
       display: flex;
@@ -408,13 +735,35 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
       height: 95px;
       cursor: pointer;
       transition: filter 0.15s ease-in-out;
+      border-radius: 4px;
+
+      @media (max-width: $breakpoint-md) {
+        width: 85px;
+        height: 85px;
+        font-size: 10px;
+      }
+
+      @media (max-width: $breakpoint-sm) {
+        width: 75px;
+        height: 75px;
+        font-size: 9px;
+      }
 
       i {
         font-size: 24px;
+
+        @media (max-width: $breakpoint-md) {
+          font-size: 22px;
+        }
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 20px;
+        }
       }
 
       label {
         text-align: center;
+        cursor: pointer;
       }
 
       &:hover {
@@ -423,8 +772,7 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
     }
   }
 
-
-  /* colors (approximate your screenshot) */
+  /* colors */
   .tilePurple {
     background-color: #aba2d0;
   }
@@ -456,4 +804,26 @@ $font-secondary: 'Almarai', 'Segoe UI', sans-serif;
   margin-left: -30px;
   margin-right: 15px;
   cursor: pointer;
+  transition: opacity 0.2s;
+
+  @media (max-width: $breakpoint-lg) {
+    margin-left: -20px;
+    margin-right: 10px;
+    font-size: 22px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    margin-left: 0;
+    margin-right: 5px;
+    font-size: 20px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: 18px;
+    order: 1;
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
