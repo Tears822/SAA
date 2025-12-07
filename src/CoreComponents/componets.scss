@@ -1,3 +1,4 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 @import '../theme/grid.scss';
 
 // Colors
@@ -35,9 +36,94 @@ $breakpoint-xl: 1200px;
 [data-sp-feature-instance-id="_Site header host"],
 [data-sp-feature-tag="Site header host"],
 [aria-label="Get the mobile app"],
-#sp-appBar{
+#sp-appBar,#CommentsWrapper{
   display: none !important;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+small,
+div {
+  font-family: $font-primary;
+}
+
+
+//Loader
+.loading-spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  margin: 0 auto;
+
+  div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    margin: 3px;
+    border: 4px solid #0078d4;
+    border-radius: 50%;
+    animation: spinner 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #0078d4 transparent transparent transparent;
+  }
+
+  div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+
+  div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+
+  div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.tilePurple {
+  background-color: #9b8bc6;
+}
+
+.tileBlue {
+  background-color: #89C8E3;
+}
+
+.tileGreen {
+  background-color: #a8c7a1;
+}
+
+.tileOrange {
+  background-color: #f88d6b;
+}
+
+.tilePeach {
+  background-color: #f6a78f;
+}
+
+.tileMint {
+  background-color: #d7e7cf;
+  color: #333;
+}
+
 
 .navigationContainer {
   width: 100%;

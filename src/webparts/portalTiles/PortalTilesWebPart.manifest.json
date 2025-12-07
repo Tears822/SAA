@@ -3,7 +3,7 @@
   "id": "86499fcf-6675-46a4-ba35-bb945c7de61f",
   "alias": "PortalTilesWebPart",
   "componentType": "WebPart",
-
+"supportsFullBleed": true,
   // The "*" signifies that the version should be taken from the package.json
   "version": "*",
   "manifestVersion": 2,

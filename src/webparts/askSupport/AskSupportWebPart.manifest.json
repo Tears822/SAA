@@ -3,7 +3,7 @@
   "id": "73f8a284-6b89-4e53-ae2d-a21f033059b1",
   "alias": "AskSupportWebPart",
   "componentType": "WebPart",
-
+"supportsFullBleed": true,
   // The "*" signifies that the version should be taken from the package.json
   "version": "*",
   "manifestVersion": 2,

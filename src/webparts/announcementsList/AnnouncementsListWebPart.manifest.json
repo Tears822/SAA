@@ -3,7 +3,7 @@
   "id": "9d4096dd-da27-4fcf-b533-c0a48d63ecdd",
   "alias": "AnnouncementsListWebPart",
   "componentType": "WebPart",
-  "supportsFullBleed": true,
+  
   // The "*" signifies that the version should be taken from the package.json
   "version": "*",
   "manifestVersion": 2,
