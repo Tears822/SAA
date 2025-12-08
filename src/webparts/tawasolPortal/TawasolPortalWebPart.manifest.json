@@ -3,7 +3,7 @@
   "id": "4425a6b9-0a61-4558-b0c1-3598cb06e7d2",
   "alias": "TawasolPortalWebPart",
   "componentType": "WebPart",
-
+  "supportsFullBleed": true,
   // The "*" signifies that the version should be taken from the package.json
   "version": "*",
   "manifestVersion": 2,

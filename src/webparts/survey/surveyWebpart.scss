@@ -1,0 +1,89 @@
+@import '../../theme/variables';
+
+
+.survey-home-box {
+  margin: 0 auto;
+  padding: 40px 20px;
+  width: 80%;
+
+  @media (max-width: $breakpoint-md) {
+    width: 90%;
+    padding: 30px 15px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+    padding: 20px 10px;
+  }
+
+  h3 {
+    color: #000;
+    font-size: 28px;
+    margin: 0;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 22px;
+    }
+  }
+
+  .ms-Stack {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0;
+    margin-top: 20px;
+
+    h3 {
+      color: #000;
+      font-size: 17px;
+      margin: 0;
+      font-weight: normal;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 15px;
+      }
+    }
+
+    div {
+      align-items: flex-start;
+      display: flex;
+      font-size: 16px;
+      flex-direction: column;
+      color: #F58B6E;
+      margin: 0;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 14px;
+      }
+
+      span:last-child {
+        display: flex;
+        gap: 5px;
+
+        span {
+          transition: color 0.2s;
+          cursor: pointer;
+          font-size: 24px;
+
+          @media (max-width: $breakpoint-sm) {
+            font-size: 20px;
+          }
+
+          &:hover {
+            color: #ffb300;
+          }
+        }
+      }
+    }
+  }
+
+  .ms-Button {
+    margin-top: 15px;
+    max-width: 150px;
+
+    @media (max-width: $breakpoint-sm) {
+      max-width: 120px;
+      font-size: 13px;
+    }
+  }
+}

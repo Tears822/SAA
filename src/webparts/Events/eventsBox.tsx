@@ -2,6 +2,7 @@ import * as React from "react";
 import { FC, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import './eventWebpart.scss';
 
 interface IEvent {
     date: string;
@@ -53,7 +54,7 @@ const EventsBox: FC<IEventsProps> = ({ events = sampleEvents }) => {
 
     return (
         <>
-            <div className="col-4 col-md-4">
+            <div className="col-12 col-md-6 col-lg-4">
                 <div className="brdr-lft-rgt">
 
                     <Calendar
@@ -76,7 +77,7 @@ const EventsBox: FC<IEventsProps> = ({ events = sampleEvents }) => {
 
                 </div>
             </div>
-            <div className="col-4 col-md-4">
+            <div className="col-12 col-md-6 col-lg-4">
                 <div className="events-list-home">
                     <div className="event-item-home">
                         <label>Nov <strong>30</strong></label>

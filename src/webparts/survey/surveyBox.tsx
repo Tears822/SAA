@@ -2,6 +2,8 @@ import * as React from "react";
 import { FC, useState } from "react";
 import { Stack, Icon } from "@fluentui/react";
 import { Link } from "react-router-dom";
+import './surveyWebpart.scss';
+
 
 interface OptionRating {
   key: string;

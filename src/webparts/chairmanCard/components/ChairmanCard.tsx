@@ -1,4 +1,3 @@
-// components/ChairmanCard.tsx
 import * as React from "react";
 import { useEffect, useState, useRef } from "react";
 import { SPFI } from "@pnp/sp";
@@ -26,72 +25,52 @@ interface ILeaderItem {
 
 const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) => {
   const [leaders, setLeaders] = useState<ILeaderItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   /** Load leaders */
-  const loadLeaders = async (): Promise<void> => {
+  const loadLeaders = async () => {
     try {
       const items = await sp.web.lists
         .getByTitle(listTitle)
-        .items.select('Id', 'Title', 'Position', 'ShortBio', 'LongBio', 'ImageUrl')
-        .orderBy('Sort', true)();
+        .items.select("Id", "Title", "Position", "ShortBio", "LongBio", "ImageUrl")
+        .orderBy("Sort", true)();
 
-      if (!items.length) {
-        setLoading(false);
-        setError('No data found.');
-        return;
-      }
-
-      const leadersData: ILeaderItem[] = items.map((i: any) => {
-        let imageUrl = '';
+      const parsed: ILeaderItem[] = items.map((i: any) => {
+        let img = "";
 
         if (i.ImageUrl) {
           try {
-            const imgInfo = JSON.parse(i.ImageUrl);
-            if (imgInfo.fileName) {
-              imageUrl = `${webUrl}/Lists/${encodeURIComponent(listTitle)}/Attachments/${i.Id}/${encodeURIComponent(imgInfo.fileName)}`;
+            const json = JSON.parse(i.ImageUrl);
+            if (json.fileName) {
+              img = `${webUrl}/Lists/${encodeURIComponent(listTitle)}/Attachments/${i.Id}/${json.fileName}`;
             }
-          } catch (e) {
-            console.warn('ImageUrl is not valid JSON', e);
+          } catch {
+            img = "";
           }
         }
 
         return {
           Id: i.Id,
-          Title: i.Title || '',
-          Position: i.Position || '',
-          ShortBio: i.ShortBio || '',
-          LongBio: i.LongBio || '',
-          ImageUrl: imageUrl,
+          Title: i.Title,
+          Position: i.Position,
+          ShortBio: i.ShortBio,
+          LongBio: i.LongBio,
+          ImageUrl: img,
         };
       });
 
-      setLeaders(leadersData);
-      setLoading(false);
+      setLeaders(parsed);
     } catch (err) {
-      console.error('Error loading leaders', err);
-      setLoading(false);
-      setError('Error loading data.');
+      console.error("Error loading leaders", err);
     }
   };
 
-  useEffect(() => {
-    loadLeaders();
-    return () => {
-      if (sliderRef.current && $(sliderRef.current).hasClass("slick-initialized")) {
-        $(sliderRef.current).slick("unslick");
-      }
-    };
-  }, []);
-
-
+  /** init slider */
   useEffect(() => {
     if (leaders.length > 0 && sliderRef.current) {
       const $slider = $(sliderRef.current);
 
-      // Destroy if already initialized
+      // destroy if init already
       if ($slider.hasClass("slick-initialized")) {
         $slider.slick("unslick");
       }
@@ -109,24 +88,11 @@ const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) =
     }
   }, [leaders]);
 
-  if (loading) {
-    return (
-      <div className="loading-spinner">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    loadLeaders();
+  }, []);
 
-  if (error) {
-    return <div className="error-message">{error}</div>;
-  }
-
-  if (!leaders.length) {
-    return <div className="no-data">No leaders found.</div>;
-  }
+  if (!leaders.length) return <div className="loading-spinner"><div></div><div></div><div></div><div></div></div>;
 
   return (
     <div className="chairmanCard">
@@ -134,18 +100,18 @@ const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) =
         {leaders.map((l) => (
           <div key={l.Id}>
             <div className="chairman-content">
-              <div className="left">
-                <h2>{l.Title}</h2>
-                <h4>{l.Position}</h4>
-                <p>{l.LongBio}</p>
+                <div className="left">
+                  <h2>{l.Title}</h2>
+                  <h4>{l.Position}</h4>
+                  <p>{l.LongBio}</p>
+                </div>
+                <div className="right">
+                  <img
+                    src={l.ImageUrl}
+                    alt={l.Title}
+                  />
+                </div>
               </div>
-              <div className="right">
-                <img
-                  src={l.ImageUrl}
-                  alt={l.Title}
-                />
-              </div>
-            </div>
           </div>
         ))}
       </div>

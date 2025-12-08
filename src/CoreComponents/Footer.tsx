@@ -5,7 +5,7 @@ export class FooterPageComponent extends React.Component<any, {}> {
         return (
 
             <div className="footer">
-                <div className="containerSaa">
+                <div className="container">
                     <div className="footer-content">
                         <p>Saa Portal Hub</p>
                         <div className="social-links">

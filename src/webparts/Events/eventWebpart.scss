@@ -1,0 +1,232 @@
+@import '../../theme/variables';
+
+// EVENTS
+.brdr-lft-rgt {
+  margin: 46px auto;
+  width: 90%;
+  position: relative;
+
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    margin: 30px auto;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    width: 6px;
+    height: 100%;
+    background: #C9E4F4;
+    position: absolute;
+    top: 0;
+    border-radius: 5px;
+
+    @media (max-width: $breakpoint-sm) {
+      width: 3px;
+    }
+  }
+
+  &::before { left: 0; }
+  &::after { right: 0; }
+
+  /* Responsive Calendar */
+  .react-calendar {
+    width: 82%;
+    margin: 0 auto;
+    border: none;
+    max-width: 100%;
+    font-family: inherit;
+
+    @media (max-width: $breakpoint-md) {
+      width: 90%;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      width: 100%;
+      padding: 10px;
+    }
+
+    /* WEEKDAYS */
+    .react-calendar__month-view__weekdays__weekday {
+      padding: 0.5em;
+      color: #B5BEC6;
+
+      @media (max-width: $breakpoint-sm) {
+        padding: 0.3em;
+        font-size: 12px;
+      }
+    }
+
+    /* NAVIGATION */
+    .react-calendar__navigation button {
+      background: transparent !important;
+      min-width: 44px;
+      font-size: 15px;
+
+      @media (max-width: $breakpoint-sm) {
+        min-width: 32px;
+        font-size: 13px;
+        padding: 4px;
+      }
+    }
+
+    .react-calendar__navigation__label {
+      color: #8478B7;
+      font-weight: bold;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 14px;
+      }
+    }
+
+    /* DAY TILES */
+    .react-calendar__tile {
+      padding: 0.5rem;
+      height: 50px;
+      font-size: 14px;
+      text-align: center;
+      background: #fff;
+      border-radius: 50%;
+      transition: background 0.2s;
+
+      @media (max-width: $breakpoint-sm) {
+        height: 40px;
+        font-size: 12px;
+        padding: 0.25rem;
+      }
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+
+    /* ACTIVE DAY */
+    .react-calendar__tile--active {
+      background: #44849E !important;
+      color: #fff !important;
+      border-radius: 25px;
+    }
+
+    .react-calendar__tile--now {
+      border: none;
+    }
+
+    /* Month grid fix for ultra small screens */
+    @media (max-width: 360px) {
+      .react-calendar__month-view__days {
+        grid-template-columns: repeat(7, 1fr) !important;
+      }
+    }
+  }
+}
+
+/* EVENT TYPES */
+.list-events-types {
+  align-items: flex-start;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  margin: 17px auto;
+  padding: 0;
+  list-style: none;
+  flex-wrap: wrap;
+
+  @media (max-width: $breakpoint-sm) {
+    gap: 10px;
+    margin: 12px auto;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    @media (max-width: $breakpoint-sm) {
+      font-size: 12px;
+    }
+
+    span {
+      border-radius: 50%;
+      height: 10px;
+      width: 10px;
+
+      @media (max-width: $breakpoint-sm) {
+        height: 8px;
+        width: 8px;
+      }
+    }
+  }
+}
+
+/* EVENTS LIST */
+.events-list-home {
+  display: flex;
+  flex-direction: column;
+  margin-top: 33px;
+
+  @media (max-width: $breakpoint-sm) {
+    margin-top: 20px;
+  }
+
+  .event-item-home {
+    display: flex;
+    gap: 15px;
+    padding: 12px;
+    align-items: center;
+
+    @media (max-width: $breakpoint-sm) {
+      gap: 10px;
+      padding: 10px;
+    }
+
+    label {
+      background: #F1F8FC;
+      color: #8AB7CF;
+      width: 70px;
+      height: 60px;
+      border-radius: 5px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 14px;
+
+      @media (max-width: $breakpoint-sm) {
+        width: 60px;
+        height: 50px;
+        font-size: 12px;
+      }
+
+      strong {
+        font-size: 21px;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 18px;
+        }
+      }
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+
+      h3 {
+        font-size: 1rem;
+        margin-bottom: 5px;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.9rem;
+        }
+      }
+
+      p {
+        font-size: 0.85rem;
+        color: #666;
+
+        @media (max-width: $breakpoint-sm) {
+          font-size: 0.75rem;
+        }
+      }
+    }
+  }
+}

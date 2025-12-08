@@ -8,11 +8,11 @@ import { spfi, SPFx } from "@pnp/sp/presets/all";
 
 
 import "../../../theme/grid.scss";
-import "../../../theme/SPFXstyle.scss";
 
 export interface ITawasolPortalWebPartProps {
   description: string;
   context: any;
+  webUrl:any;
 }
 
 const TawasolPortal: React.FC<ITawasolPortalWebPartProps> = (props) => {
@@ -27,7 +27,7 @@ const TawasolPortal: React.FC<ITawasolPortalWebPartProps> = (props) => {
         />
         <Router>
           <Routes>
-            <Route path="/" element={<Homepage sp={sp} contextProp={props.context} />} />
+            <Route path="/" element={<Homepage sp={sp} contextProp={props.context} webUrl={props.webUrl}/>} />
             <Route path="*" element={<Error404Component />} />
           </Routes>
         </Router>

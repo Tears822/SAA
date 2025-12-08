@@ -212,7 +212,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
 
       return (
          <div className="navigationContainer">
-            <div className="containerSaa">
+            <div className="container">
                <div className='top-Bar'>
                   <Icon
                      iconName="WaffleOffice365"
@@ -333,7 +333,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
             </div>
 
             <div className="bottom-Bar">
-               <div className="containerSaa">
+               <div className="container">
                   <div className="navbar">
                      {loading ? (
                         <div className="loading">Loading navigation...</div>
