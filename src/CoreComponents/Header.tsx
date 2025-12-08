@@ -17,7 +17,7 @@ export interface IHeaderState {
 }
 
 export interface IHeaderProps {
-    context: ApplicationCustomizerContext;
+   context: ApplicationCustomizerContext;
 }
 
 export interface IUserInfo {
@@ -35,6 +35,50 @@ export interface INavigationNode {
    Children?: INavigationNode[];
 }
 
+const navigationNodesStatic: INavigationNode[] = [
+   {
+      Id: 1,
+      Title: "EmployeeHub",
+      Url: "#",
+      IsExternal: false,
+      Children: []
+   },
+   {
+      Id: 2,
+      Title: "Tawasul",
+      Url: "#",
+      IsExternal: false,
+      Children: [
+         { Id: 21, Title: "News", Url: "#", IsExternal: false, Children: [] },
+         { Id: 22, Title: "Announcements", Url: "#", IsExternal: false, Children: [] },
+         { Id: 23, Title: "InternalJobs", Url: "#", IsExternal: false, Children: [] },
+         { Id: 24, Title: "Surveys", Url: "#", IsExternal: false, Children: [] }
+      ]
+   },
+   {
+      Id: 3,
+      Title: "Matari",
+      Url: "#",
+      IsExternal: false,
+      Children: [
+         { Id: 31, Title: "Matari Program", Url: "#", IsExternal: false, Children: [] },
+         { Id: 32, Title: "Nomination Process", Url: "#", IsExternal: false, Children: [] }
+      ]
+   },
+   {
+      Id: 4,
+      Title: "About",
+      Url: "#",
+      IsExternal: false,
+      Children: [
+         { Id: 41, Title: "SAA Strategy", Url: "#", IsExternal: false, Children: [] },
+         { Id: 42, Title: "SAA Organizational Structure", Url: "#", IsExternal: false, Children: [] }
+      ]
+   }
+];
+
+
+
 class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
 
    constructor(props: IHeaderProps) {
@@ -45,7 +89,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
          menuOpen: false,
          userBoxOpen: false,
          user: null,
-         siteLogo: require('../theme/images/logo.svg'), // Fallback logo
+         siteLogo: require('../theme/images/logo.svg'),
          navigationNodes: [],
          loading: true
       };
@@ -64,7 +108,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
       try {
          const { context } = this.props;
          const siteUrl = context.pageContext.web.absoluteUrl;
-         
+
          // Get site logo URL from web properties
          const response: SPHttpClientResponse = await context.spHttpClient.get(
             `${siteUrl}/_api/web?$select=SiteLogoUrl`,
@@ -79,7 +123,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
          }
       } catch (error) {
          console.error('Error loading site logo:', error);
-         // Keep fallback logo
+
       }
    };
 
@@ -90,7 +134,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
       try {
          const { context } = this.props;
          const siteUrl = context.pageContext.web.absoluteUrl;
-         
+
          // Get top navigation nodes
          const response: SPHttpClientResponse = await context.spHttpClient.get(
             `${siteUrl}/_api/web/navigation/topnavigationbar?$expand=Children`,
@@ -107,7 +151,10 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
                Children: node.Children?.results || []
             }));
 
-            this.setState({ navigationNodes: nodes, loading: false });
+
+
+
+            this.setState({ navigationNodes: navigationNodesStatic  || nodes , loading: false });
          }
       } catch (error) {
          console.error('Error loading navigation:', error);
@@ -122,7 +169,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
       try {
          const { context } = this.props;
          const siteUrl = context.pageContext.web.absoluteUrl;
-         
+
          // Get current user profile picture
          const response: SPHttpClientResponse = await context.spHttpClient.get(
             `${siteUrl}/_api/SP.UserProfiles.PeopleManager/GetMyProperties`,
@@ -221,8 +268,8 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
                   />
 
                   <a href={this.props.context.pageContext.web.absoluteUrl} className="brand">
-                     <img 
-                        src={siteLogo} 
+                     <img
+                        src={siteLogo}
                         alt="Site Logo"
                         onError={(e) => {
                            (e.target as HTMLImageElement).src = require('../theme/images/logo.svg');
@@ -247,79 +294,54 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
                         </div>
 
                         {this.state.userBoxOpen && (
+
                            <div className='user-profile-box'>
+
                               <Icon onClick={this.toggleUserBox} iconName='ChromeClose' className='close-user-profile' />
                               <div className='curr-user'>
+                                 <img
+                                    src={this.state.user.pictureUrl
+                                       ? this.state.user.pictureUrl
+                                       : require('../theme/images/default-user.png')}
+                                    alt={this.state.user.displayName || "User"}
+                                    onError={(e) => {
+                                       (e.target as HTMLImageElement).src = require('../theme/images/default-user.png');
+                                    }}
+                                 />
                                  <div>
                                     <h3>{this.state.user.displayName}</h3>
-                                    <h4>{this.state.user.email}</h4>
-                                    {this.state.user.title && <p>{this.state.user.title}</p>}
+                                    <h4>{this.state.user.title}</h4>
                                  </div>
                               </div>
 
                               <div className="tiles">
-                                 <a 
-                                    id="cucTileProfile" 
-                                    className="tilePurple" 
-                                    href={`${this.props.context.pageContext.web.absoluteUrl}/_layouts/15/me.aspx`}
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                 >
-                                    <Icon iconName='Contact' />
+                                 <a id="cucTileProfile" className="tilePurple" target="_blank" rel="noopener">
+                                    <Icon iconName='TeamsLogo' />
                                     <label>Profile</label>
                                  </a>
-                                 <a 
-                                    id="cucTileEmail" 
-                                    className="tileGreen"
-                                    href="https://outlook.office.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                 >
+                                 <a id="cucTileEmail" className="tileGreen">
                                     <Icon iconName='Mail' />
                                     <label>Email</label>
                                  </a>
-                                 <a 
-                                    id="cucTileOneDrive" 
-                                    className="tileOrange" 
-                                    href={`${this.props.context.pageContext.web.absoluteUrl}/_layouts/15/onedrive.aspx`}
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                 >
+                                 <a id="cucTileOneDrive" className="tileOrange" target="_blank" rel="noopener">
                                     <Icon iconName='OneDriveLogo' />
                                     <label>OneDrive</label>
                                  </a>
-                                 <a 
-                                    id="cucTileTeams" 
-                                    className="tilePeach" 
-                                    href="https://teams.microsoft.com"
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                 >
+                                 <a id="cucTileTeams" className="tilePeach" target="_blank" rel="noopener">
                                     <Icon iconName='TeamsLogo' />
                                     <label>Teams</label>
                                  </a>
-                                 <a 
-                                    id="cucTileFav" 
-                                    className="tileFav" 
-                                    href={`${this.props.context.pageContext.web.absoluteUrl}/_layouts/15/favorites.aspx`}
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                 >
+                                 <a id="cucTileFav" className="tileFav" target="_blank" rel="noopener">
                                     <Icon iconName='FavoriteStar' />
                                     <label>Favorites</label>
                                  </a>
-                                 <a 
-                                    id="cucTileTasks" 
-                                    className="tileMint" 
-                                    href="https://to-do.office.com"
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                 >
+                                 <a id="cucTileTasks" className="tileMint" target="_blank" rel="noopener">
                                     <Icon iconName='BulletedList2' />
                                     <label>My Tasks</label>
                                  </a>
                               </div>
                            </div>
+
                         )}
                      </>
                   )}
