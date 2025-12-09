@@ -81,32 +81,29 @@ div {
     transform: rotate(360deg);
   }
 }
+  .tilePurple {
+    background-color: #ABA2D0;
+  }
 
+  .tileGreen {
+    background-color: #84AE9A;
+  }
 
-.tilePurple {
-  background-color: #9b8bc6;
-}
+  .tileOrange {
+    background-color: #F58B6E;
+  }
 
-.tileBlue {
-  background-color: #89C8E3;
-}
+  .tilePeach {
+    background-color: #FAB599;
+  }
 
-.tileGreen {
-  background-color: #a8c7a1;
-}
+  .tileMint {
+    background-color: #d7e7cf;
+  }
 
-.tileOrange {
-  background-color: #f88d6b;
-}
-
-.tilePeach {
-  background-color: #f6a78f;
-}
-
-.tileMint {
-  background-color: #d7e7cf;
-  color: #333;
-}
+  .tileFav {
+    background-color: #ACCDE0;
+  }
 
 
 .navigationContainer {
@@ -844,19 +841,19 @@ div {
 
   /* colors */
   .tilePurple {
-    background-color: #aba2d0;
+    background-color: #ABA2D0;
   }
 
   .tileGreen {
-    background-color: #84ae9a;
+    background-color: #84AE9A;
   }
 
   .tileOrange {
-    background-color: #f58b6e;
+    background-color: #F58B6E;
   }
 
   .tilePeach {
-    background-color: #fab599;
+    background-color: #FAB599;
   }
 
   .tileMint {
@@ -864,8 +861,9 @@ div {
   }
 
   .tileFav {
-    background-color: #accde0;
+    background-color: #ACCDE0;
   }
+
 }
 
 .openAppsIcon {
@@ -1187,4 +1185,11 @@ div {
     direction: rtl;
     text-align: right;
   }
+
+  .bandLabel {
+    margin-right: 0 !important;
+    margin-left: 32px;
+        font-size: 16px;
+}
+
 }
