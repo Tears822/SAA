@@ -96,7 +96,6 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
    }
 
    async componentDidMount() {
-      document.body.classList.add('arLang');
       await this.loadSiteLogo();
       await this.loadNavigation();
       await this.loadUserInfo();
