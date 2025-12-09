@@ -129,25 +129,30 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
     this._loading = true;
     this._error = undefined;
     this._renderView(); // show "Loading..."
-
+    const listName = this.properties.listName || "Announcements";
     try {
       const rawItems: any[] = await this._sp.web.lists
-        .getByTitle(this.properties.listName || 'Announcements')
+        .getByTitle(listName)
         .items
-        .select('Id', 'Title', 'TitleEn', 'DescriptionAr', 'DescriptionEn','Category', 'ImageUrl', 'Created')
+        .select('Id', 'Title', 'TitleAr', 'DescriptionAr', 'DescriptionEn','Category', 'ImageUrl', 'Created')
         .orderBy('Created', false)
         .top(500)();
 
-      this._items = rawItems.map(r => ({
+        const webUrl = this.context.pageContext.web.absoluteUrl.replace(
+        /\/$/,
+        ""
+      );
+
+      this._items = rawItems.map((r) => ({
+        
         Id: r.Id,
         Title: r.Title,
-        Description: r.Description,
+        Description: r.DescriptionEn,
         Category: r.Category,
-        ImageUrl: r.ImageUrl && r.ImageUrl.Url
-          ? r.ImageUrl.Url
-          : (typeof r.ImageUrl === 'string' ? r.ImageUrl : ''),
+        ImageUrl: `${webUrl}/Lists/${listName}/Attachments/${r.Id}/${JSON.parse(r.ImageUrl).fileName}`,
         Created: r.Created
       }));
+
 
       // build dynamic categories (distinct Category values)
       const cats = new Set<string>();

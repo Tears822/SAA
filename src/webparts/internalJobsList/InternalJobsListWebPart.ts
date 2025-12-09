@@ -18,6 +18,7 @@ import "@pnp/sp";
 import "@pnp/sp/files";
 import "@pnp/sp/folders";
 import "@pnp/sp/items";
+import "@pnp/sp/attachments";
 import "@pnp/sp/lists";
 import "@pnp/sp/profiles";
 import "@pnp/sp/site-users/web";
@@ -52,6 +53,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
   private _currentDepartment: string = "All";
   private _currentPage: number = 1;
   private _searchText: string = "";
+  // private _applyPopup: any;
 
   public async render(): Promise<void> {
     const id = this.instanceId;
@@ -60,7 +62,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       <!--<div class="stories">
         <div class="filterBar" id="sl-filters-${id}"></div>-->
 
-        <div class="stories">
+        <!--<div class="stories">
       <div class="stories-toolbar">
         <div class="filterBar" id="sl-filters-${id}"></div>
 
@@ -82,10 +84,48 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
         <div id="sl-list-${id}"></div>
 
         <div id="sl-pager-${id}" class="pager"></div>
-        <!-- 🔹 popup host -->
+        <!-- popup host -->
       <div id="sl-popup-${id}"></div>
+      <div id="sl-apply-popup-${id}"></div>
     </div>
+      </div>-->
+      <div class="stories">
+      <!-- Top toolbar: filters + search -->
+      <div class="stories-toolbar">
+        <div class="filterBar" id="sl-filters-${id}"></div>
+
+        <div class="stories-search">
+          <input
+            type="text"
+            id="sl-search-${id}"
+            class="stories-search-input"
+            placeholder="Search jobs..."
+            autocomplete="off"
+          />
+        </div>
       </div>
+
+      <!-- Main layout: left (cards) 60% / right (image) 30% -->
+      <div class="stories-layout">
+        <div class="stories-list-column">
+          <div id="sl-status-${id}" class="status">Loading...</div>
+          <div id="sl-list-${id}"></div>
+          <div id="sl-pager-${id}" class="pager"></div>
+        </div>
+
+        <div class="stories-banner-column">
+          <img
+            src="/sites/InternalJobs/SiteAssets/internaljobs.png"
+            alt="Internal jobs"
+            class="stories-banner-image"
+          />
+        </div>
+      </div>
+
+      <!-- Popups -->
+      <div id="sl-popup-${id}"></div>
+      <div id="sl-apply-popup-${id}"></div>
+    </div>
     `;
 
     await this._loadData();
@@ -117,6 +157,10 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
 
     try {
       // const today = new Date().toISOString();
+      const today = new Date().toISOString().split("T")[0];
+      // const tomorrow = new Date();
+      // tomorrow.setDate(tomorrow.getDate() + 1);
+      // const tomorrowStr = tomorrow.toISOString().split("T")[0];
 
       const list = this._sp.web.lists.getByTitle(this.properties.listName);
 
@@ -133,6 +177,9 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
         )
         // .filter('PublishedDate ge datetime\'' + today + '\' and ClosingDate le datetime\'' + today + '\')')
         // .filter(l => l.date("PublishedDate").greaterThanOrEquals(today) && l.date("ClosingDate").lessThan(today))
+        .filter(
+          `PublishedDate le datetime'${today}T23:59:59Z' and ClosingDate ge datetime'${today}T00:00:00Z'`
+        )
         .orderBy("PublishedDate", false)();
 
       this._allItems = raw.map((i) => ({
@@ -275,7 +322,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
           if (item.ClosingDate) {
             $("<div>")
               .addClass("ij-detail-date")
-              .text('Closing: ' + formatDate(item.ClosingDate))
+              .text("Closing: " + formatDate(item.ClosingDate))
               .appendTo($root);
           }
 
@@ -285,7 +332,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
 
       popupInstance.show();
     };
-    // 🔹 end popup init
+    // end popup init
 
     $status.hide();
     // $listHost.empty();
@@ -354,6 +401,77 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       activeStateEnabled: false,
       focusStateEnabled: false,
       elementAttr: { class: "sl-list-root" },
+      // itemTemplate: (data: IJobItem, _index: number, element: HTMLElement) => {
+      //   const $card = $("<div>").addClass("storyCard");
+
+      //   // image
+      //   if (data.ImageUrl) {
+      //     $("<img>")
+      //       .addClass("storyImage")
+      //       .attr("src", data.ImageUrl)
+      //       .attr("alt", data.Title)
+      //       .appendTo($card);
+      //   }
+
+      //   const $content = $("<div>").addClass("storyContent").appendTo($card);
+
+      //   if (data.Department) {
+      //     $("<div>")
+      //       .addClass("storyCategory")
+      //       .text(data.Department)
+      //       .appendTo($content);
+      //   }
+
+      //   $("<h3>").addClass("storyTitle").text(data.Title).appendTo($content);
+
+      //   if (data.JobDescription) {
+      //     $("<p>")
+      //       .addClass("storyTeaser")
+      //       .text(truncateText(data.JobDescription, 100))
+      //       .appendTo($content);
+      //   }
+
+      //   if (data.PublishedDate) {
+      //     $("<div>")
+      //       .addClass("storyDate")
+      //       .text(formatDate(data.PublishedDate))
+      //       .appendTo($content);
+      //   }
+
+      // View details on the right bottom
+      // const $detailsWrapper = $("<div>")
+      //   .addClass("storyDetailsWrapper")
+      //   .appendTo($card);
+
+      // $("<a>")
+      //   .addClass("storyDetailsLink")
+      //   .attr("href", getDetailsUrl.call(this, data.Id))
+      //   .text("View details ›")
+      //   .appendTo($detailsWrapper);
+
+      //   const $actionsWrapper = $('<div class="job-actions"></div>');
+
+      //   $("<button>")
+      //     .addClass("storyDetailsLink") // reuse same styling
+      //     .attr("type", "button")
+      //     .text("Job Description ›")
+      //     .on("click", () => {
+      //       showDetails(data); // open dxPopup
+      //     })
+      //     .appendTo($actionsWrapper);
+
+      //   $(element).append($card);
+
+      //   // Apply button
+      //   $("<button>")
+      //     .addClass("storyApplyLink")
+      //     .attr("type", "button")
+      //     .text("Apply")
+      //     .on("click", () => {
+      //       this.openApplyPopup(data);
+      //     })
+      //     .appendTo($actionsWrapper);
+      // },
       itemTemplate: (data: IJobItem, _index: number, element: HTMLElement) => {
         const $card = $("<div>").addClass("storyCard");
 
@@ -380,7 +498,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
         if (data.JobDescription) {
           $("<p>")
             .addClass("storyTeaser")
-            .text(truncateText(data.JobDescription, 260))
+            .text(truncateText(data.JobDescription, 100))
             .appendTo($content);
         }
 
@@ -391,25 +509,30 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
             .appendTo($content);
         }
 
-        // View details on the right bottom
-        const $detailsWrapper = $("<div>")
-          .addClass("storyDetailsWrapper")
-          .appendTo($card);
+        // Buttons on the right
+        const $actionsWrapper = $('<div class="job-actions"></div>').appendTo(
+          $card
+        );
 
-        // $("<a>")
-        //   .addClass("storyDetailsLink")
-        //   .attr("href", getDetailsUrl.call(this, data.Id))
-        //   .text("View details ›")
-        //   .appendTo($detailsWrapper);
-
+        // Apply first (like screenshot)
         $("<button>")
-          .addClass("storyDetailsLink") // reuse same styling
+          .addClass("storyApplyLink")
           .attr("type", "button")
-          .text("View details ›")
+          .text("Apply")
           .on("click", () => {
-            showDetails(data); // 🔹 open dxPopup
+            this.openApplyPopup(data);
           })
-          .appendTo($detailsWrapper);
+          .appendTo($actionsWrapper);
+
+        // Job Description button
+        $("<button>")
+          .addClass("storyDetailsLink")
+          .attr("type", "button")
+          .text("Job Description")
+          .on("click", () => {
+            showDetails(data);
+          })
+          .appendTo($actionsWrapper);
 
         $(element).append($card);
       },
@@ -460,6 +583,181 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
     //     base.indexOf("?") > -1 ? "&" : "?"
     //   }itemId=${encodeURIComponent(id)}`;
     // }
+  }
+
+  private openApplyPopup = (job: IJobItem): void => {
+    const id = this.instanceId;
+    const $host = $(`#sl-apply-popup-${id}`, this.domElement);
+
+    let popup: any;
+    try {
+      popup = ($host as any).dxPopup("instance");
+    } catch {
+      popup = null;
+    }
+
+    if (!popup) {
+      ($host as any).dxPopup({
+        width: 430,
+        maxHeight: 520,
+        showTitle: true,
+        title: "Apply for this job",
+        hideOnOutsideClick: true,
+        dragEnabled: false,
+        contentTemplate: () => $("<div>"),
+      });
+      popup = ($host as any).dxPopup("instance");
+    }
+
+    // this._applyPopup = popup;
+
+    popup.option({
+      title: `Apply for "${job.Title}"`,
+      contentTemplate: () => {
+        const $root = $('<div class="ij-apply-popup"></div>');
+
+        // Select reason
+        $('<label class="ij-apply-label">Select Reason</label>').appendTo(
+          $root
+        );
+        const $reasonSelect = $("<div></div>").appendTo($root);
+        ($reasonSelect as any).dxSelectBox({
+          items: [
+            "Career growth",
+            "Internal transfer",
+            "New challenge",
+            "Other",
+          ],
+          placeholder: "Reason for applying",
+          stylingMode: "outlined",
+        });
+
+        // Why are you applying?
+        $(
+          '<label class="ij-apply-label">Why are you applying for this job?</label>'
+        ).appendTo($root);
+        const $whyArea = $("<div></div>").appendTo($root);
+        ($whyArea as any).dxTextArea({
+          placeholder: "Write...",
+          height: 100,
+        });
+
+        // Upload CV
+        $('<label class="ij-apply-label">Upload your CV</label>').appendTo(
+          $root
+        );
+        const $cvBox = $(
+          '<div class="ij-upload-box"><span>Upload CV</span></div>'
+        ).appendTo($root);
+        const $cvInput = $(
+          '<input type="file" accept=".pdf,.doc,.docx" style="display:none" />'
+        ).appendTo($root);
+        $cvBox.on("click", () => $cvInput.trigger("click"));
+
+        // Upload additional documents
+        $(
+          '<label class="ij-apply-label">Upload additional documents</label>'
+        ).appendTo($root);
+        const $attBox = $(
+          '<div class="ij-upload-box"><span>Upload attachments</span></div>'
+        ).appendTo($root);
+        const $attInput = $(
+          '<input type="file" multiple style="display:none" />'
+        ).appendTo($root);
+        $attBox.on("click", () => $attInput.trigger("click"));
+
+        // Apply button
+        const $btn = $(
+          '<button type="button" class="ij-apply-button">Apply</button>'
+        ).appendTo($root);
+
+        $btn.on("click", async () => {
+          const reason = ($reasonSelect as any).dxSelectBox("option", "value");
+          const why = ($whyArea as any).dxTextArea("option", "value");
+
+          if (!reason) {
+            alert("Please select a reason for applying.");
+            return;
+          }
+
+          try {
+            $btn.prop("disabled", true).text("Submitting...");
+
+            await this._submitApplication(
+              job,
+              reason,
+              why,
+              $cvInput[0] as HTMLInputElement,
+              $attInput[0] as HTMLInputElement
+            );
+
+            popup.hide();
+            alert("Your application has been submitted.");
+          } catch (e) {
+            console.error(e);
+            alert("Error while submitting the application.");
+          } finally {
+            $btn.prop("disabled", false).text("Apply");
+          }
+        });
+
+        return $root;
+      },
+    });
+
+    popup.show();
+  };
+
+  private async _submitApplication(
+    job: IJobItem,
+    reason: string,
+    why: string,
+    cvInput: HTMLInputElement,
+    attachmentsInput: HTMLInputElement
+  ): Promise<void> {
+    const me = await this._sp.profiles.myProperties();
+    const profile: Record<string, string> = {};
+    const fullName = me.DisplayName || profile.PreferredName || "";
+    const jobTitle = profile["SPS-JobTitle"] || profile.Title || "";
+    const department = profile.Department || "";
+    const list = this._sp.web.lists.getByTitle("Job Applications");
+
+    const itemAddResult = await list.items.add({
+      Title: job.Title,
+      ApplicantName: fullName,
+      ApplicantEmail: this.context.pageContext.user.email,
+      Department: department,
+      JobTitle: jobTitle,
+      JobId: job.Id,
+      Reason_For_Applying: reason,
+      Why: why,
+      Status: "Submitted",
+    });
+
+    const itemId: number = itemAddResult.data.Id;
+
+    const filesToUpload: File[] = [];
+
+    if (cvInput.files && cvInput.files.length > 0) {
+      filesToUpload.push(cvInput.files[0]);
+    }
+
+    if (attachmentsInput.files && attachmentsInput.files.length > 0) {
+      for (let i = 0; i < attachmentsInput.files.length; i++) {
+        const f = attachmentsInput.files[i];
+        if (f) {
+          filesToUpload.push(f);
+        }
+      }
+    }
+
+    if (filesToUpload.length > 0) {
+      const item = list.items.getById(itemId);
+      for (const file of filesToUpload) {
+        // File extends Blob so we can pass it directly
+        await item.attachmentFiles.add(file.name, file);
+      }
+    }
   }
 
   protected async onAfterPropertyPaneChangesApplied(): Promise<void> {
