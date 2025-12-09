@@ -122,7 +122,7 @@
         }
       ]
     },
-     "announcements-feed-web-part": {
+    "announcements-feed-web-part": {
       "components": [
         {
           "entrypoint": "./lib/webparts/announcementsFeed/AnnouncementsFeedWebPart.js",
@@ -143,6 +143,14 @@
         {
           "entrypoint": "./lib/webparts/tawasolPortal/TawasolPortalWebPart.js",
           "manifest": "./src/webparts/tawasolPortal/TawasolPortalWebPart.manifest.json"
+        }
+      ]
+    },
+    "job-applications-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/jobApplications/JobApplicationsWebPart.js",
+          "manifest": "./src/webparts/jobApplications/JobApplicationsWebPart.manifest.json"
         }
       ]
     }
@@ -182,6 +190,7 @@
     "PortalTilesWebPartStrings": "lib/webparts/portalTiles/loc/{locale}.js",
     "AnnouncementsFeedWebPartStrings": "lib/webparts/announcementsFeed/loc/{locale}.js",
     "AnnouncementsListWebPartStrings": "lib/webparts/announcementsList/loc/{locale}.js",
-    "TawasolPortalWebPartStrings": "lib/webparts/tawasolPortal/loc/{locale}.js"
+    "TawasolPortalWebPartStrings": "lib/webparts/tawasolPortal/loc/{locale}.js",
+    "JobApplicationsWebPartStrings": "lib/webparts/jobApplications/loc/{locale}.js"
   }
 }
