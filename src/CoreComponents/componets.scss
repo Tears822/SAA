@@ -7,7 +7,8 @@
 [data-sp-feature-instance-id="_Site header host"],
 [data-sp-feature-tag="Site header host"],
 [aria-label="Get the mobile app"],
-#sp-appBar,#CommentsWrapper{
+#sp-appBar,
+#CommentsWrapper {
   display: none !important;
 }
 
@@ -16,6 +17,7 @@
   .CanvasZone--noMargin {
     padding: 0 !important;
   }
+
   .CanvasZoneSectionContainer {
     max-width: 100% !important;
   }
@@ -424,7 +426,7 @@ div {
       border-bottom: none;
     }
 
-    > a {
+    >a {
       padding: 12px 0;
       text-decoration: none;
       font-size: 16px;
@@ -492,10 +494,10 @@ div {
         text-decoration: underline;
       }
     }
-    
-      @media (max-width: $breakpoint-md) {
-        display: flex;
-      }
+
+    @media (max-width: $breakpoint-md) {
+      display: flex;
+    }
   }
 }
 
@@ -893,5 +895,296 @@ div {
 
   &:hover {
     opacity: 0.8;
+  }
+}
+
+
+//arabic version
+.arLang {
+  direction: rtl;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  a,
+  small,
+  div {
+    font-family: $font-secondary !important;
+    text-align: right;
+  }
+
+  .SPPageChrome-app>div {
+    direction: rtl;
+  }
+
+  .viewAllBtn i {
+    transform: rotate(180deg);
+  }
+
+  .News-home .news-list-home {
+    border-right: 1px solid #c9e4f4;
+    border-left: none;
+  }
+
+  .navigationContainer .bottom-Bar .navbar .navLinks li ul {
+    right: 0;
+    left: inherit !important;
+  }
+
+  .chairmanCard {
+    direction: ltr;
+  }
+
+  .chairman-content {
+    direction: rtl;
+  }
+
+  // Navigation Container RTL
+  .navigationContainer {
+    .top-Bar {
+      .traingleBg {
+        transform: scaleX(-1); // Flip triangle
+      }
+
+      .search-Box {
+        margin-left: 0;
+        margin-right: -60px;
+
+        @media (max-width: $breakpoint-lg) {
+          margin-right: -40px;
+        }
+
+        @media (max-width: $breakpoint-md) {
+          margin-right: 0;
+        }
+
+        input {
+          text-align: right;
+        }
+      }
+
+      .user-box {
+        order: 1; // Move to left in RTL
+      }
+
+      .lang-switcher {
+
+        i {
+          margin-left: 0;
+          margin-right: 5px;
+
+          @media (max-width: $breakpoint-sm) {
+            margin-right: 3px;
+          }
+        }
+
+        .lang-dropdown {
+          left: auto;
+          right: 0;
+          text-align: right;
+        }
+      }
+    }
+
+  }
+
+  // Mobile Menu RTL
+  .mobileMenu {
+    direction: rtl;
+    text-align: right;
+
+    ul {
+      direction: rtl;
+    }
+
+    li {
+      > a {
+        text-align: right;
+      }
+
+      ul {
+        padding-left: 0;
+        padding-right: 15px;
+
+        li a {
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  // Footer RTL
+  .footer {
+    .footer-content {
+      direction: rtl;
+
+      p {
+        text-align: center;
+      }
+    }
+  }
+
+  // 404 Section RTL
+  .notfoundSection {
+    direction: rtl;
+
+    h1, p {
+      text-align: center;
+    }
+  }
+
+  // User Profile Box RTL
+  .user-profile-box {
+    right: auto;
+    left: 23px;
+    direction: rtl;
+
+    @media (max-width: $breakpoint-md) {
+      left: 15px;
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      left: 10px;
+    }
+
+    .close-user-profile {
+      right: auto;
+      left: 21px;
+
+      @media (max-width: $breakpoint-sm) {
+        left: 15px;
+      }
+    }
+
+    .curr-user {
+      direction: rtl;
+
+      div {
+        text-align: right;
+
+        h3, h4 {
+          text-align: right;
+        }
+      }
+    }
+
+    .tiles {
+      a {
+        label {
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  // Open Apps Icon RTL
+  .openAppsIcon {
+    margin-left: 15px;
+    margin-right: -30px;
+
+    @media (max-width: $breakpoint-lg) {
+      margin-right: -20px;
+      margin-left: 10px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      margin-right: 0;
+      margin-left: 5px;
+    }
+  }
+
+  // Additional RTL adjustments
+  .hamburger {
+    i {
+      transform: scaleX(-1);
+    }
+  }
+
+  // Social Links - keep centered
+  .social-links {
+    direction: rtl;
+  }
+
+  // Loading Spinner - keep as is (circular)
+  .loading-spinner {
+    direction: ltr;
+  }
+
+  // Input fields and textareas
+  input[type="text"],
+  input[type="email"],
+  input[type="search"],
+  textarea {
+    text-align: right;
+    direction: rtl;
+  }
+
+  // Buttons with icons
+  button i,
+  a i {
+    &.icon-right {
+      margin-right: 0;
+      margin-left: 8px;
+    }
+
+    &.icon-left {
+      margin-left: 0;
+      margin-right: 8px;
+    }
+  }
+
+  // Breadcrumbs
+  .breadcrumb {
+    direction: rtl;
+
+    li {
+      &::after {
+        content: "\\";
+        transform: scaleX(-1);
+      }
+    }
+  }
+
+  // Dropdown menus
+  .dropdown-menu {
+    right: 0;
+    left: auto;
+    text-align: right;
+  }
+
+  // Modal/Dialog
+  .modal,
+  .dialog {
+    direction: rtl;
+
+    .close-button {
+      right: auto;
+      left: 10px;
+    }
+  }
+
+  // Tables
+  table {
+    direction: rtl;
+
+    th, td {
+      text-align: right;
+    }
+  }
+
+  // Lists
+  ul, ol {
+    padding-right: 20px;
+    padding-left: 0;
+  }
+
+  // Tooltips
+  .tooltip {
+    direction: rtl;
+    text-align: right;
   }
 }
