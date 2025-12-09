@@ -2,17 +2,17 @@ import { Icon } from "@fluentui/react";
 import * as React from "react";
 import { FC } from "react";
 import { Link } from "react-router-dom";
-
+import './newsWebpart.scss';
 
 const NewsBox: FC<{}> = ({ }) => {
 
 
     return (
         <>
-            <div className="col-5 col-md-5">
+            <div className="col-12 col-md-6 col-lg-5">
                 <img className="newsBigImg" src={require("../../theme/images/newsSide.jpg")} alt="news" />
             </div>
-            <div className="col-7 col-md-7">
+            <div className="col-12 col-md-6 col-lg-7">
 
                 <div className="component-header">
                     <h2>News & Announcements</h2>
@@ -44,14 +44,14 @@ const NewsBox: FC<{}> = ({ }) => {
                             </div>
                         </div>
                         <div className="news-item-home">
-                            <img src={require("../../theme/images/news2.jpg")} alt="news" />
+                            <img src={require("../../theme/images/news1.jpg")} alt="news" />
                             <div>
                                 <h5>HR Announcement - Meet Our New Colleagues</h5>
                                 <Link to="/">Safety Department</Link>
                             </div>
                         </div>
                         <div className="news-item-home">
-                            <img src={require("../../theme/images/news3.jpg")} alt="news" />
+                            <img src={require("../../theme/images/news1.jpg")} alt="news" />
                             <div>
                                 <h5>Events Announcement - Join Us in Celebrating</h5>
                                 <Link to="/">UAE National Day</Link>

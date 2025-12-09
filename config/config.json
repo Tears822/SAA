@@ -153,6 +153,14 @@
           "manifest": "./src/webparts/jobApplications/JobApplicationsWebPart.manifest.json"
         }
       ]
+    },
+    "saa-main-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/saaMain/SaaMainApplicationCustomizer.js",
+          "manifest": "./src/extensions/saaMain/SaaMainApplicationCustomizer.manifest.json"
+        }
+      ]
     }
   },
   "externals": {
@@ -191,6 +199,7 @@
     "AnnouncementsFeedWebPartStrings": "lib/webparts/announcementsFeed/loc/{locale}.js",
     "AnnouncementsListWebPartStrings": "lib/webparts/announcementsList/loc/{locale}.js",
     "TawasolPortalWebPartStrings": "lib/webparts/tawasolPortal/loc/{locale}.js",
-    "JobApplicationsWebPartStrings": "lib/webparts/jobApplications/loc/{locale}.js"
+    "JobApplicationsWebPartStrings": "lib/webparts/jobApplications/loc/{locale}.js",
+    "SaaMainApplicationCustomizerStrings": "lib/extensions/saaMain/loc/{locale}.js"
   }
 }

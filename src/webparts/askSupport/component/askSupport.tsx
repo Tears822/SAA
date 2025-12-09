@@ -1,12 +1,13 @@
-import * as React from "react";
-import { FC } from "react";
+import * as React from 'react';
+import './AskSupportWebPart.scss';
 
 export interface IAskSupportProps {
   askItUrl?: string;
   askAdminUrl?: string;
 }
 
-const AskSupport: FC<IAskSupportProps> = ({ askItUrl, askAdminUrl }) => {
+const AskSupport: React.FC<IAskSupportProps> = ({ askItUrl, askAdminUrl }) => {
+
   const handleClick = (url?: string) => {
     if (url) {
       window.open(url, "_blank"); // open in new tab
@@ -22,7 +23,7 @@ const AskSupport: FC<IAskSupportProps> = ({ askItUrl, askAdminUrl }) => {
         >
           <span className="icon">
             <img
-              src={require('../../theme/images/askit.svg')}
+              src={require('../../../theme/images/askit.svg')}
               className="ggprofile-icon"
               alt="Ask IT"
             />
@@ -36,7 +37,7 @@ const AskSupport: FC<IAskSupportProps> = ({ askItUrl, askAdminUrl }) => {
         >
           <span className="icon">
             <img
-              src={require('../../theme/images/askadmin.svg')}
+              src={require('../../../theme/images/askadmin.svg')}
               className="ggprofile-icon"
               alt="Ask Admin"
             />

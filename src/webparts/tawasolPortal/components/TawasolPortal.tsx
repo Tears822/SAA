@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
-import HeaderPageComponent from '../../../CoreComponents/Header';
-import { FooterPageComponent } from '../../../CoreComponents/Footer';
 import { Error404Component } from '../../../CoreComponents/Error404';
 import Homepage from '../../../Views/HomePage/Homepage';
 import { spfi, SPFx } from "@pnp/sp/presets/all";
@@ -10,11 +8,11 @@ import { spfi, SPFx } from "@pnp/sp/presets/all";
 
 
 import "../../../theme/grid.scss";
-import "../../../theme/SPFXstyle.scss";
 
 export interface ITawasolPortalWebPartProps {
   description: string;
   context: any;
+  webUrl:any;
 }
 
 const TawasolPortal: React.FC<ITawasolPortalWebPartProps> = (props) => {
@@ -28,14 +26,10 @@ const TawasolPortal: React.FC<ITawasolPortalWebPartProps> = (props) => {
           rel="stylesheet"
         />
         <Router>
-          <HeaderPageComponent sp={sp} contextProp={props.context}/>
-
           <Routes>
-            <Route path="/" element={<Homepage sp={sp} contextProp={props.context} />} />
+            <Route path="/" element={<Homepage sp={sp} contextProp={props.context} webUrl={props.webUrl}/>} />
             <Route path="*" element={<Error404Component />} />
           </Routes>
-
-          <FooterPageComponent />
         </Router>
 
       </div>

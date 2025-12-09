@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState, useRef } from "react";
 import { SPFI } from "@pnp/sp";
-
+import "./ChairmanCardWebPart.scss";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel";
@@ -107,7 +107,7 @@ const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) =
                 </div>
                 <div className="right">
                   <img
-                    src={l.ImageUrl || require("../../theme/images/Pic.Leader.jpg")}
+                    src={l.ImageUrl}
                     alt={l.Title}
                   />
                 </div>

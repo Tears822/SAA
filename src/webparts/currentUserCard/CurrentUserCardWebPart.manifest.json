@@ -3,7 +3,7 @@
   "id": "72db434d-9913-42f8-94e2-ca35f0f1623c",
   "alias": "CurrentUserCardWebPart",
   "componentType": "WebPart",
-  "supportsFullBleed": true,
+  
   // The "*" signifies that the version should be taken from the package.json
   "version": "*",
   "manifestVersion": 2,

@@ -17,7 +17,8 @@ export default class TawasolPortalWebPart extends BaseClientSideWebPart<ITawasol
 public render(): void {
   const element = React.createElement(TawasolPortal, {
     description: this.properties.description,
-    context: this.context
+    context: this.context,
+    webUrl: this.context.pageContext.web.absoluteUrl
   });
 
   ReactDom.render(element, this.domElement);

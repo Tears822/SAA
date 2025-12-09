@@ -1,14 +1,12 @@
+import * as React from 'react';
+import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import {
-  type IPropertyPaneConfiguration,
+  IPropertyPaneConfiguration,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-// import type { IReadonlyTheme } from '@microsoft/sp-component-base';
-// import { escape } from '@microsoft/sp-lodash-subset';
-
-// import styles from './AskSupportWebPart.module.scss';
-// import * as strings from 'AskSupportWebPartStrings';
+import AskSupport, { IAskSupportProps } from './component/askSupport';
 
 export interface IAskSupportWebPartProps {
   description: string;
@@ -18,57 +16,20 @@ export interface IAskSupportWebPartProps {
 
 export default class AskSupportWebPart extends BaseClientSideWebPart<IAskSupportWebPartProps> {
 
-  // private _isDarkTheme: boolean = false;
-  // private _environmentMessage: string = '';
-
   public render(): void {
-    this.domElement.innerHTML = `
-    <div class="fullWidthWrapper">
-        <div class="bar">
-          <button id="askItBtn" class="askSupporttile askIt">
-            <span class="icon">
-              <img src="/sites/HubSite/SiteAssets/icons/askit.svg" class="ggprofile-icon" alt="">
-            </span>
-            <span class="label">ASK IT</span>
-          </button>
+    const element: React.ReactElement<IAskSupportProps> = React.createElement(
+      AskSupport,
+      {
+        askItUrl: this.properties.askItUrl,
+        askAdminUrl: this.properties.askAdminUrl
+      }
+    );
 
-          <button id="askAdminBtn" class="askSupporttile askAdmin">
-            <span class="icon">
-              <img src="/sites/HubSite/SiteAssets/icons/askadmin.svg" class="ggprofile-icon" alt="">
-            </span>
-            <span class="label">ASK Admin</span>
-          </button>
-        </div>
-      </div>`;
-
-      this._wireEvents();
+    ReactDom.render(element, this.domElement);
   }
 
-  // protected onInit(): Promise<void> {
-  //   // return this._getEnvironmentMessage().then(message => {
-  //   //   // this._environmentMessage = message;
-  //   // });
-  // }
-
-  private _wireEvents(): void {
-    const askItBtn = this.domElement.querySelector('#askItBtn') as HTMLButtonElement;
-    const askAdminBtn = this.domElement.querySelector('#askAdminBtn') as HTMLButtonElement;
-
-    if (askItBtn) {
-      askItBtn.onclick = () => {
-        if (this.properties.askItUrl) {
-          window.location.href = this.properties.askItUrl;
-        }
-      };
-    }
-
-    if (askAdminBtn) {
-      askAdminBtn.onclick = () => {
-        if (this.properties.askAdminUrl) {
-          window.location.href = this.properties.askAdminUrl;
-        }
-      };
-    }
+  protected onDispose(): void {
+    ReactDom.unmountComponentAtNode(this.domElement);
   }
 
   protected get dataVersion(): Version {
@@ -79,7 +40,9 @@ export default class AskSupportWebPart extends BaseClientSideWebPart<IAskSupport
     return {
       pages: [
         {
-           header: { description: 'Links' },
+          header: { 
+            description: 'Links' 
+          },
           groups: [
             {
               groupName: 'Settings',

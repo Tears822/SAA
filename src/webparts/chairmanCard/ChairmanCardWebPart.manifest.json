@@ -3,7 +3,7 @@
   "id": "4d22ad1a-16fe-46f8-8098-f837d63d8856",
   "alias": "ChairmanCardWebPart",
   "componentType": "WebPart",
-  "supportsFullBleed": true,
+  
   // The "*" signifies that the version should be taken from the package.json
   "version": "*",
   "manifestVersion": 2,
