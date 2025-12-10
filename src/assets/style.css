@@ -1,3 +1,4 @@
+
         .gs-cards {
           display: flex;
           flex-wrap: wrap;
@@ -157,9 +158,9 @@
 }
 
 
-/* Internal Jobs feed */
+/* ============= Internal Jobs feed ================== */
 
-.ijFeed {
+/* .ijFeed {
   padding: 16px 0;
   font-family: "Segoe UI", Tahoma, Arial, sans-serif;
 }
@@ -200,130 +201,302 @@
 }
 
 /* DevExtreme root (class is applied via elementAttr in TS) */
-.ij-list-root {
-}
+/* .ij-list-root {
+} */
 
 /* Layout: make items act as 3-column cards */
-.ij-list-root .dx-list-items {
+/* .ij-list-root .dx-list-items {
   display: flex;
   flex-wrap: wrap;
   column-gap: 48px;
-}
+} */
 
-.ij-list-root .dx-list-item {
+/* .ij-list-root .dx-list-item { */
   /* border-bottom: none; */
-  border-top: none!important;
+  /* border-top: none!important;
   padding: 0;
   margin-bottom: 24px;
   width: 30%;      /* roughly one third */
-  min-width: 260px;
-}
+  /* min-width: 260px; 
+} */
 
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .ij-list-root .dx-list-item {
-    width: 48%;    /* 2 columns */
+    width: 48%;   
   }
 }
 
 @media (max-width: 640px) {
   .ij-list-root .dx-list-item {
-    width: 100%;   /* 1 column on mobile */
+    width: 100%;   
   }
+} */
+
+
+.ijFeed {
+  padding: 0px 84px;
+  /* border-radius: 16px; */
+  background: #F4F9FB;
 }
 
+.ijFeedHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
 
-/* Card layout */
+.ijFeedTitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #7a6ad8;
+}
+
+.ijFeedViewAll {
+  font-size: 14px;
+  text-decoration: none;
+  color: #7a6ad8;
+}
+
+.ijFeedContent {
+  /* display: grid;
+  grid-template-columns: minmax(0, 2.1fr) minmax(0, 2.9fr);
+  gap: 40px;
+  align-items: center; */
+  display: grid;
+  grid-template-columns: 75% 25%;   /* left = 60%, right = 30% */
+  gap: 5%;
+  /* align-items: start; */
+  align-items: center;
+}
+
+.ijFeedLeft {
+  display: flex;
+  flex-direction: column;
+  /* gap: 16px; */
+}
+
+.ijFeedStatus {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.ijList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
 
 .ijCard {
   display: flex;
-  gap: 16px;
-  /* border-bottom: 1px solid #eee;
-  padding-bottom: 16px; */
-  border: 1px solid #d0d0d0;   /* ✅ light gray border */
-  border-radius: 8px;          /* optional rounded corners */
-  background: #fff;            /* keep white background */
-  padding: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);  /* optional subtle shadow */
-}
-
-
-.ijcard:hover {
-  border-color: #5b3fd3;       /* highlight border on hover */
-  box-shadow: 0 2px 6px rgba(91,63,211,0.15);
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f8f8ff;
 }
 
 .ijCardImage {
-  width: 96px;
-  height: 96px;
-  border-radius: 4px;
+  width: 80px;
+  height: 80px;
+  /* border-radius: 10px; */
   object-fit: cover;
-  flex-shrink: 0;
 }
 
 .ijCardBody {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 6px;
 }
 
 .ijCardDepartment {
-  font-size: 12px;
-  color: #7f7f9b;
-  margin-bottom: 4px;
+  font-size: 11px;
+  color: #999;
 }
 
 .ijCardTitle {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  color: #5b3fd3;
-  text-decoration: none;
-  margin-bottom: 4px;
-}
-
-.ijCardTitle:hover {
-  text-decoration: underline;
-}
-
-.ijCardClosing {
-  font-size: 12px;
-  color: #7f7f9b;
-  margin-bottom: 12px;
-}
-
-.ijCardApply {
-  align-self: flex-start;
-  padding: 4px 18px;
-  border-radius: 18px;
-  border: 1px solid #5b3fd3;
-  background: #fff;
-  color: #5b3fd3;
-  font-size: 13px;
-  font-weight: 500;
   cursor: pointer;
 }
 
-.ijCardApply:hover {
-  background: #f4f1ff;
+.ijCardClosing {
+  font-size: 11px;
+  color: #999;
+}
+
+.ijCardActions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.ijCardApply {
+ font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #8478B7;
+  background: #fff;
+  cursor: pointer;
+  color: #8478B7;
+}
+
+.ijCardJobDescription {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #ff6c3c;
+  background: #fff;
+  cursor: pointer;
+  color: #ff6c3c;
+}
+
+/* .ijCardApply {
+  background: #ff6c3c;
+  color: #fff;
+} */
+
+.ijFeedRight {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.ijRightPanel {
+  width: 100%;
+  max-width: 720px;
+}
+
+.ijRightBanner {
+  position: relative;
+  border-radius: 16px;
+  overflow: visible; 
+}
+
+.ijRightBannerImg {
+  width: 100%;
+  height: auto;                  
+  object-fit: contain;           
+  display: block;
+  /* border-radius: 16px; */
+}
+
+.ijRightBannerOverlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.65), transparent);
+  color: #fff;
+}
+
+.ijRightBannerTitle {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.ijRightBannerSub {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Job details view */
+.ijJobDetails {
+  background: #ffffff;
+  /* border-radius: 16px; */
+  padding: 20px 24px;
+}
+
+.ijJobDetailsDepartment {
+  font-size: 11px;
+  color: #999;
+}
+
+.ijJobDetailsTitle {
+  margin: 4px 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.ijJobDetailsClosing {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.ijJobDetailsBody {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  max-height: 320px;          /* adjust the visible area height */
+  overflow-y: auto;           /* enable scrolling */
+  padding-right: 10px;       /* space for scrollbar */
+}
+
+.ijJobDetailsBody::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ijJobDetailsBody::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.ijJobDetailsBody::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.35);
 }
 
 
-/* End Internal Jobs feed */
+
+/* =============== End Internal Jobs feed ===================== */
+
 
 /* =============== Internal Jobs list style ==================== */
 
 .stories {
-  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-  padding: 8px 0 24px;
+  /* font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  padding: 8px 0 24px; */
+   display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 /* Toolbar: filters + search */
 .stories-toolbar {
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
+  /* gap: 12px;
+  margin-bottom: 16px; */
+}
+
+.stories-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.stories-list-column {
+  flex: 0 0 60%;
+  max-width: 60%;
+}
+
+.stories-banner-column {
+  flex: 0 0 30%;
+  max-width: 30%;
+  margin-left: auto;
+}
+
+.stories-banner-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 /* Filter bar */
@@ -419,17 +592,19 @@
 /* Make DevExtreme list items use flex layout */
 /* DevExtreme host: vertical list of cards */
 .sl-list-root .dx-scrollview-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px 24px;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 32px;
 }
 /* .sl-list-root .dx-scrollview-content { */
 .sl-list-root .dx-list-items {
-  display: flex;
+  /* display: flex; */
   /* flex-direction: column;   vertical cards – like your screenshot */
   /* row-gap: 24px; */
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   /* column-gap: 48px; */
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 /* Each item is a full-width card */
@@ -472,7 +647,7 @@
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
   transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease; */
 
-   display: grid;
+   /* display: grid;
   grid-template-columns: auto 1fr auto;
   column-gap: 16px;
   align-items: flex-start;
@@ -482,7 +657,11 @@
   border: 1px solid #e2e6f0;
   background: #ffffff;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
-  transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+  transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease; */
+
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
 }
 
 .storyCard:hover {
@@ -500,19 +679,35 @@
   border-radius: 4px;
   flex-shrink: 0; */
   /* margin-right: 24px; */
-  width: 90px;
+
+  /* width: 90px;
   height: 90px;
   border-radius: 8px;
+  object-fit: cover; */
+
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
   object-fit: cover;
 
-  /* flex-shrink: 0;
-  margin-right: 18px; */
+  
 }
 
 .storyContent {
-  flex: 1;
+  /* flex: 1;
   white-space: normal !important;
-  word-break: break-word;
+  word-break: break-word; */
+
+  flex: 1 1 auto;
+}
+
+.job-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 16px;
+  align-self: center;
 }
 
 .storyCategory {
@@ -577,6 +772,15 @@
   text-align: center;
 }
 
+.storyApplyLink,
+.storyDetailsLink {
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+}
+
 .storyDetailsLink:hover {
   text-decoration: underline;
   border-color: #34a4c4;
@@ -638,6 +842,75 @@
   color: #9a9a9a;
 }
 
+
+/* ===== Apply pop-up */
+
+.ij-apply-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 4px;
+}
+
+.ij-apply-popup .dx-texteditor-input {
+  max-height: 140px;
+  overflow-y: auto;
+}
+
+.ij-apply-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
+}
+
+.ij-upload-box {
+  border-radius: 8px;
+  border: 1px dashed #c9c3ff;
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  cursor: pointer;
+  background: #f8f6ff;
+}
+
+.ij-upload-box span {
+  display: inline-block;
+}
+
+.ij-apply-button {
+  margin-top: 16px;
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #8c7ae6;
+  color: #fff;
+  cursor: pointer;
+}
+
+.storyApplyLink {
+  margin-left: 8px;
+}
+
+/* ===== Responsive: stack on small screens ===== */
+
+@media (max-width: 900px) {
+  .stories-layout {
+    flex-direction: column;
+  }
+
+  .stories-list-column,
+  .stories-banner-column {
+    max-width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .sl-list-root {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* =============== End of Internal Jobs list style ==================== */
 

@@ -38,7 +38,7 @@ export interface INavigationNode {
 const navigationNodesStatic: INavigationNode[] = [
    {
       Id: 1,
-      Title: "EmployeeHub",
+      Title: "Employee Hub",
       Url: "#",
       IsExternal: false,
       Children: []

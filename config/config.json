@@ -42,14 +42,6 @@
         }
       ]
     },
-    "goraet-saada-app-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/goraetSaadaApp/GoraetSaadaAppWebPart.js",
-          "manifest": "./src/webparts/goraetSaadaApp/GoraetSaadaAppWebPart.manifest.json"
-        }
-      ]
-    },
     "g-saada-feed-web-part": {
       "components": [
         {
@@ -186,7 +178,6 @@
     "MccServiceActionsWebPartStrings": "lib/webparts/mccServiceActions/loc/{locale}.js",
     "MccRequesterViewWebPartStrings": "lib/webparts/mccRequesterView/loc/{locale}.js",
     "MccDashboardWebPartStrings": "lib/webparts/mccDashboard/loc/{locale}.js",
-    "GoraetSaadaAppWebPartStrings": "lib/webparts/goraetSaadaApp/loc/{locale}.js",
     "GSaadaFeedWebPartStrings": "lib/webparts/gSaadaFeed/loc/{locale}.js",
     "SendGSaadaWebPartStrings": "lib/webparts/sendGSaada/loc/{locale}.js",
     "GSaadaItemsWebPartStrings": "lib/webparts/gSaadaItems/loc/{locale}.js",

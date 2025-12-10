@@ -12,8 +12,11 @@
     "test": "gulp test"
   },
   "dependencies": {
+    "@microsoft/decorators": "1.21.1",
+    "@microsoft/sp-application-base": "^1.21.1",
     "@microsoft/sp-component-base": "1.21.1",
     "@microsoft/sp-core-library": "1.21.1",
+    "@microsoft/sp-dialog": "1.21.1",
     "@microsoft/sp-lodash-subset": "1.21.1",
     "@microsoft/sp-office-ui-fabric-core": "1.21.1",
     "@microsoft/sp-property-pane": "1.21.1",
@@ -33,10 +36,7 @@
     "react-router-dom": "^6.30.2",
     "slick-carousel": "^1.8.1",
     "tslib": "2.3.1",
-    "url-loader": "^4.1.0",
-    "@microsoft/decorators": "1.21.1",
-    "@microsoft/sp-dialog": "1.21.1",
-    "@microsoft/sp-application-base": "1.21.1"
+    "url-loader": "^4.1.0"
   },
   "devDependencies": {
     "@fluentui/react": "^8.106.4",

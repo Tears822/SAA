@@ -39,12 +39,12 @@
         }
       }
     ],
-    "webApiPermissionRequests": [
-      {
-        "resource": "Microsoft Graph",
-        "scope": "User.Read.All"
-      }
-    ]
+    // "webApiPermissionRequests": [
+    //   {
+    //     "resource": "Microsoft Graph",
+    //     "scope": "User.Read.All"
+    //   }
+    // ]
   },
   "paths": {
     "zippedPackage": "solution/saa-tawasol.sppkg"
