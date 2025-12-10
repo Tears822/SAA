@@ -75,6 +75,10 @@
   /* TEXT AREA */
   .textArea {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
   }
 
   .name {
@@ -157,10 +161,26 @@
     }
   }
 }
+  .tilePurple {
+    background-color: #ABA2D0;
+  }
 
-/* TILE COLORS (same as yours) */
-.tilePurple { background-color: #9b8bc6; }
-.tileGreen  { background-color: #a8c7a1; }
-.tileOrange { background-color: #f88d6b; }
-.tilePeach  { background-color: #f6a78f; }
-.tileMint   { background-color: #d7e7cf; color: #333; }
+  .tileGreen {
+    background-color: #84AE9A;
+  }
+
+  .tileOrange {
+    background-color: #F58B6E;
+  }
+
+  .tilePeach {
+    background-color: #FAB599;
+  }
+
+  .tileMint {
+    background-color: #d7e7cf;
+  }
+
+  .tileFav {
+    background-color: #ACCDE0;
+  }
