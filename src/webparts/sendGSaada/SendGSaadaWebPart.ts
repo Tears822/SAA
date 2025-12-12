@@ -10,6 +10,7 @@ import "@pnp/sp/items";
 import "@pnp/sp/lists";
 import "@pnp/sp/site-users/web";
 import "@pnp/sp/profiles";
+import "@pnp/sp/attachments";
 import "devextreme";
 import * as $ from "jquery";
 import { createPeopleStore } from "../../util/PeopleStore";
@@ -34,6 +35,7 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
   private selectedCardId: number | null = null; // chosen from gallery
   private pendingCustomFile: File | null = null; // selected local image, not uploaded yet
   private pendingCustomPreviewUrl: string | null = null; // object URL for preview
+  // private _canChangeGiftType: boolean = false;
 
   protected onInit(): Promise<void> {
     if (this.properties.minAmount === undefined)
@@ -48,13 +50,6 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
   }
 
   public async render(): Promise<void> {
-    // const peopleStore = createPeopleStore(this.sp);
-    // const users = await this.sp.web.siteUsers();
-    // console.log(users);
-
-    // const me = await this.sp.web.currentUser();
-    // this.meId = me.Id;
-
     this.domElement.innerHTML = `
       <style>
         .gs-cards {
@@ -105,15 +100,26 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
         .gs-card{border:1px solid #e7e7e7;border-radius:12px;padding:8px;cursor:pointer;background:#fff}
         .gs-card.selected{outline:2px solid #1677ff}
         .gs-card img{width:100%;height:110px;object-fit:cover;border-radius:8px}
+        
+        /*.muted{color:#666;font-size:12px}
+        .hide{display:none}
+        .btn{background:#1677ff;color:#fff;border:none;border-radius:8px;padding:10px 14px;cursor:pointer}
+        .btn.link{background:transparent;color:#1677ff}*/
+
         .muted{color:#666;font-size:12px}
         .hide{display:none}
         .btn{background:#1677ff;color:#fff;border:none;border-radius:8px;padding:10px 14px;cursor:pointer}
         .btn.link{background:transparent;color:#1677ff}
+
+        .gs-actions{margin-top:40px;display:flex;justify-content:center;gap:12px}
+        #btn-save{min-width:160px}
+        #btn-cancel{min-width:160px;background:#ffffff;color:#1677ff;border:1px solid #1677ff}
+
       </style>
       <div class="gs-form">
         <h3>Send Goraet Saada</h3>
         <div id="gs-form"></div>
-        <div id="cards-section" class="hide">
+        <div id="cards-section" class="hide1">
           <div style="display:flex;align-items:center;gap:12px;margin:10px 0">
             <span class="muted">Pick a card or upload your own</span>
             <!--<button id="btn-upload" class="btn link">Upload your card</button>-->
@@ -123,14 +129,15 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
           <input id="file-input" type="file" accept="image/*" style="display:none" />
           <!--<div id="upload-note" class="muted" style="margin-top:6px"></div>-->
         </div>
-        <div style="margin-top:16px">
+        <div class="gs-actions">
           <button id="btn-save" class="btn">Submit</button>
+          <button id="btn-cancel" class="btn btn-cancel">Cancel</button>
         </div>
       </div>
     `;
 
     await this.initForm();
-    $("#cards-section", this.domElement).removeClass("hide");
+    // $("#cards-section", this.domElement).removeClass("hide");
     const cards = await this.loadCardsFromLibrary();
     this.renderCards(cards); // preload catalog
     this.wireEvents();
@@ -176,6 +183,31 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
       // 7) Reset input so user can pick the same file again if they want
       input.value = "";
     });
+
+    setTimeout(() => {
+      this.bindFormEvents();
+    }, 0);
+  }
+
+  private async isCurrentUserManagerOf(email: string): Promise<boolean> {
+    try {
+      // get user profile of the recipient
+      const managerClaim: string =
+        await this.sp.profiles.getUserProfilePropertyFor(email, "Manager");
+
+      if (!managerClaim) return false;
+
+      // SharePoint often returns manager claim like: "i:0#.f|membership|manager@domain.com"
+      const managerEmail = managerClaim.split("|").pop()?.toLowerCase();
+
+      const currentUserEmail =
+        this.context.pageContext.user.email?.toLowerCase();
+
+      return managerEmail === currentUserEmail;
+    } catch (err) {
+      console.error("Manager check failed", err);
+      return false;
+    }
   }
 
   private async initForm(): Promise<void> {
@@ -206,12 +238,20 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
                 searchTimeout: 300,
                 valueExpr: "name",
                 searchExpr: ["name", "email"],
-                onSelectionChanged: async (e: { selectedItem?: { id?: string | number; name?: string; email?: string } | null }) => {
+                onSelectionChanged: async (e: {
+                  selectedItem?: {
+                    id?: string | number;
+                    name?: string;
+                    email?: string;
+                  } | null;
+                }) => {
                   const selected = e.selectedItem; // full object
                   const form = $("#gs-form").dxForm("instance");
                   form.updateData("ToUserEmail", selected?.email);
                   // ensure we pass a string to updateGiftTypePermission
-                  await this.updateGiftTypePermission(String(selected?.id ?? ""));
+                  await this.updateGiftTypePermission(
+                    String(selected?.id ?? "")
+                  );
                 },
                 itemTemplate(data: { name?: string; email?: string }) {
                   return $(`<div>
@@ -235,13 +275,14 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
                 value: "Card",
                 items: [
                   { text: "Card", value: "Card" },
-                  { text: "Voucher", value: "Voucher", disabled: true },
-                  { text: "Amount", value: "Amount", disabled: true }
+                  { text: "Voucher", value: "Voucher" },
+                  { text: "Amount", value: "Amount" },
                 ],
                 valueExpr: "value",
                 displayExpr: "text",
-                // disabled: true,
-                onValueChanged: (e: { value: string }) => this.onGiftTypeChanged(e.value),
+                disabled: true,
+                onValueChanged: (e: { value: string }) =>
+                  this.onGiftTypeChanged(e.value),
               },
             },
             {
@@ -283,32 +324,44 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
     });
   }
 
-  // Get Manager from User Profile and compare with current user
-  private async isCurrentUserManagerOf(
-    recipientLogin: string
-  ): Promise<boolean> {
-    if (!recipientLogin) return false;
+  private bindFormEvents(): void {
+    const formInstance: any = $("#gs-form", this.domElement).dxForm("instance");
 
-    try {
-      const me = await this.sp.web.currentUser();
-      const meLogin = (me.LoginName || "").toLowerCase();
-
-      // Get recipient profile
-      const profile = await this.sp.profiles.getPropertiesFor(recipientLogin);
-      type UserProfileProperty = { Key: string; Value?: string | null };
-      const props: UserProfileProperty[] = (profile.UserProfileProperties as UserProfileProperty[]) || [];
-
-      const managerProp = props.find((p) => p.Key === "Manager");
-      const managerLogin = (managerProp?.Value || "").toLowerCase();
-
-      if (!managerLogin || !meLogin) return false;
-
-      // UPS Manager is usually stored as a login/claims; simple compare works in most setups
-      return managerLogin.indexOf(meLogin) !== -1;
-    } catch (err) {
-      console.error("Error checking manager relationship:", err);
-      return false;
+    if (!formInstance) {
+      console.warn("dxForm not ready yet");
+      return;
     }
+
+    formInstance.off("fieldDataChanged.gs");
+
+    formInstance.on("fieldDataChanged.gs", async (e: any) => {
+      if (e.dataField === "ToUserEmail") {
+        const recipientEmail = e.value;
+
+        if (!recipientEmail) {
+          formInstance.itemOption("GiftType", "editorOptions.disabled", true);
+          formInstance.updateData("GiftType", null);
+          return;
+        }
+
+        const isManager = await this.isCurrentUserManagerOf(recipientEmail);
+
+        formInstance.itemOption(
+          "GiftType",
+          "editorOptions.disabled",
+          !isManager
+        );
+
+        if (isManager && !formInstance.option("formData").GiftType) {
+          formInstance.updateData("GiftType", "Card");
+          await this.onGiftTypeChanged("Card");
+        }
+      }
+
+      if (e.dataField === "GiftType") {
+        await this.onGiftTypeChanged(e.value);
+      }
+    });
   }
 
   // Enable GiftType only if current user is recipient's manager
@@ -330,20 +383,9 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
     const currentOpts = form.itemOption("GiftType", "editorOptions") || {};
     form.itemOption("GiftType", "editorOptions", {
       ...currentOpts,
-      disabled: !isManager
+      disabled: !isManager,
     });
   }
-
-  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures
-  // private async onGiftTypeChanged(val: string) {
-  //   const show = val === "Card";
-  //   $("#cards-section", this.domElement).toggleClass("hide", !show);
-
-  //   if (show) {
-  //     const cards = await this.loadCardsFromLibrary();
-  //     this.renderCards(cards);
-  //   }
-  // }
 
   private async onGiftTypeChanged(value: string): Promise<void> {
     const form = $("#gs-form").dxForm("instance");
@@ -353,33 +395,13 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
     // Toggle visibility
     form.itemOption("Amount", "visible", isAmount);
 
-    // Toggle required rule dynamically
-    form.itemOption("Amount", "isRequired", isAmount);
+    form.itemOption("Amount", {
+      validationRules: isAmount
+        ? [{ type: "required", message: "Amount is required" }]
+        : [],
+    });
 
-    form.itemOption("GiftType", "value", value);
-    form.itemOption("GiftType", "disabled", !isAmount);
-
-    // Clear or keep card section
-    if (value === "Card") {
-      // Show card picker
-      $("#cards-section", this.domElement).removeClass("hide");
-
-      // Reload cards only if necessary
-      await this.loadCardsFromLibrary().then((cards) => {
-        this.renderCards(cards);
-      });
-    } else {
-      // Hide card picker if not Card
-      $("#cards-section", this.domElement).addClass("hide");
-
-      // Clear any card selection
-      this.selectedCardId = null;
-      this.pendingCustomFile = null;
-      if (this.pendingCustomPreviewUrl) {
-        URL.revokeObjectURL(this.pendingCustomPreviewUrl);
-        this.pendingCustomPreviewUrl = null;
-      }
-    }
+  //  form.itemOption("GiftType", "editorOptions.disabled", !isAmount);
   }
 
   private async loadCardsFromLibrary(): Promise<unknown[]> {
@@ -489,22 +511,14 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
         $("#file-input", root).trigger("click");
       });
 
-    // $("#file-input", root)
-    //   .off("change.gs")
-    //   .on("change.gs", async (ev: any) => {
-    //     const file: File | null = ev.target.files?.[0];
-    //     if (!file) return;
-
-    //     const result = await this.uploadToCardsLibrary(file);
-
-    //     if (result && result.Url) {
-    //       this.selectedCardId = null;
-    //       // this.uploadedFileServerUrl = result.Url;
-    //       this.selectedCardId = result.itemId;
-    //       $("#upload-note", root).text(`Uploaded: ${file.name}`);
-    //       $(".gs-card", root).removeClass("selected");
-    //     }
-    //   });
+    // custom card upload
+    $("#custom-card-upload", root) // use your real input id
+      .off("change.gs")
+      .on("change.gs", (e: any) => {
+        const input = e.target as HTMLInputElement;
+        const files = input.files;
+        this.pendingCustomFile = files && files.length > 0 ? files[0] : null;
+      });
 
     // submit
     $("#btn-save", root)
@@ -512,71 +526,77 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
       .on("click.gs", async () => {
         await this.submitDose();
       });
-  }
 
-  private async uploadToCardsLibrary(
-    file: File
-  ): Promise<{ itemId: number; Url: string }> {
-    try {
-      const web = this.context.pageContext.web;
-
-      // Normalize paths
-      const serverRelWeb = web.serverRelativeUrl.replace(/^\//, "");
-      const folderServerRel = `/${serverRelWeb}/GSaada_Cards`;
-
-      // Target folder
-      const folder = this.sp.web.getFolderByServerRelativePath(folderServerRel);
-
-      // Upload => returns IFileInfo (no .file!)
-      const uploadInfo = await folder.files.addUsingPath(file.name, file, {
-        Overwrite: true,
+    // cancel -> go back to previous page
+    $("#btn-cancel", root)
+      .off("click.gs")
+      .on("click.gs", () => {
+        window.history.back();
       });
 
-      // Resolve file URL from IFileInfo
-      const serverRelativeUrl = uploadInfo.ServerRelativeUrl;
+    const formInstance = ($("#gs-form", this.domElement) as any).dxForm(
+      "instance"
+    );
 
-      // Rebind to the real IFile object
-      const fileObj =
-        this.sp.web.getFileByServerRelativePath(serverRelativeUrl);
+    // formInstance.on("fieldDataChanged", async (e: any) => {
+    //   if (e.dataField === "ToUserEmail") {
+    //     const recipientEmail = e.value;
 
-      // Get list item to retrieve ID
-      const item = await fileObj.getItem();
+    //     if (!recipientEmail) return;
 
-      // EXECUTE the query to get data with Id
-      const itemData: { Id: number } = await item.select("Id")();
+    //     const isManager = await this.isCurrentUserManagerOf(recipientEmail);
 
-      // Build absolute URL
-      const webUrl = web.absoluteUrl.replace(/\/$/, "");
-      const absoluteUrl = `${webUrl}${serverRelativeUrl}`;
+    //     formInstance.itemOption("GiftType", "editorOptions", {
+    //       disabled: !isManager,
+    //     });
+    //   }
+    // });
+    formInstance.on("fieldDataChanged", async (e: any) => {
+      // Only act when Recipient changes
+      if (e.dataField === "ToUserEmail") {
+        const recipientEmail = e.value as string;
 
-      return {
-        itemId: itemData.Id,
-        Url: absoluteUrl,
-      };
-    } catch (err) {
-      console.log("Upload error:", err);
-      throw err;
-    }
+        if (!recipientEmail) {
+          // this._canChangeGiftType = false;
+          formInstance.itemOption("GiftType", "editorOptions.disabled", true);
+          formInstance.updateData("GiftType", null);
+          return;
+        }
+
+        const isManager = await this.isCurrentUserManagerOf(recipientEmail);
+        // this._canChangeGiftType = isManager;
+
+        // only toggle disabled here
+        formInstance.itemOption(
+          "GiftType",
+          "editorOptions.disabled",
+          !isManager
+        );
+
+        // Optionally set default for managers when empty
+        if (isManager && !formInstance.option("formData").GiftType) {
+          formInstance.updateData("GiftType", "Card");
+          await this.onGiftTypeChanged("Card");
+        }
+      }
+
+      // GiftType changed → update Amount/Card UI
+      if (e.dataField === "GiftType") {
+        await this.onGiftTypeChanged(e.value);
+      }
+    });
   }
 
   private async submitDose(): Promise<void> {
     const form = ($("#gs-form", this.domElement) as any).dxForm("instance");
     const data = form.option("formData") || {};
-    // const toId = Number(data.ToUserId);
-
-    // let toId: number | null = Number(data.ToUserId) || null;
-
-    // Resolve on submit if it wasn't resolved during selection
-    // if (!toId && data.ToUserId) {
-    //   toId = await this.ensureUserIdFromLogin(String(data.ToUserId));
-    // }
 
     const giftType = data.GiftType;
     const message = (data.Message || "").toString().trim();
 
     if (/*!toId ||*/ !giftType || !message) {
       alert("Please fill Recipient, GiftType, and Message.");
-      
+
       return;
     }
 
@@ -589,7 +609,6 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
 
     const payload: any = {
       Title: `Goreat Saada ${new Date().toISOString()}`,
-      // FromUserId: this.meId,
       ToUserName: data.ToUserName,
       ToUserEmail: data.ToUserEmail,
       GiftType: giftType,
@@ -599,33 +618,12 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
       Amount: data.Amount,
     };
 
-    // Card semantics
-    // if (giftType === "Card") {
-    //   if (this.selectedCardId) payload.CardId = this.selectedCardId; // Lookup
-    //   if (this.uploadedFileServerUrl)
-    //     payload.CardFileUrl = {
-    //       Url: this.uploadedFileServerUrl,
-    //       Description: "Custom Card",
-    //     };
-    //   if (!this.selectedCardId && !this.uploadedFileServerUrl) {
-    //     alert("Please pick a card or upload your own.");
-    //     return;
-    //   }
-    // }
     if (giftType === "Card") {
       if (this.selectedCardId) {
         // existing catalog card
         payload.CardId = this.selectedCardId;
       } else if (this.pendingCustomFile) {
         // upload custom image NOW
-        // const uploaded =
-        await this.uploadToCardsLibrary(this.pendingCustomFile);
-        // payload.CardFileUrl = {
-        //   Url: uploaded.Url,
-        //   Description: "Custom Card",
-        // };
-        // optionally also save CardIdId = uploaded.itemId if you want to treat it as catalog
-        // payload.CardIdId = uploaded.itemId;
       } else {
         alert("Please pick a card or select a custom image.");
         return;
@@ -633,11 +631,38 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
     }
 
     try {
-      await this.sp.web.lists.getByTitle(DOSES_LIST).items.add(payload);
-      // alert("Recognition submitted successfully!");
+      const list = this.sp.web.lists.getByTitle(DOSES_LIST);
+
+      // 1) create the item – in your environment this returns the item data directly
+      const addResult: any = await list.items.add(payload);
+
+      // from your log, the object has both ID and Id
+      const itemId: number | undefined =
+        addResult?.Id ?? addResult?.ID ?? addResult?.data?.Id;
+
+      if (!itemId) {
+        console.error("Could not resolve item ID from addResult:", addResult);
+        alert("Could not get the created item ID to attach the image.");
+        return;
+      }
+
+      // 2) if user uploaded a custom image (and did not choose a catalog card),
+      //    attach it to this list item
+      if (
+        giftType === "Card" &&
+        this.pendingCustomFile &&
+        !this.selectedCardId
+      ) {
+        await list.items
+          .getById(itemId)
+          .attachmentFiles.add(
+            this.pendingCustomFile.name,
+            this.pendingCustomFile
+          );
+      }
+
       // reset
       this.selectedCardId = null;
-      // this.uploadedFileServerUrl = null;
       if (this.pendingCustomPreviewUrl) {
         URL.revokeObjectURL(this.pendingCustomPreviewUrl);
       }
@@ -651,7 +676,8 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
       $("#upload-note", this.domElement).text("");
       $(".gs-card", this.domElement).removeClass("selected");
 
-      window.location.href = this.context.pageContext.site.absoluteUrl; 
+      // redirect after submit
+      window.location.href = this.context.pageContext.site.absoluteUrl;
     } catch (err) {
       console.log(err);
       alert("Could not submit the recognition.");
