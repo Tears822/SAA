@@ -93,7 +93,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
             </div>
 
             <div id="ij-status-${id}" class="ijFeedStatus">Loading...</div>
-            <div id="ij-list-${id}" class="ijList"></div>
+            <div id="ij-list-${id}" class="ijListGrid"></div>
             <div id="ij-pager-${id}" class="ijPager"></div>
           </div>
 
@@ -268,7 +268,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
             }
           </div>
         </div>
-        <div class="ijJobDetailsBody">
+        <div class="ijJobDetailsBodyList">
           ${descriptionHtml}
         </div>
       </div>
@@ -675,7 +675,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       const $actions = $('<div class="ijCardActions"></div>').appendTo($body);
 
       $("<button>")
-        .addClass("ijCardApply")
+        .addClass("ijCardApplyList")
         .text("Apply")
         // .on("click", () => this._openApplyPopup(job))
         .appendTo($actions);

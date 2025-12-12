@@ -403,7 +403,7 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
                   min: 4,
                   max: 24,
                   step: 1,
-                  value: 12,
+                  value: 6,
                 }),
                 PropertyPaneTextField("redirectUrl", {
                   label: "Redirect URL for Happiness Dose",
