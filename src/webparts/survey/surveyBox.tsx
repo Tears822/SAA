@@ -11,8 +11,8 @@ interface OptionRating {
   rating: number;
 }
 
-const SurveyBox: FC<{ lang?: string }> = ({ lang = "en" }) => {
-  const isAr = lang === "ar";
+const SurveyBox: FC<{ }> = ({ }) => {
+  const isAr = window.location.href.toLowerCase().includes("/ar/");
 
   const initialOptions: OptionRating[] = [
     { key: "Food", text: "Food", textAr: "الطعام", rating: 0 },

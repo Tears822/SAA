@@ -4,12 +4,11 @@ import './AskSupportWebPart.scss';
 export interface IAskSupportProps {
   askItUrl?: string;
   askAdminUrl?: string;
-  lang?:string;
 }
 
-const AskSupport: React.FC<IAskSupportProps> = ({ askItUrl, askAdminUrl,lang }) => {
+const AskSupport: React.FC<IAskSupportProps> = ({ askItUrl, askAdminUrl }) => {
 
-const isAr = lang === "ar";
+const isAr = window.location.href.toLowerCase().includes("/ar/");
 
   const handleClick = (url?: string) => {
     if (url) {

@@ -74,8 +74,8 @@ export const newsList: INewsItem[] = [
     }
 ];
 
-const NewsBox: FC<{ lang?: string }> = ({ lang = "en" }) => {
-    const isAr = lang === "ar";
+const NewsBox: FC<{}> = ({ }) => {
+    const isAr = window.location.href.toLowerCase().includes("/ar/");
 
     return (
         <>
@@ -100,7 +100,7 @@ const NewsBox: FC<{ lang?: string }> = ({ lang = "en" }) => {
                     <div className="news-home-big">
                         <h5>{isAr ? featuredNews.titleAr : featuredNews.title}</h5>
                         <h3>{isAr ? featuredNews.subtitleAr : featuredNews.subtitle}</h3>
-                        <p dangerouslySetInnerHTML={{ __html: isAr ? featuredNews.descriptionAr : featuredNews.description}}></p>
+                        <p dangerouslySetInnerHTML={{ __html: isAr ? featuredNews.descriptionAr : featuredNews.description }}></p>
                         <small>{featuredNews.date}</small>
                     </div>
 

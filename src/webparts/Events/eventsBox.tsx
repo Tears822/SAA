@@ -14,7 +14,6 @@ interface IEvent {
 
 interface IEventsProps {
     events?: IEvent[];
-    lang?: string;
 }
 
 const sampleEvents: IEvent[] = [
@@ -24,8 +23,8 @@ const sampleEvents: IEvent[] = [
     { date: "2025-12-10", title: "Sprint Planning", titleAr: "تخطيط السبرنت" },
 ];
 
-const EventsBox: FC<IEventsProps> = ({ events = sampleEvents, lang = "en" }) => {
-    const isAr = lang === "ar";
+const EventsBox: FC<IEventsProps> = ({ events = sampleEvents}) => {
+const isAr = window.location.href.toLowerCase().includes("/ar/");
 
     const [value, setValue] = useState<Date>(new Date());
 

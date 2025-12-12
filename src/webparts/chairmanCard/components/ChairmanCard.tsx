@@ -30,7 +30,7 @@ interface ILeaderItem {
 
 const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl, lang = "en" }) => {
 
-  const isAr = lang === "ar";
+  const isAr = window.location.href.toLowerCase().includes("/ar/");
 
   const [leaders, setLeaders] = useState<ILeaderItem[]>([]);
   const sliderRef = useRef<HTMLDivElement>(null);

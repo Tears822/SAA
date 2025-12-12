@@ -18,11 +18,11 @@ interface IUserProfile {
     accountName: string;
 }
 
-const CurrentUserCard: React.FC<ICurrentUserCardProps> = ({ sp, webUrl, lang = "en" }) => {
+const CurrentUserCard: React.FC<ICurrentUserCardProps> = ({ sp, webUrl }) => {
     const [userProfile, setUserProfile] = React.useState<IUserProfile | null>(null);
     const [loading, setLoading] = React.useState<boolean>(true);
 
-    const isAr = lang === "ar";
+    const isAr = window.location.href.toLowerCase().includes("/ar/");
 
     React.useEffect(() => {
         loadCurrentUser();

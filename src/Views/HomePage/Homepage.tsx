@@ -37,39 +37,39 @@ export default class HomePage extends React.Component<any, IHomePageState> {
                         {/* User Card & Chairman Card Row */}
                         <div className="row">
                             <div className="col-12 col-md-4 col-lg-3">
-                                <CurrentUserCard lang={this.props.lang} sp={this.props.sp} webUrl={this.props.webUrl} />
+                                <CurrentUserCard sp={this.props.sp} webUrl={this.props.webUrl} />
                             </div>
                             <div className="col-12 col-md-8 col-lg-9">
-                                <ChairmanCard lang={this.props.lang}  sp={this.props.sp} webUrl={this.props.webUrl} listTitle="Leaders" />
+                                <ChairmanCard sp={this.props.sp} webUrl={this.props.webUrl} listTitle="Leaders" />
                             </div>
                         </div>
 
                         {/* Ask Support Row */}
                         <div className="row">
                             <div className="col-12">
-                                <AskSupport  lang={this.props.lang} />
+                                <AskSupport />
                             </div>
                         </div>
 
                         {/* News Box Row */}
                         <div className="row">
-                                <NewsBox  lang={this.props.lang} />
+                                <NewsBox />
                         </div>
 
                         {/* Portal Tiles Row */}
                         <div className="row">
                             <div className="col-12">
-                                <PortalTiles  lang={this.props.lang} sp={this.props.sp} webUrl={this.props.webUrl} listTitle="PortalTiles" />
+                                <PortalTiles sp={this.props.sp} webUrl={this.props.webUrl} listTitle="PortalTiles" />
                             </div>
                         </div>
 
                         {/* Survey & Events Row */}
                         <div className="row">
                             <div className="col-12 col-md-6 col-lg-4">
-                                <SurveyBox  lang={this.props.lang} />
+                                <SurveyBox />
                             </div>
                            
-                                <EventsBox  lang={this.props.lang} />
+                                <EventsBox />
                         </div>
 
                     </div>

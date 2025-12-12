@@ -27,7 +27,7 @@ const TawasolPortalAr: React.FC<ITawasolPortalArWebPartProps> = (props) => {
         />
         <Router>
           <Routes>
-            <Route path="/" element={<Homepage lang="ar"  sp={sp} contextProp={props.context} webUrl={props.webUrl}/>} />
+            <Route path="/" element={<Homepage  sp={sp} contextProp={props.context} webUrl={props.webUrl}/>} />
             <Route path="*" element={<Error404Component />} />
           </Routes>
         </Router>

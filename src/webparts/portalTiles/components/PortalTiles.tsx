@@ -17,7 +17,6 @@ export interface IPortalTilesProps {
   sp: SPFI;
   listTitle: string;
   webUrl: string;
-  lang?:string;
 }
 
 export interface IPortalTilesState {
@@ -161,7 +160,7 @@ export default class PortalTiles extends React.Component<IPortalTilesProps, IPor
 
   public render(): React.ReactElement<IPortalTilesProps> {
     const { apps, services, loading, error } = this.state;
-    const isAr = this.props.lang === "ar";
+   const isAr = window.location.href.toLowerCase().includes("/ar/");
     if (loading) {
       return (
         <div className="outer">
