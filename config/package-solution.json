@@ -1,205 +1,46 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
-  "version": "2.0",
-  "bundles": {
-    "employee-directory-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/employeeDirectory/EmployeeDirectoryWebPart.js",
-          "manifest": "./src/webparts/employeeDirectory/EmployeeDirectoryWebPart.manifest.json"
-        }
-      ]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "saa-tawasol",
+    "id": "891d96c1-e19e-4fcc-8da7-5be7b2b52085",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.21.1"
     },
-    "mcc-service-request-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/mccServiceRequest/MccServiceRequestWebPart.js",
-          "manifest": "./src/webparts/mccServiceRequest/MccServiceRequestWebPart.manifest.json"
-        }
-      ]
+    "metadata": {
+      "shortDescription": {
+        "default": "SAA-Tawasol description"
+      },
+      "longDescription": {
+        "default": "SAA-Tawasol description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
     },
-    "mcc-service-actions-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/mccServiceActions/MccServiceActionsWebPart.js",
-          "manifest": "./src/webparts/mccServiceActions/MccServiceActionsWebPart.manifest.json"
+    "features": [
+      {
+        "title": "saa-tawasol Feature",
+        "description": "The feature that activates elements of the saa-tawasol solution.",
+        "id": "e2e873a4-801f-4e70-ae43-ce7681c61ff6",
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml",
+            "ClientSideInstance.xml"
+          ]
         }
-      ]
-    },
-    "mcc-requester-view-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/mccRequesterView/MccRequesterViewWebPart.js",
-          "manifest": "./src/webparts/mccRequesterView/MccRequesterViewWebPart.manifest.json"
-        }
-      ]
-    },
-    "mcc-dashboard-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/mccDashboard/MccDashboardWebPart.js",
-          "manifest": "./src/webparts/mccDashboard/MccDashboardWebPart.manifest.json"
-        }
-      ]
-    },
-    "g-saada-feed-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/gSaadaFeed/GSaadaFeedWebPart.js",
-          "manifest": "./src/webparts/gSaadaFeed/GSaadaFeedWebPart.manifest.json"
-        }
-      ]
-    },
-    "send-g-saada-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/sendGSaada/SendGSaadaWebPart.js",
-          "manifest": "./src/webparts/sendGSaada/SendGSaadaWebPart.manifest.json"
-        }
-      ]
-    },
-    "g-saada-items-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/gSaadaItems/GSaadaItemsWebPart.js",
-          "manifest": "./src/webparts/gSaadaItems/GSaadaItemsWebPart.manifest.json"
-        }
-      ]
-    },
-    "internal-jobs-feed-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/internalJobsFeed/InternalJobsFeedWebPart.js",
-          "manifest": "./src/webparts/internalJobsFeed/InternalJobsFeedWebPart.manifest.json"
-        }
-      ]
-    },
-    "internal-jobs-list-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/internalJobsList/InternalJobsListWebPart.js",
-          "manifest": "./src/webparts/internalJobsList/InternalJobsListWebPart.manifest.json"
-        }
-      ]
-    },
-    "current-user-card-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/currentUserCard/CurrentUserCardWebPart.js",
-          "manifest": "./src/webparts/currentUserCard/CurrentUserCardWebPart.manifest.json"
-        }
-      ]
-    },
-    "chairman-card-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/chairmanCard/ChairmanCardWebPart.js",
-          "manifest": "./src/webparts/chairmanCard/ChairmanCardWebPart.manifest.json"
-        }
-      ]
-    },
-    "ask-support-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/askSupport/AskSupportWebPart.js",
-          "manifest": "./src/webparts/askSupport/AskSupportWebPart.manifest.json"
-        }
-      ]
-    },
-    "portal-tiles-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/portalTiles/PortalTilesWebPart.js",
-          "manifest": "./src/webparts/portalTiles/PortalTilesWebPart.manifest.json"
-        }
-      ]
-    },
-    "announcements-feed-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/announcementsFeed/AnnouncementsFeedWebPart.js",
-          "manifest": "./src/webparts/announcementsFeed/AnnouncementsFeedWebPart.manifest.json"
-        }
-      ]
-    },
-    "announcements-list-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/announcementsList/AnnouncementsListWebPart.js",
-          "manifest": "./src/webparts/announcementsList/AnnouncementsListWebPart.manifest.json"
-        }
-      ]
-    },
-    "tawasol-portal-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/tawasolPortal/TawasolPortalWebPart.js",
-          "manifest": "./src/webparts/tawasolPortal/TawasolPortalWebPart.manifest.json"
-        }
-      ]
-    },
-    "job-applications-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/jobApplications/JobApplicationsWebPart.js",
-          "manifest": "./src/webparts/jobApplications/JobApplicationsWebPart.manifest.json"
-        }
-      ]
-    },
-    "saa-main-application-customizer": {
-      "components": [
-        {
-          "entrypoint": "./lib/extensions/saaMain/SaaMainApplicationCustomizer.js",
-          "manifest": "./src/extensions/saaMain/SaaMainApplicationCustomizer.manifest.json"
-        }
-      ]
-    },
-    "tawasol-portal-ar-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/tawasolPortalAr/TawasolPortalArWebPart.js",
-          "manifest": "./src/webparts/tawasolPortalAr/TawasolPortalArWebPart.manifest.json"
-        }
-      ]
-    }
+      }
+    ]
   },
-  "externals": {
-    "jquery": {
-      "path": "https://code.jquery.com/jquery-3.5.1.min.js",
-      "globalName": "jQuery"
-    },
-    "devextreme": {
-      "path": "https://cdn3.devexpress.com/jslib/23.2.4/js/dx.all.js",
-      "globalName": "devextreme",
-      "globalDependencies": [
-        "jquery"
-      ]
-    },
-    "@pnp/pnpjs": {
-      "path": "https://cdnjs.cloudflare.com/ajax/libs/sp-pnp-js/3.0.10/pnp.min.js",
-      "globalName": "pnp.sp"
-    }
-  },
-  "localizedResources": {
-    "EmployeeDirectoryWebPartStrings": "lib/webparts/employeeDirectory/loc/{locale}.js",
-    "MccServiceRequestWebPartStrings": "lib/webparts/mccServiceRequest/loc/{locale}.js",
-    "MccServiceActionsWebPartStrings": "lib/webparts/mccServiceActions/loc/{locale}.js",
-    "MccRequesterViewWebPartStrings": "lib/webparts/mccRequesterView/loc/{locale}.js",
-    "MccDashboardWebPartStrings": "lib/webparts/mccDashboard/loc/{locale}.js",
-    "GSaadaFeedWebPartStrings": "lib/webparts/gSaadaFeed/loc/{locale}.js",
-    "SendGSaadaWebPartStrings": "lib/webparts/sendGSaada/loc/{locale}.js",
-    "GSaadaItemsWebPartStrings": "lib/webparts/gSaadaItems/loc/{locale}.js",
-    "InternalJobsFeedWebPartStrings": "lib/webparts/internalJobsFeed/loc/{locale}.js",
-    "InternalJobsListWebPartStrings": "lib/webparts/internalJobsList/loc/{locale}.js",
-    "CurrentUserCardWebPartStrings": "lib/webparts/currentUserCard/loc/{locale}.js",
-    "ChairmanCardWebPartStrings": "lib/webparts/chairmanCard/loc/{locale}.js",
-    "AskSupportWebPartStrings": "lib/webparts/askSupport/loc/{locale}.js",
-    "PortalTilesWebPartStrings": "lib/webparts/portalTiles/loc/{locale}.js",
-    "AnnouncementsFeedWebPartStrings": "lib/webparts/announcementsFeed/loc/{locale}.js",
-    "AnnouncementsListWebPartStrings": "lib/webparts/announcementsList/loc/{locale}.js",
-    "TawasolPortalWebPartStrings": "lib/webparts/tawasolPortal/loc/{locale}.js",
-    "JobApplicationsWebPartStrings": "lib/webparts/jobApplications/loc/{locale}.js",
-    "SaaMainApplicationCustomizerStrings": "lib/extensions/saaMain/loc/{locale}.js",
-    "TawasolPortalArWebPartStrings": "lib/webparts/tawasolPortalAr/loc/{locale}.js"
+  "paths": {
+    "zippedPackage": "solution/saa-tawasol.sppkg"
   }
 }
