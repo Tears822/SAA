@@ -90,7 +90,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
 
    constructor(props: IHeaderProps) {
       super(props);
-      const autoLang = window.location.href.toLowerCase().includes("ar") ? "ar" : "en";
+      const autoLang = window.location.href.toLowerCase().includes("/ar/") ? "ar" : "en";
       this.state = {
          langOpen: false,
          menuOpen: false,
