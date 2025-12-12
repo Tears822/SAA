@@ -15,6 +15,7 @@ export interface IHeaderState {
    siteLogo: string;
    navigationNodes: INavigationNode[];
    loading: boolean;
+   selectedLang: 'en' | 'ar';
 }
 
 export interface IHeaderProps {
@@ -31,6 +32,7 @@ export interface IUserInfo {
 export interface INavigationNode {
    Id: number;
    Title: string;
+   TitleAr: string;
    Url: string;
    IsExternal: boolean;
    Children?: INavigationNode[];
@@ -40,6 +42,7 @@ const navigationNodesStatic: INavigationNode[] = [
    {
       Id: 1,
       Title: "Employee Hub",
+      TitleAr: "بوابة الموظف",
       Url: "#",
       IsExternal: false,
       Children: []
@@ -47,33 +50,36 @@ const navigationNodesStatic: INavigationNode[] = [
    {
       Id: 2,
       Title: "Tawasul",
+      TitleAr: "تواصل",
       Url: "#",
       IsExternal: false,
       Children: [
-         { Id: 21, Title: "News", Url: "#", IsExternal: false, Children: [] },
-         { Id: 22, Title: "Announcements", Url: "#", IsExternal: false, Children: [] },
-         { Id: 23, Title: "InternalJobs", Url: "#", IsExternal: false, Children: [] },
-         { Id: 24, Title: "Surveys", Url: "#", IsExternal: false, Children: [] }
+         { Id: 21, Title: "News", TitleAr: "الأخبار", Url: "#", IsExternal: false, Children: [] },
+         { Id: 22, Title: "Announcements", TitleAr: "الإعلانات", Url: "#", IsExternal: false, Children: [] },
+         { Id: 23, Title: "InternalJobs", TitleAr: "الوظائف الداخلية", Url: "#", IsExternal: false, Children: [] },
+         { Id: 24, Title: "Surveys", TitleAr: "الاستبيانات", Url: "#", IsExternal: false, Children: [] }
       ]
    },
    {
       Id: 3,
       Title: "Matari",
+      TitleAr: "مطاري",
       Url: "#",
       IsExternal: false,
       Children: [
-         { Id: 31, Title: "Matari Program", Url: "#", IsExternal: false, Children: [] },
-         { Id: 32, Title: "Nomination Process", Url: "#", IsExternal: false, Children: [] }
+         { Id: 31, Title: "Matari Program", TitleAr: "برنامج مطاري", Url: "#", IsExternal: false, Children: [] },
+         { Id: 32, Title: "Nomination Process", TitleAr: "عملية الترشيح", Url: "#", IsExternal: false, Children: [] }
       ]
    },
    {
       Id: 4,
       Title: "About",
+      TitleAr: "عن الهيئة",
       Url: "#",
       IsExternal: false,
       Children: [
-         { Id: 41, Title: "SAA Strategy", Url: "#", IsExternal: false, Children: [] },
-         { Id: 42, Title: "SAA Organizational Structure", Url: "#", IsExternal: false, Children: [] }
+         { Id: 41, Title: "SAA Strategy", TitleAr: "استراتيجية الهيئة", Url: "#", IsExternal: false, Children: [] },
+         { Id: 42, Title: "SAA Organizational Structure", TitleAr: "الهيكل التنظيمي للهيئة", Url: "#", IsExternal: false, Children: [] }
       ]
    }
 ];
@@ -84,7 +90,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
 
    constructor(props: IHeaderProps) {
       super(props);
-
+      const autoLang = window.location.href.toLowerCase().includes("/ar/") ? "ar" : "en";
       this.state = {
          langOpen: false,
          menuOpen: false,
@@ -92,24 +98,25 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
          user: null,
          siteLogo: require('../theme/images/logo.svg'),
          navigationNodes: [],
-         loading: true
+         loading: true,
+         selectedLang: autoLang,
       };
    }
 
-   private get isArabic(): boolean {
-    const culture = window.location.href || ""; 
-    return culture.toLowerCase().includes("/ar/");
-  }
 
    async componentDidMount() {
-      
-      //to use ar languge add this class to body
-      if (this.isArabic) {
-         document.body.classList.add('arLang');
+      this.applyLanguageDirection(this.state.selectedLang);
+      this.loadSiteLogo();
+      this.loadNavigation();
+      this.loadUserInfo();
+   }
+
+   private applyLanguageDirection(lang: 'en' | 'ar') {
+      if (lang === "ar") {
+         document.body.classList.add("arLang");
+      } else {
+         document.body.classList.remove("arLang");
       }
-      await this.loadSiteLogo();
-      await this.loadNavigation();
-      await this.loadUserInfo();
    }
 
    /**
@@ -165,7 +172,7 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
 
 
 
-            this.setState({ navigationNodes: navigationNodesStatic  || nodes , loading: false });
+            this.setState({ navigationNodes: navigationNodesStatic || nodes, loading: false });
          }
       } catch (error) {
          console.error('Error loading navigation:', error);
@@ -241,29 +248,35 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
       }
    };
 
-   /**
-    * Render navigation items recursively
-    */
+   private changeLang = (lng: 'en' | 'ar'): void => {
+      this.setState({ selectedLang: lng, langOpen: false });
+      this.applyLanguageDirection(lng);
+   };
+
    private renderNavigationItems = (nodes: INavigationNode[]): JSX.Element[] => {
+      const isAr = this.state.selectedLang === "ar";
+
       return nodes.map((node) => (
-         <li key={node.Id}>
-            <a href={node.Url} target={node.IsExternal ? '_blank' : '_self'}>
-               {node.Title}
-            </a>
-            {node.Children && node.Children.length > 0 && (
-               <ul>
-                  {node.Children.map((child: INavigationNode) => (
-                     <li key={child.Id}>
-                        <a href={child.Url} target={child.IsExternal ? '_blank' : '_self'}>
-                           {child.Title}
-                        </a>
-                     </li>
-                  ))}
-               </ul>
-            )}
-         </li>
+        <li key={node.Id}>
+          <a href={node.Url} target={node.IsExternal ? "_blank" : "_self"}>
+            {isAr ? node.TitleAr : node.Title}
+          </a>
+
+          {node.Children && node.Children.length > 0 && (
+            <ul>
+              {node.Children.map((child) => (
+                <li key={child.Id}>
+                  <a href={child.Url} target={child.IsExternal ? "_blank" : "_self"}>
+                    {isAr ? child.TitleAr : child.Title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
       ));
    };
+
 
    public render(): React.ReactElement<{}> {
       const { siteLogo, navigationNodes, loading } = this.state;
@@ -359,8 +372,20 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
 
                   <div className="lang-switcher">
                      <div className="selected-lang" onClick={this.toggleLangDropdown}>
-                        EN<Icon iconName='ChevronDownMed' />
+                        {this.state.selectedLang.toUpperCase()} <Icon iconName='ChevronDownMed' />
                      </div>
+                     {this.state.langOpen && (
+                        <ul className="lang-dropdown">
+                           {['en', 'ar']
+                              .filter(l => l !== this.state.selectedLang)
+                              .map(lang => (
+                                 <li key={lang} onClick={() => this.changeLang(lang as 'en' | 'ar')}>
+                                    {lang.toUpperCase()}
+                                 </li>
+                              ))}
+                        </ul>
+
+                     )}
                   </div>
                </div>
             </div>

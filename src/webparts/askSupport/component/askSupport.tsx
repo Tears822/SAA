@@ -4,9 +4,12 @@ import './AskSupportWebPart.scss';
 export interface IAskSupportProps {
   askItUrl?: string;
   askAdminUrl?: string;
+  lang?:string;
 }
 
-const AskSupport: React.FC<IAskSupportProps> = ({ askItUrl, askAdminUrl }) => {
+const AskSupport: React.FC<IAskSupportProps> = ({ askItUrl, askAdminUrl,lang }) => {
+
+const isAr = lang === "ar";
 
   const handleClick = (url?: string) => {
     if (url) {
@@ -28,7 +31,7 @@ const AskSupport: React.FC<IAskSupportProps> = ({ askItUrl, askAdminUrl }) => {
               alt="Ask IT"
             />
           </span>
-          <span className="label">ASK IT</span>
+          <span className="label">{isAr ? "اسأل الموارد البشرية" : "ASK IT"}</span>
         </button>
 
         <button
@@ -42,7 +45,7 @@ const AskSupport: React.FC<IAskSupportProps> = ({ askItUrl, askAdminUrl }) => {
               alt="Ask Admin"
             />
           </span>
-          <span className="label">ASK Admin</span>
+          <span className="label">{isAr ? "اسأل قسم تكنولوجيا المعلومات" : "ASK Admin"}</span>
         </button>
       </div>
     </div>
