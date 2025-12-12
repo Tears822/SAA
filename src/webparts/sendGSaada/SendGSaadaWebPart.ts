@@ -576,6 +576,7 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
 
     if (/*!toId ||*/ !giftType || !message) {
       alert("Please fill Recipient, GiftType, and Message.");
+      
       return;
     }
 
@@ -633,7 +634,7 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
 
     try {
       await this.sp.web.lists.getByTitle(DOSES_LIST).items.add(payload);
-      alert("Recognition submitted successfully!");
+      // alert("Recognition submitted successfully!");
       // reset
       this.selectedCardId = null;
       // this.uploadedFileServerUrl = null;
@@ -649,6 +650,8 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
       this.renderCards(cards);
       $("#upload-note", this.domElement).text("");
       $(".gs-card", this.domElement).removeClass("selected");
+
+      window.location.href = this.context.pageContext.site.absoluteUrl; 
     } catch (err) {
       console.log(err);
       alert("Could not submit the recognition.");

@@ -1,3 +1,27 @@
+/* === PROXIMA NOVA FONT === */
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('../assets/fonts/ProximaNova-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('../assets/fonts/ProximaNova-Semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('../assets/fonts/ProximaNova-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
         .gs-cards {
           display: flex;
@@ -63,7 +87,7 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   margin-bottom: 25px;
-  font-family: "Segoe UI", sans-serif;
+  font-family: 'Proxima Nova','Segoe UI', sans-serif;
 }
 
 /* KPI Cards */
@@ -456,461 +480,256 @@
 
 /* =============== Internal Jobs list style ==================== */
 
+
+
+/* ===== Top-level layout ===== */
+
+/* ==== INTERNAL JOBS LIST PAGE ONLY (stories) ==== */
+
 .stories {
-  /* font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-  padding: 8px 0 24px; */
-   display: flex;
-  flex-direction: column;
-  gap: 24px;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 16px 0;
 }
 
-/* Toolbar: filters + search */
+/* Top bar: filters + search */
 .stories-toolbar {
   display: flex;
-  /* flex-wrap: wrap; */
-  align-items: center;
   justify-content: space-between;
-  /* gap: 12px;
-  margin-bottom: 16px; */
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
-.stories-layout {
-  display: flex;
-  align-items: flex-start;
-  gap: 32px;
-}
-
-.stories-list-column {
-  flex: 0 0 60%;
-  max-width: 60%;
-}
-
-.stories-banner-column {
-  flex: 0 0 30%;
-  max-width: 30%;
-  margin-left: auto;
-}
-
-.stories-banner-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-/* Filter bar */
-
-.filterBar {
-  /* margin-bottom: 16px; */
+.stories-toolbar .filterBar {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.filterButton {
-  /* border-radius: 18px;
-  border: 1px solid #ddd;
-  background: #fff;
-  padding: 4px 18px;
+/* Filter buttons */
+.ij-filter-btn {
+  border-radius: 999px;
+  padding: 4px 14px;
   font-size: 13px;
-  margin-right: 8px;
-  cursor: pointer; */
-  border-radius: 20px;
-  border: 1px solid #e2e6f0;
+  border: 1px solid #d0d7de;
   background: #ffffff;
-  padding: 4px 16px;
-  font-size: 13px;
-  color: #444;
   cursor: pointer;
-  min-width: 64px;
-  text-align: center;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.filterButton:hover {
-  border-color: #c7d2fe;
-  background: #f4f5fb;
+.ij-filter-btn:hover {
+  border-color: #c1c7d0;
+  box-shadow: 0 0 0 2px rgba(127, 90, 240, 0.15);
 }
 
-.filterButtonActive {
-  border-color: #ff6c3c;
-  background: #fff3ec;
-  color: #ff6c3c;
+.ij-filter-btn.active {
+  background: #ff6b6b;
+  border-color: #ff6b6b;
+  color: #ffffff;
 }
 
 /* Search box */
-.stories-search {
-  min-width: 200px;
-  flex: 1;
+.stories-search-input {
+  min-width: 220px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #d0d7de;
+  font-size: 13px;
+}
+
+.stories-search-input:focus {
+  outline: none;
+  border-color: #7f5af0;
+  box-shadow: 0 0 0 2px rgba(127, 90, 240, 0.15);
+}
+
+
+/* Main two-column layout */
+.stories-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.stories-list-column {
+  min-width: 0;
+}
+
+.stories-banner-column {
   display: flex;
   justify-content: flex-end;
 }
 
-.stories-search-input {
-  width: 100%;
-  max-width: 260px;
-  padding: 6px 10px;
-  border-radius: 20px;
-  border: 1px solid #d0d7e2;
+.stories-banner-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  display: block;
+}
+
+/* Status text */
+.stories .status {
   font-size: 13px;
-  outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  color: #6b7280;
+  margin-top: 4px;
 }
 
-.stories-search-input:focus {
-  border-color: #5b3fd3;
-  box-shadow: 0 0 0 2px rgba(91, 63, 211, 0.15);
+
+/* Root list & grid */
+.sl-list-root {
+  margin-top: 8px;
 }
 
-/* Status message */
-
-.status {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 12px;
-}
-
-.error {
-  color: #d83b01;
-}
-
-/* DevExtreme root for our list */
-/* :global {
-  .sl-list-root .dx-scrollview-content {
-    display: flex;
-    flex-direction: column;
-    row-gap: 24px;
-  }
-
-  .sl-list-root .dx-list-item {
-    border-bottom: none;
-    padding: 0;
-  }
-} */
-
-/* Make DevExtreme list items use flex layout */
-/* DevExtreme host: vertical list of cards */
-.sl-list-root .dx-scrollview-content {
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px 32px;
-}
-/* .sl-list-root .dx-scrollview-content { */
-.sl-list-root .dx-list-items {
-  /* display: flex; */
-  /* flex-direction: column;   vertical cards – like your screenshot */
-  /* row-gap: 24px; */
-  /* flex-wrap: wrap; */
-  /* column-gap: 48px; */
-  display: grid !important;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-/* Each item is a full-width card */
-.sl-list-root .dx-list-item {
-  border-bottom: none;
-  border-top: none!important;
-  padding: 0;
-  /* margin-bottom: 24px; */
-  width: 30%;      /* roughly one third */
-  min-width: 400px;
-}
-
-@media (max-width: 1024px) {
-  .sl-list-root .dx-list-item {
-    width: 48%;
-  }
-}
-
-@media (max-width: 640px) {
-  .sl-list-root .dx-list-item {
-    width: 100%;
-  }
-}
-
-/* Card layout */
-
-.storyCard {
-  /* display: flex;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #eee;
-  background: #fff; */
-
-  /* display: flex;
-  align-items: flex-start;
-  padding: 14px 18px;
-  border-radius: 14px;
-  border: 1px solid #e2e6f0;
-  background: #ffffff;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
-  transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease; */
-
-   /* display: grid;
-  grid-template-columns: auto 1fr auto;
-  column-gap: 16px;
-  align-items: flex-start;
-
-  padding: 14px 18px;
-  border-radius: 14px;
-  border: 1px solid #e2e6f0;
-  background: #ffffff;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
-  transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease; */
-
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.storyCard:hover {
-  transform: translateY(-2px);
-  border-color: #c7d2fe;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
-}
-
-.storyImage {
-  /* width: 260px;
-  height: 170px; */
-  /* width: 96px;
-  height: 96px;
-  object-fit: cover;
-  border-radius: 4px;
-  flex-shrink: 0; */
-  /* margin-right: 24px; */
-
-  /* width: 90px;
-  height: 90px;
-  border-radius: 8px;
-  object-fit: cover; */
-
-  flex: 0 0 64px;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;
-
-  
-}
-
-.storyContent {
-  /* flex: 1;
-  white-space: normal !important;
-  word-break: break-word; */
-
-  flex: 1 1 auto;
-}
-
-.job-actions {
+.ij-jobs-grid {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-left: 16px;
-  align-self: center;
+  gap: 12px;
+}
+
+/* Single job card */
+.storyCard {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+  align-items: center;
+}
+
+/* Card image */
+.storyImage {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* Card content */
+.storyContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
 .storyCategory {
   font-size: 12px;
-  color: #9a9a9a;
-  margin-bottom: 4px;
+  font-weight: 600;
+  color: #7f5af0;
 }
 
 .storyTitle {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 600;
-  color: #5b3fd3;
-  margin: 0 0 8px 0;
-
-  white-space: normal;
-  word-break: break-word;
+  margin: 0;
+  color: #111827;
 }
 
+/* Short teaser to avoid breaking layout */
 .storyTeaser {
   font-size: 13px;
-  /* color: #555;
-  margin: 0 0 12px 0; */
+  margin: 0;
   color: #4b5563;
-  margin: 0 0 8px 0;
-  line-height: 1.5;
+  max-height: 40px;
+  overflow: hidden;
 }
 
 .storyDate {
   font-size: 12px;
-  color: #9a9a9a;
+  color: #6b7280;
 }
 
-/* View details right bottom */
 
-.storyDetailsWrapper {
-  /* display: flex;
-  align-items: flex-end;
-  justify-content: flex-end; */
-  align-self: flex-start;
-  margin-left: 0; 
-  white-space: nowrap;
-
-  /* flex-direction: column;
-  margin-left: 24px; */
-  /* margin-left: 12px; */
+/* Actions column on the right */
+.job-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.storyDetailsLink {
-  /* font-size: 13px;
-  color: #34a4c4;
-  text-decoration: none;
-  font-weight: 500; */
-  font-size: 13px;
-  padding: 4px 14px;
-  border-radius: 18px;
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-  color: #34a4c4;
-  cursor: pointer;
-  font-weight: 500;
-  min-width: 110px;
-  text-align: center;
-}
-
+/* Buttons */
 .storyApplyLink,
 .storyDetailsLink {
   border-radius: 999px;
-  padding: 6px 18px;
+  padding: 6px 16px;
   font-size: 13px;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-.storyDetailsLink:hover {
-  text-decoration: underline;
-  border-color: #34a4c4;
-  background: #ecfeff;
+/* Primary apply button */
+.storyApplyLink {
+  background: #ff6b6b;
+  border-color: #ff6b6b;
+  color: #ffffff;
 }
 
-/* Pager */
-
-.pager {
-  margin-top: 24px;
-  text-align: center;
+.storyApplyLink:hover {
+  background: #e85656;
+  border-color: #e85656;
 }
 
-.pagerButton {
-  border: none;
-  background: transparent;
-  padding: 4px 8px;
-  margin: 0 2px;
-  font-size: 13px;
-  cursor: pointer;
-  color: #888;
-}
-
-.pagerButtonActive {
-  color: #5b3fd3;
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-/* Popup content */
-.ij-detail-popup {
-  padding: 16px 20px;
-  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-}
-
-.ij-detail-department {
-  font-size: 12px;
-  color: #9a9a9a;
-  margin-bottom: 6px;
-}
-
-.ij-detail-heading {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 12px 0 4px;
+/* Secondary Job Description button */
+.storyDetailsLink {
+  background: #ffffff;
+  border-color: #d0d7de;
   color: #111827;
 }
 
-.ij-detail-text {
-  font-size: 13px;
-  color: #4b5563;
-  line-height: 1.6;
-  white-space: pre-wrap;  /* keep line breaks from multiline column */
+.storyDetailsLink:hover {
+  border-color: #c1c7d0;
 }
 
-.ij-detail-date {
-  margin-top: 12px;
-  font-size: 12px;
-  color: #9a9a9a;
-}
-
-
-/* ===== Apply pop-up */
-
-.ij-apply-popup {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 8px 4px;
-}
-
-.ij-apply-popup .dx-texteditor-input {
-  max-height: 140px;
-  overflow-y: auto;
-}
-
-.ij-apply-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: #888;
-}
-
-.ij-upload-box {
-  border-radius: 8px;
-  border: 1px dashed #c9c3ff;
-  padding: 12px;
-  text-align: center;
-  font-size: 13px;
-  cursor: pointer;
-  background: #f8f6ff;
-}
-
-.ij-upload-box span {
-  display: inline-block;
-}
-
-.ij-apply-button {
+/* Pager under the cards */
+.stories .pager {
   margin-top: 16px;
-  width: 100%;
-  border: none;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.ij-page-btn {
+  min-width: 28px;
+  height: 28px;
   border-radius: 999px;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  background: #8c7ae6;
-  color: #fff;
+  border: 1px solid #d0d7de;
+  background: #ffffff;
+  font-size: 13px;
   cursor: pointer;
 }
 
-.storyApplyLink {
-  margin-left: 8px;
+.ij-page-btn.active {
+  background: #7f5af0;
+  border-color: #7f5af0;
+  color: #ffffff;
 }
 
-/* ===== Responsive: stack on small screens ===== */
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .stories-layout {
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
   }
 
-  .stories-list-column,
-  .stories-banner-column {
-    max-width: 100%;
-    flex: 1 1 auto;
+  .storyCard {
+    grid-template-columns: auto 1fr;
   }
 
-  .sl-list-root {
-    grid-template-columns: 1fr;
+  .job-actions {
+    flex-direction: row;
+    justify-content: flex-start;
   }
 }
+
+
 
 /* =============== End of Internal Jobs list style ==================== */
 
@@ -920,7 +739,7 @@
   width: 260px;
   background-color: #397b8f;
   color: #ffffff;
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: 'Proxima Nova','Segoe UI', sans-serif;
   border-radius: 4px;
   overflow: hidden;
 
@@ -1271,7 +1090,7 @@
   cursor: pointer;
   padding: 0 24px;
   background: transparent;
-  font-family: inherit;
+  font-family: 'Proxima Nova','Segoe UI', sans-serif;
   font-size: 20px;
   letter-spacing: 0.08em;
   font-weight: 600;

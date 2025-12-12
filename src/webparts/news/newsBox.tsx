@@ -4,10 +4,12 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import './newsWebpart.scss';
 
+
 const NewsBox: FC<{}> = ({ }) => {
 
 
     return (
+        
         <>
             <div className="col-12 col-md-6 col-lg-5">
                 <img className="newsBigImg" src={require("../../theme/images/newsSide.jpg")} alt="news" />

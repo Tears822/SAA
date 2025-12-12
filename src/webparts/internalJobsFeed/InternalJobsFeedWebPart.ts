@@ -176,7 +176,7 @@ export default class InternalJobsFeedWebPart extends BaseClientSideWebPart<IInte
     renderDefaultRightBanner();
 
     try {
-      const today = new Date().toISOString().split("T")[0];
+      // const today = new Date().toISOString().split("T")[0];
       const list = this._sp.web.lists.getByTitle(this.properties.listName);
 
       const rawItems: any[] = await list.items
@@ -189,9 +189,8 @@ export default class InternalJobsFeedWebPart extends BaseClientSideWebPart<IInte
           "Status",
           "JobDescription"
         )
-        .filter(
-          `PublishedDate le datetime'${today}T23:59:59Z' and ClosingDate ge datetime'${today}T00:00:00Z'`
-        )
+        // .filter(l => l.date("PublishedDate").lessThanOrEquals(new Date()) && l.date("ClosingDate").greaterThanOrEquals(new Date()))
+        // .filter(`PublishedDate le datetime'${today}T23:59:59Z' and ClosingDate ge datetime'${today}T00:00:00Z'`)
         .filter("Status eq 'Open'")
         .orderBy("ClosingDate", true)
         .top(this.properties.maxItems || 4)();

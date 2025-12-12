@@ -1,15 +1,15 @@
-import { Version } from '@microsoft/sp-core-library';
+import { Version } from "@microsoft/sp-core-library";
 import {
   type IPropertyPaneConfiguration,
   PropertyPaneSlider,
-  PropertyPaneTextField
-} from '@microsoft/sp-property-pane';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+  PropertyPaneTextField,
+} from "@microsoft/sp-property-pane";
+import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
 // import type { IReadonlyTheme } from '@microsoft/sp-component-base';
 // import { escape } from '@microsoft/sp-lodash-subset';
 
-import styles from './AnnouncementsListWebPart.module.scss';
-import * as strings from 'AnnouncementsListWebPartStrings';
+import styles from "./AnnouncementsListWebPart.module.scss";
+import * as strings from "AnnouncementsListWebPartStrings";
 import { SPFx, SPFI, spfi } from "@pnp/sp";
 import "@pnp/sp/webs";
 import "@pnp/sp/lists";
@@ -20,6 +20,7 @@ export interface IAnnouncementsListWebPartProps {
   description: string;
   listName: string;
   itemsPerPage: number;
+  redirectUrl: string;
 }
 
 export interface IAnnouncementItem {
@@ -31,17 +32,15 @@ export interface IAnnouncementItem {
   Created: string;
 }
 
-
 export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnnouncementsListWebPartProps> {
-
-   private _sp: SPFI;
+  private _sp: SPFI;
   private _items: IAnnouncementItem[] = [];
-  private _categories: string[] = [];     // <-- dynamic categories
+  private _categories: string[] = []; // <-- dynamic categories
 
   private _loading = false;
   private _error?: string;
 
-  private _activeFilter: string = 'All';  // <-- can be 'All' or any category
+  private _activeFilter: string = "All"; // <-- can be 'All' or any category
   private _currentPage = 1;
 
   // DOM ids (per instance)
@@ -51,7 +50,7 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
   private _pagerId: string;
 
   public async render(): Promise<void> {
-   this._filtersId = `${this.instanceId}-filters`;
+    this._filtersId = `${this.instanceId}-filters`;
     this._itemsId = `${this.instanceId}-items`;
     this._statusId = `${this.instanceId}-status`;
     this._pagerId = `${this.instanceId}-pager`;
@@ -64,10 +63,9 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
 
   protected onInit(): Promise<void> {
     this._sp = spfi().using(SPFx(this.context));
-        
+
     return super.onInit();
   }
-
 
   private _getTemplateHtml(): string {
     // filters will be rendered dynamically in _renderView()
@@ -93,13 +91,13 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
   private _bindStaticEvents(): void {
     const filtersBar = this.domElement.querySelector(`#${this._filtersId}`);
     if (filtersBar) {
-      filtersBar.addEventListener('click', (ev: Event) => {
+      filtersBar.addEventListener("click", (ev: Event) => {
         const target = ev.target as HTMLElement;
-        const btn = target.closest('button[data-filter]') as HTMLElement;
+        const btn = target.closest("button[data-filter]") as HTMLElement;
         if (!btn) {
           return;
         }
-        const filter = btn.getAttribute('data-filter') || 'All';
+        const filter = btn.getAttribute("data-filter") || "All";
         this._activeFilter = filter;
         this._currentPage = 1;
         this._renderView();
@@ -109,18 +107,39 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
     const pager = this.domElement.querySelector(`#${this._pagerId}`);
     if (pager) {
       // event delegation for pager buttons
-      pager.addEventListener('click', (ev: Event) => {
+      pager.addEventListener("click", (ev: Event) => {
         const target = ev.target as HTMLElement;
-        const btn = target.closest('button[data-page]') as HTMLElement;
+        const btn = target.closest("button[data-page]") as HTMLElement;
         if (!btn) {
           return;
         }
-        const pageStr = btn.getAttribute('data-page');
+        const pageStr = btn.getAttribute("data-page");
         const page = pageStr ? parseInt(pageStr, 10) : NaN;
         if (!isNaN(page)) {
           this._currentPage = page;
           this._renderView();
         }
+      });
+    }
+
+    const itemsEl = this.domElement.querySelector(`#${this._itemsId}`);
+    if (itemsEl) {
+      itemsEl.addEventListener("click", (ev: Event) => {
+        const target = ev.target as HTMLElement;
+        const btn = target.closest(
+          `button.${styles.happinessBtn}`
+        ) as HTMLButtonElement | null;
+        if (!btn) {
+          return;
+        }
+
+        const redirectUrl =
+          this.properties.redirectUrl &&
+          this.properties.redirectUrl.trim().length > 0
+            ? this.properties.redirectUrl
+            : `${this.context.pageContext.web.absoluteUrl}/SitePages/SendGoreatSaasa.aspx`;
+
+        window.location.href = redirectUrl;
       });
     }
   }
@@ -133,30 +152,51 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
     try {
       const rawItems: any[] = await this._sp.web.lists
         .getByTitle(listName)
-        .items
-        .select('Id', 'Title', 'TitleAr', 'DescriptionAr', 'DescriptionEn','Category', 'ImageUrl', 'Created')
-        .orderBy('Created', false)
+        .items.select(
+          "Id",
+          "Title",
+          "TitleAr",
+          "DescriptionAr",
+          "DescriptionEn",
+          "Category",
+          "ImageUrl",
+          "Created"
+        )
+        .orderBy("Created", false)
         .top(500)();
 
-        const webUrl = this.context.pageContext.web.absoluteUrl.replace(
+      const webUrl = this.context.pageContext.web.absoluteUrl.replace(
         /\/$/,
         ""
       );
 
-      this._items = rawItems.map((r) => ({
-        
-        Id: r.Id,
-        Title: r.Title,
-        Description: r.DescriptionEn,
-        Category: r.Category,
-        ImageUrl: `${webUrl}/Lists/${listName}/Attachments/${r.Id}/${JSON.parse(r.ImageUrl).fileName}`,
-        Created: r.Created
-      }));
+      this._items = rawItems.map((r) => {
+        let imageUrl = "";
 
+        if (r.ImageUrl) {
+          try {
+            const imgJson = JSON.parse(r.ImageUrl);
+            if (imgJson && imgJson.fileName) {
+              imageUrl = `${webUrl}/Lists/${listName}/Attachments/${r.Id}/${imgJson.fileName}`;
+            }
+          } catch (e) {
+            console.warn("Invalid ImageUrl JSON for item", r.Id, r.ImageUrl, e);
+          }
+        }
+
+        return {
+          Id: r.Id,
+          Title: r.Title,
+          Description: r.DescriptionEn,
+          Category: r.Category,
+          ImageUrl: imageUrl,
+          Created: r.Created,
+        };
+      });
 
       // build dynamic categories (distinct Category values)
       const cats = new Set<string>();
-      this._items.forEach(i => {
+      this._items.forEach((i) => {
         if (i.Category) {
           cats.add(i.Category);
         }
@@ -169,70 +209,81 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
     } catch (err) {
       console.error(err);
       this._loading = false;
-      this._error = 'Failed to load items. Check list name and permissions.';
+      this._error = "Failed to load items. Check list name and permissions.";
       this._renderView();
     }
   }
 
   private _renderView(): void {
-    const statusEl = this.domElement.querySelector(`#${this._statusId}`) as HTMLElement;
-    const itemsEl = this.domElement.querySelector(`#${this._itemsId}`) as HTMLElement;
-    const pagerEl = this.domElement.querySelector(`#${this._pagerId}`) as HTMLElement;
-    const filtersBar = this.domElement.querySelector(`#${this._filtersId}`) as HTMLElement;
+    const statusEl = this.domElement.querySelector(
+      `#${this._statusId}`
+    ) as HTMLElement;
+    const itemsEl = this.domElement.querySelector(
+      `#${this._itemsId}`
+    ) as HTMLElement;
+    const pagerEl = this.domElement.querySelector(
+      `#${this._pagerId}`
+    ) as HTMLElement;
+    const filtersBar = this.domElement.querySelector(
+      `#${this._filtersId}`
+    ) as HTMLElement;
 
     if (!statusEl || !itemsEl || !pagerEl || !filtersBar) {
       return;
     }
 
     // --- render dynamic filter tabs ---
-    const tabs: string[] = ['All', ...this._categories];
-    filtersBar.innerHTML = tabs.map(tab => {
-      const isActive = tab === this._activeFilter;
-      const cls = isActive
-        ? `${styles.filterTab} ${styles.active}`
-        : styles.filterTab;
-      return `
+    const tabs: string[] = ["All", ...this._categories];
+    filtersBar.innerHTML = tabs
+      .map((tab) => {
+        const isActive = tab === this._activeFilter;
+        const cls = isActive
+          ? `${styles.filterTab} ${styles.active}`
+          : styles.filterTab;
+        return `
         <button type="button"
                 class="${cls}"
                 data-filter="${this._escape(tab)}">
           ${this._escape(tab)}
         </button>
       `;
-    }).join('');
+      })
+      .join("");
 
     if (this._loading) {
-      statusEl.textContent = 'Loading...';
-      statusEl.style.display = 'block';
+      statusEl.textContent = "Loading...";
+      statusEl.style.display = "block";
       statusEl.classList.remove(styles.error);
-      itemsEl.innerHTML = '';
-      pagerEl.innerHTML = '';
+      itemsEl.innerHTML = "";
+      pagerEl.innerHTML = "";
       return;
     }
 
     if (this._error) {
       statusEl.textContent = this._error;
       statusEl.classList.add(styles.error);
-      statusEl.style.display = 'block';
-      itemsEl.innerHTML = '';
-      pagerEl.innerHTML = '';
+      statusEl.style.display = "block";
+      itemsEl.innerHTML = "";
+      pagerEl.innerHTML = "";
       return;
     }
 
     // filtered items
-    const filteredItems = this._activeFilter === 'All'
-      ? this._items
-      : this._items.filter(i => i.Category === this._activeFilter);
+    const filteredItems =
+      this._activeFilter === "All"
+        ? this._items
+        : this._items.filter((i) => i.Category === this._activeFilter);
 
     if (filteredItems.length === 0) {
-      statusEl.textContent = 'No items found for the selected filter.';
+      statusEl.textContent = "No items found for the selected filter.";
       statusEl.classList.remove(styles.error);
-      statusEl.style.display = 'block';
-      itemsEl.innerHTML = '';
-      pagerEl.innerHTML = '';
+      statusEl.style.display = "block";
+      itemsEl.innerHTML = "";
+      pagerEl.innerHTML = "";
       return;
     }
 
-    statusEl.style.display = 'none';
+    statusEl.style.display = "none";
 
     // paging
     const pageSize = this.properties.itemsPerPage || 12;
@@ -244,7 +295,7 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
     const pageItems = filteredItems.slice(startIndex, startIndex + pageSize);
 
     // cards HTML
-    const cardsHtml = pageItems.map(i => this._renderCardHtml(i)).join('');
+    const cardsHtml = pageItems.map((i) => this._renderCardHtml(i)).join("");
     itemsEl.innerHTML = cardsHtml;
 
     // pager HTML
@@ -263,21 +314,21 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
             ${page}
           </button>
         `;
-      }).join('');
+      }).join("");
 
       pagerEl.innerHTML = `
         <button type="button"
                 data-page="${Math.max(1, this._currentPage - 1)}"
-                ${this._currentPage === 1 ? 'disabled' : ''}
+                ${this._currentPage === 1 ? "disabled" : ""}
         >&#8249; Prev</button>
         ${pagesHtml}
         <button type="button"
                 data-page="${Math.min(totalPages, this._currentPage + 1)}"
-                ${this._currentPage === totalPages ? 'disabled' : ''}
+                ${this._currentPage === totalPages ? "disabled" : ""}
         >Next &#8250;</button>
       `;
     } else {
-      pagerEl.innerHTML = '';
+      pagerEl.innerHTML = "";
     }
   }
 
@@ -286,7 +337,7 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
       ? `<img src="${item.ImageUrl}"
               alt="${this._escape(item.Title)}"
               class="${styles.cardImage}" />`
-      : '';
+      : "";
 
     return `
       <div class="${styles.card}">
@@ -305,9 +356,9 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
             </button>
           </div>
           <p class="${styles.cardDescription}">
-            ${this._escape(item.Description || '')}
+            ${this._escape(item.Description || "")}
           </p>
-          <button type="button" class="${styles.happinessBtn}">
+          <button type="button" class="${styles.happinessBtn}" >
             Happiness Dose
           </button>
         </div>
@@ -316,60 +367,17 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
   }
 
   private _escape(value: string): string {
-    if (!value) { return ''; }
+    if (!value) {
+      return "";
+    }
     return value
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
   }
 
-  // private _getEnvironmentMessage(): Promise<string> {
-  //   if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
-  //     return this.context.sdks.microsoftTeams.teamsJs.app.getContext()
-  //       .then(context => {
-  //         let environmentMessage: string = '';
-  //         switch (context.app.host.name) {
-  //           case 'Office': // running in Office
-  //             environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOffice : strings.AppOfficeEnvironment;
-  //             break;
-  //           case 'Outlook': // running in Outlook
-  //             environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentOutlook : strings.AppOutlookEnvironment;
-  //             break;
-  //           case 'Teams': // running in Teams
-  //           case 'TeamsModern':
-  //             environmentMessage = this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentTeams : strings.AppTeamsTabEnvironment;
-  //             break;
-  //           default:
-  //             environmentMessage = strings.UnknownEnvironment;
-  //         }
-
-  //         return environmentMessage;
-  //       });
-  //   }
-
-  //   return Promise.resolve(this.context.isServedFromLocalhost ? strings.AppLocalEnvironmentSharePoint : strings.AppSharePointEnvironment);
-  // }
-
-  // protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
-  //   if (!currentTheme) {
-  //     return;
-  //   }
-
-  //   this._isDarkTheme = !!currentTheme.isInverted;
-  //   const {
-  //     semanticColors
-  //   } = currentTheme;
-
-  //   if (semanticColors) {
-  //     this.domElement.style.setProperty('--bodyText', semanticColors.bodyText || null);
-  //     this.domElement.style.setProperty('--link', semanticColors.link || null);
-  //     this.domElement.style.setProperty('--linkHovered', semanticColors.linkHovered || null);
-  //   }
-
-  // }
-
   protected get dataVersion(): Version {
-    return Version.parse('1.0');
+    return Version.parse("1.0");
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -377,31 +385,37 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
       pages: [
         {
           header: {
-            description: strings.PropertyPaneDescription
+            description: strings.PropertyPaneDescription,
           },
           groups: [
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
+                PropertyPaneTextField("description", {
+                  label: strings.DescriptionFieldLabel,
                 }),
-                PropertyPaneTextField('listName', {
-                  label: 'List name',
-                  value: 'Announcements'
+                PropertyPaneTextField("listName", {
+                  label: "List name",
+                  value: "Announcements",
                 }),
-                PropertyPaneSlider('itemsPerPage', {
-                  label: 'Items per page',
+                PropertyPaneSlider("itemsPerPage", {
+                  label: "Items per page",
                   min: 4,
                   max: 24,
                   step: 1,
-                  value: 12
-                })
-              ]
-            }
-          ]
-        }
-      ]
+                  value: 12,
+                }),
+                PropertyPaneTextField("redirectUrl", {
+                  label: "Redirect URL for Happiness Dose",
+                  description:
+                    "Enter a relative or absolute URL to redirect users when they click the Happiness Dose button.",
+                  placeholder: "/SitePages/SendGoreatSaasa.aspx",
+                }),
+              ],
+            },
+          ],
+        },
+      ],
     };
   }
 }

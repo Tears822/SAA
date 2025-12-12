@@ -314,7 +314,7 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
       }
 
       DevExpress.ui?.notify?.({ message: ' Request Submitted successfully', type: 'success', displayTime: 1500 });
-      setTimeout(() => { window.location.href = '/' }, 900);
+      setTimeout(() => { window.location.href = this.context.pageContext.site.absoluteUrl }, 900);
     } catch (err: unknown) {
       console.error(err);
       const message = err instanceof Error

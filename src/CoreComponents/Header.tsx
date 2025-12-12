@@ -6,6 +6,7 @@ import { Icon } from '@fluentui/react';
 import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
 
+
 export interface IHeaderState {
    menuOpen: boolean;
    userBoxOpen: boolean;
@@ -95,10 +96,17 @@ class HeaderPageComponent extends React.Component<IHeaderProps, IHeaderState> {
       };
    }
 
+   private get isArabic(): boolean {
+    const culture = window.location.href || ""; 
+    return culture.toLowerCase().includes("/ar/");
+  }
+
    async componentDidMount() {
       
       //to use ar languge add this class to body
-      //document.body.classList.add('arLang');
+      if (this.isArabic) {
+         document.body.classList.add('arLang');
+      }
       await this.loadSiteLogo();
       await this.loadNavigation();
       await this.loadUserInfo();
