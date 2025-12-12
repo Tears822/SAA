@@ -12,18 +12,26 @@ export interface IChairmanCardProps {
   sp: SPFI;
   listTitle: string;
   webUrl: string;
+  lang?: string;
 }
 
 interface ILeaderItem {
   Id: number;
   Title: string;
+  TitleAr: string;
   Position: string;
+  PositionAr: string;
   ShortBio: string;
+  ShortBioAr: string;
   LongBio: string;
+  LongBioAr: string;
   ImageUrl: string;
 }
 
-const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) => {
+const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl, lang = "en" }) => {
+
+  const isAr = lang === "ar";
+
   const [leaders, setLeaders] = useState<ILeaderItem[]>([]);
   const sliderRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +40,18 @@ const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) =
     try {
       const items = await sp.web.lists
         .getByTitle(listTitle)
-        .items.select("Id", "Title", "Position", "ShortBio", "LongBio", "ImageUrl")
+        .items.select(
+          "Id",
+          "Title",
+          "TitleAr",
+          "Position",
+          "PositionAr",
+          "ShortBio",
+          "ShortBioAr",
+          "LongBio",
+          "LongBioAr",
+          "ImageUrl"
+        )
         .orderBy("Sort", true)();
 
       const parsed: ILeaderItem[] = items.map((i: any) => {
@@ -52,9 +71,13 @@ const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) =
         return {
           Id: i.Id,
           Title: i.Title,
+          TitleAr: i.TitleAr,
           Position: i.Position,
+          PositionAr: i.PositionAr,
           ShortBio: i.ShortBio,
+          ShortBioAr: i.ShortBioAr,
           LongBio: i.LongBio,
+          LongBioAr: i.LongBioAr,
           ImageUrl: img,
         };
       });
@@ -70,7 +93,6 @@ const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) =
     if (leaders.length > 0 && sliderRef.current) {
       const $slider = $(sliderRef.current);
 
-      // destroy if init already
       if ($slider.hasClass("slick-initialized")) {
         $slider.slick("unslick");
       }
@@ -92,26 +114,28 @@ const ChairmanCard: React.FC<IChairmanCardProps> = ({ sp, listTitle, webUrl }) =
     loadLeaders();
   }, []);
 
-  if (!leaders.length) return <div className="loading-spinner"><div></div><div></div><div></div><div></div></div>;
+  if (!leaders.length)
+    return (
+      <div className="loading-spinner"><div></div><div></div><div></div><div></div></div>
+    );
 
   return (
-    <div className="chairmanCard">
+    <div className={`chairmanCard ${isAr ? "rtl" : ""}`}>
       <div className="slick-wrapper" ref={sliderRef}>
         {leaders.map((l) => (
           <div key={l.Id}>
             <div className="chairman-content">
-                <div className="left">
-                  <h2>{l.Title}</h2>
-                  <h4>{l.Position}</h4>
-                  <p>{l.LongBio}</p>
-                </div>
-                <div className="right">
-                  <img
-                    src={l.ImageUrl}
-                    alt={l.Title}
-                  />
-                </div>
+              <div className="left">
+                <h2>{isAr ? l.TitleAr : l.Title}</h2>
+                <h4>{isAr ? l.PositionAr : l.Position}</h4>
+
+                <p>{isAr ? l.LongBioAr : l.LongBio}</p>
               </div>
+
+              <div className="right">
+                <img src={l.ImageUrl} alt={l.Title} />
+              </div>
+            </div>
           </div>
         ))}
       </div>

@@ -17,6 +17,7 @@ export interface IPortalTilesProps {
   sp: SPFI;
   listTitle: string;
   webUrl: string;
+  lang?:string;
 }
 
 export interface IPortalTilesState {
@@ -160,7 +161,7 @@ export default class PortalTiles extends React.Component<IPortalTilesProps, IPor
 
   public render(): React.ReactElement<IPortalTilesProps> {
     const { apps, services, loading, error } = this.state;
-
+    const isAr = this.props.lang === "ar";
     if (loading) {
       return (
         <div className="outer">
@@ -180,14 +181,14 @@ export default class PortalTiles extends React.Component<IPortalTilesProps, IPor
     return (
       <div className="outer">
         <div className="band bandApps">
-          <div className="bandLabel">Apps &amp; Systems</div>
+          <div className="bandLabel">{isAr ? "التطبيقات والأنظمة" : "Apps &amp; Systems"}</div>
           <div className="tilesRow tilesRowApps">
             {apps.map(tile => this.renderAppTile(tile))}
           </div>
         </div>
 
         <div className="band bandServices">
-          <div className="bandLabel">Services</div>
+          <div className="bandLabel">{isAr ? "الخدمات" : "Services"}</div>
           <div className="tilesRow tilesRowServices">
             {services.map(tile => this.renderServiceTile(tile))}
           </div>

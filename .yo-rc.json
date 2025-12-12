@@ -3,7 +3,6 @@
     "whichFolder": "subdir",
     "solutionName": "SAA-Tawasol",
     "template": "none",
-    "componentName": "JobApplications",
     "plusBeta": false,
     "isCreatingSolution": false,
     "nodeVersion": "22.21.1",
@@ -16,7 +15,6 @@
     "solutionShortDescription": "SAA-Tawasol description",
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
-    "componentType": "extension",
-    "extensionType": "ApplicationCustomizer"
+    "componentType": "webpart"
   }
 }

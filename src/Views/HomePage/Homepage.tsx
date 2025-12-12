@@ -25,7 +25,7 @@ export default class HomePage extends React.Component<any, IHomePageState> {
     }
 
     public componentDidMount(): void {
-        console.log(this.props.contextProp)
+     
     }
 
 
@@ -37,39 +37,39 @@ export default class HomePage extends React.Component<any, IHomePageState> {
                         {/* User Card & Chairman Card Row */}
                         <div className="row">
                             <div className="col-12 col-md-4 col-lg-3">
-                                <CurrentUserCard sp={this.props.sp} webUrl={this.props.webUrl} />
+                                <CurrentUserCard lang={this.props.lang} sp={this.props.sp} webUrl={this.props.webUrl} />
                             </div>
                             <div className="col-12 col-md-8 col-lg-9">
-                                <ChairmanCard sp={this.props.sp} webUrl={this.props.webUrl} listTitle="Leaders" />
+                                <ChairmanCard lang={this.props.lang}  sp={this.props.sp} webUrl={this.props.webUrl} listTitle="Leaders" />
                             </div>
                         </div>
 
                         {/* Ask Support Row */}
                         <div className="row">
                             <div className="col-12">
-                                <AskSupport />
+                                <AskSupport  lang={this.props.lang} />
                             </div>
                         </div>
 
                         {/* News Box Row */}
                         <div className="row">
-                                <NewsBox />
+                                <NewsBox  lang={this.props.lang} />
                         </div>
 
                         {/* Portal Tiles Row */}
                         <div className="row">
                             <div className="col-12">
-                                <PortalTiles sp={this.props.sp} webUrl={this.props.webUrl} listTitle="PortalTiles" />
+                                <PortalTiles  lang={this.props.lang} sp={this.props.sp} webUrl={this.props.webUrl} listTitle="PortalTiles" />
                             </div>
                         </div>
 
                         {/* Survey & Events Row */}
                         <div className="row">
                             <div className="col-12 col-md-6 col-lg-4">
-                                <SurveyBox />
+                                <SurveyBox  lang={this.props.lang} />
                             </div>
                            
-                                <EventsBox />
+                                <EventsBox  lang={this.props.lang} />
                         </div>
 
                     </div>
