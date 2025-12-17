@@ -255,9 +255,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
           <div class="ijJobDetailsTitleRow">
             <h3 class="ijJobDetailsTitle">${job.Title}</h3>
             ${
-              closing
-                ? `<div class="ijJobDetailsClosing">${closing}</div>`
-                : ""
+              closing ? `<div class="ijJobDetailsClosing">${closing}</div>` : ""
             }
           </div>
           <div class="ijJobDetailsMeta">
@@ -273,20 +271,23 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
         </div>
       </div>
     `);
+    const $detailsContainer = $(".ijJobDetails");
+
+    const $applyWrapper = $('<div class="ijJobApplyWrapper"></div>');
+
+    $("<button>")
+      .addClass("ijCardApplyList")
+      .text("Apply")
+      .on("click", () => {
+        // this._openApplyPopup(job);
+      })
+      .appendTo($applyWrapper);
+
+    $detailsContainer.append($applyWrapper);
   }
 
   private async _getJobsFromList(): Promise<IJobItem[]> {
     const listTitle = this.properties.listName || "Job Listings";
-
-    // Build start/end of today for inclusive filter
-    // const today = new Date();
-    // const start = new Date(today);
-    // start.setHours(0, 0, 0, 0);
-    // const end = new Date(today);
-    // end.setHours(23, 59, 59, 999);
-
-    // const startIso = start.toISOString();
-    // const endIso = end.toISOString();
 
     interface IJobItemRaw {
       Id: number;
@@ -296,7 +297,9 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       Requirements: string;
       PublishedDate?: string;
       ClosingDate?: string;
-      ImageUrl?: string | { Url?: string; serverUrl?: string; serverRelativeUrl?: string };
+      ImageUrl?:
+        | string
+        | { Url?: string; serverUrl?: string; serverRelativeUrl?: string };
       Status: string;
     }
 
@@ -421,7 +424,9 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
         Requirements: string;
         PublishedDate?: string;
         ClosingDate?: string;
-        ImageUrl?: string | { Url?: string; serverUrl?: string; serverRelativeUrl?: string };
+        ImageUrl?:
+          | string
+          | { Url?: string; serverUrl?: string; serverRelativeUrl?: string };
         Status: string;
       }
 
@@ -485,38 +490,6 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
     }
   }
 
-  // private _setupFilters(): void {
-  //   const id = this.instanceId;
-  //   const $filters = $(`#ij-filters-${id}`, this.domElement);
-  //   $filters.empty();
-
-  //   const categories = [
-  //     "All",
-  //     "Finance",
-  //     "HR",
-  //     "IT",
-  //     "Marketing",
-  //     "Operations",
-  //   ];
-
-  //   categories.forEach((cat) => {
-  //     const $btn = $('<button type="button" class="ij-filter-btn"></button>')
-  //       .text(cat)
-  //       .toggleClass("active", cat === this._currentDept)
-  //       .on("click", () => {
-  //         this._currentDept = cat;
-  //         this._currentPage = 1;
-  //         this._applyFilterAndSearch();
-  //         this._renderCurrentPage();
-  //         this._renderPager();
-  //         $filters.find(".ij-filter-btn").removeClass("active");
-  //         $btn.addClass("active");
-  //       });
-
-  //     $filters.append($btn);
-  //   });
-  // }
-
   private _applyFilterAndSearch(): void {
     this._filteredJobs = this._jobs.filter((j) => {
       const matchesDept =
@@ -526,8 +499,7 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       const matchesSearch =
         !search ||
         (j.Title && j.Title.toLowerCase().includes(search)) ||
-        (j.JobDescription &&
-          j.JobDescription.toLowerCase().includes(search));
+        (j.JobDescription && j.JobDescription.toLowerCase().includes(search));
 
       return matchesDept && matchesSearch;
     });
@@ -575,47 +547,6 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       return "";
     }
   }
-
-  // private _showDescription(job: IJobItem): void {
-  //   // Create a simple modal overlay dynamically
-  //   const overlay = document.createElement("div");
-  //   overlay.className = "ij-overlay";
-
-  //   const modal = document.createElement("div");
-  //   modal.className = "ij-popup";
-  //   modal.innerHTML = `
-  //   <div class="ij-popup-header">
-  //     <h3>${job.Title || "Job Details"}</h3>
-  //     <button type="button" class="ij-close-btn">&times;</button>
-  //   </div>
-  //   <div class="ij-popup-body">
-  //     <p><strong>Department:</strong> ${job.Department || "-"}</p>
-  //     <p><strong>Published:</strong> ${this._formatDate(
-  //       job.PublishedDate ?? ""
-  //     )}</p>
-  //     <p><strong>Closing:</strong> ${this._formatDate(
-  //       job.ClosingDate ?? ""
-  //     )}</p>
-  //     <hr/>
-  //     <div style="max-height: 300px; overflow-y: auto;">
-  //       ${job.JobDescription || "<em>No description provided.</em>"}
-  //     </div>
-  //   </div>
-  // `;
-
-  //   overlay.appendChild(modal);
-  //   document.body.appendChild(overlay);
-
-  //   const close = modal.querySelector(".ij-close-btn") as HTMLButtonElement;
-  //   close.addEventListener("click", () => document.body.removeChild(overlay));
-
-  //   // Also close when clicking outside
-  //   overlay.addEventListener("click", (e) => {
-  //     if (e.target === overlay) {
-  //       document.body.removeChild(overlay);
-  //     }
-  //   });
-  // }
 
   private _renderCurrentPage(): void {
     const id = this.instanceId;
@@ -666,19 +597,16 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       $title.on("click", () => this._renderJobDetails(job));
 
       if (closingText) {
-        $("<div>")
-          .addClass("ijCardClosing")
-          .text(closingText)
-          .appendTo($body);
+        $("<div>").addClass("ijCardClosing").text(closingText).appendTo($body);
       }
 
       const $actions = $('<div class="ijCardActions"></div>').appendTo($body);
 
-      $("<button>")
-        .addClass("ijCardApplyList")
-        .text("Apply")
-        // .on("click", () => this._openApplyPopup(job))
-        .appendTo($actions);
+      // $("<button>")
+      //   .addClass("ijCardApplyList")
+      //   .text("Apply")
+      //   // .on("click", () => this._openApplyPopup(job))
+      //   .appendTo($actions);
 
       $("<button>")
         .addClass("ijCardJobDescription")
@@ -716,191 +644,6 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
     }
   }
 
-  // private openApplyPopup = (job: IJobItem): void => {
-  //   const id = this.instanceId;
-  //   const $host = $(`#sl-apply-popup-${id}`, this.domElement);
-
-  //   let popup: any;
-  //   try {
-  //     popup = ($host as any).dxPopup("instance");
-  //   } catch {
-  //     popup = null;
-  //   }
-
-  //   if (!popup) {
-  //     ($host as any).dxPopup({
-  //       width: 430,
-  //       maxHeight: 520,
-  //       showTitle: true,
-  //       title: "Apply for this job",
-  //       hideOnOutsideClick: true,
-  //       dragEnabled: false,
-  //       contentTemplate: () => $("<div>"),
-  //     });
-  //     popup = ($host as any).dxPopup("instance");
-  //   }
-
-  //   // this._applyPopup = popup;
-
-  //   popup.option({
-  //     title: `Apply for "${job.Title}"`,
-  //     contentTemplate: () => {
-  //       const $root = $('<div class="ij-apply-popup"></div>');
-
-  //       // Select reason
-  //       $('<label class="ij-apply-label">Select Reason</label>').appendTo(
-  //         $root
-  //       );
-  //       const $reasonSelect = $("<div></div>").appendTo($root);
-  //       ($reasonSelect as any).dxSelectBox({
-  //         items: [
-  //           "Career growth",
-  //           "Internal transfer",
-  //           "New challenge",
-  //           "Other",
-  //         ],
-  //         placeholder: "Reason for applying",
-  //         stylingMode: "outlined",
-  //       });
-
-  //       // Why are you applying?
-  //       $(
-  //         '<label class="ij-apply-label">Why are you applying for this job?</label>'
-  //       ).appendTo($root);
-  //       const $whyArea = $("<div></div>").appendTo($root);
-  //       ($whyArea as any).dxTextArea({
-  //         placeholder: "Write...",
-  //         height: 100,
-  //       });
-
-  //       // Upload CV
-  //       $('<label class="ij-apply-label">Upload your CV</label>').appendTo(
-  //         $root
-  //       );
-  //       const $cvBox = $(
-  //         '<div class="ij-upload-box"><span>Upload CV</span></div>'
-  //       ).appendTo($root);
-  //       const $cvInput = $(
-  //         '<input type="file" accept=".pdf,.doc,.docx" style="display:none" />'
-  //       ).appendTo($root);
-  //       $cvBox.on("click", () => $cvInput.trigger("click"));
-
-  //       // Upload additional documents
-  //       $(
-  //         '<label class="ij-apply-label">Upload additional documents</label>'
-  //       ).appendTo($root);
-  //       const $attBox = $(
-  //         '<div class="ij-upload-box"><span>Upload attachments</span></div>'
-  //       ).appendTo($root);
-  //       const $attInput = $(
-  //         '<input type="file" multiple style="display:none" />'
-  //       ).appendTo($root);
-  //       $attBox.on("click", () => $attInput.trigger("click"));
-
-  //       // Apply button
-  //       const $btn = $(
-  //         '<button type="button" class="ij-apply-button">Apply</button>'
-  //       ).appendTo($root);
-
-  //       $btn.on("click", async () => {
-  //         const reason = ($reasonSelect as any).dxSelectBox("option", "value");
-  //         const why = ($whyArea as any).dxTextArea("option", "value");
-
-  //         if (!reason) {
-  //           alert("Please select a reason for applying.");
-  //           return;
-  //         }
-
-  //         try {
-  //           $btn.prop("disabled", true).text("Submitting...");
-
-  //           await this._submitApplication(
-  //             job,
-  //             reason,
-  //             why,
-  //             $cvInput[0] as HTMLInputElement,
-  //             $attInput[0] as HTMLInputElement
-  //           );
-
-  //           popup.hide();
-  //           alert("Your application has been submitted.");
-  //         } catch (e) {
-  //           console.error(e);
-  //           alert("Error while submitting the application.");
-  //         } finally {
-  //           $btn.prop("disabled", false).text("Apply");
-  //         }
-  //       });
-
-  //       return $root;
-  //     },
-  //   });
-
-  //   popup.show();
-  // };
-
-  // private _openApplyPopup(job: IJobItem): void {
-  //   const id = this.instanceId;
-  //   const $overlay = $(`#ij-apply-overlay-${id}`, this.domElement);
-
-  //   $(`#ij-job-id-${id}`, this.domElement).val(job.Id);
-  //   $(`#ij-dept-${id}`, this.domElement).val(job.Department || "");
-  //   $(`#ij-jobtitle-${id}`, this.domElement).val(job.Title || "");
-
-  //   $(`#ij-apply-title-${id}`, this.domElement).text(`Apply - ${job.Title}`);
-
-  //   $overlay.removeClass("ij-hidden");
-  // }
-
-  // private _hideApplyPopup(): void {
-  //   const id = this.instanceId;
-  //   const $overlay = $(`#ij-apply-overlay-${id}`, this.domElement);
-  //   $overlay.addClass("ij-hidden");
-  // }
-
-  // private async _createJobApplicationItem(payload: {
-  //   jobId: number;
-  //   name: string;
-  //   email: string;
-  //   dept: string;
-  //   jobTitle: string;
-  //   reason: string;
-  //   notes: string;
-  //   file?: File;
-  // }): Promise<void> {
-  //   const listTitle = "Job Applications"; // change if your list name is different
-
-  //   // Map payload to list fields (use your internal names)
-  //   const body: any = {
-  //     Title: `${payload.jobTitle || ""} - ${payload.name || ""}`,
-  //     ApplicantName: payload.name,
-  //     ApplicantEmail: payload.email,
-  //     Department: payload.dept,
-  //     JobTitle: payload.jobTitle,
-  //     Reason_For_Applying: payload.reason,
-  //     Status: "Submitted", // default status
-  //     Notes: payload.notes,
-  //   };
-
-  //   if (payload.jobId) {
-  //     body.JobId = payload.jobId; // optional JobId column
-  //   }
-
-  //   // 1) Add item
-  //   const list = this._sp.web.lists.getByTitle(listTitle);
-  //   const addResult = await list.items.add(body);
-  //   const item = addResult.item;
-  //   const itemId = addResult.data.Id as number;
-
-  //   // 2) Add attachment (CV) if provided
-  //   if (payload.file) {
-  //     const buffer = await payload.file.arrayBuffer();
-  //     await item.attachmentFiles.add(payload.file.name, buffer);
-  //   }
-
-  //   console.log(`Application item created. Id = ${itemId}`);
-  // }
-
   private async _submitApplication(): Promise<void> {
     const id = this.instanceId;
 
@@ -908,7 +651,9 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
     const jobId = jobIdVal ? Number(jobIdVal) : undefined;
 
     const name = ($(`#ij-name-${id}`, this.domElement).val() || "").toString();
-    const email = ($(`#ij-email-${id}`, this.domElement).val() || "").toString();
+    const email = (
+      $(`#ij-email-${id}`, this.domElement).val() || ""
+    ).toString();
     const dept = ($(`#ij-dept-${id}`, this.domElement).val() || "").toString();
     const jobTitle = (
       $(`#ij-jobtitle-${id}`, this.domElement).val() || ""
@@ -920,10 +665,9 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       $(`#ij-notes-${id}`, this.domElement).val() || ""
     ).toString();
 
-    const fileInput = $(
-      `#ij-cv-${id}`,
-      this.domElement
-    )[0] as HTMLInputElement | undefined;
+    const fileInput = $(`#ij-cv-${id}`, this.domElement)[0] as
+      | HTMLInputElement
+      | undefined;
 
     let file: File | undefined;
     if (fileInput && fileInput.files && fileInput.files.length > 0) {
@@ -939,7 +683,8 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       const appsList = this._sp.web.lists.getByTitle("Job Applications");
 
       const itemAddResult = await appsList.items.add({
-        Title: jobTitle || (jobId ? `Application for job #${jobId}` : "Application"),
+        Title:
+          jobTitle || (jobId ? `Application for job #${jobId}` : "Application"),
         ApplicantName: name,
         ApplicantEmail: email,
         Department: dept,
@@ -953,7 +698,9 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       const itemId: number = itemAddResult.data.Id;
 
       if (file) {
-        await appsList.items.getById(itemId).attachmentFiles.add(file.name, file);
+        await appsList.items
+          .getById(itemId)
+          .attachmentFiles.add(file.name, file);
       }
 
       alert("Your application has been submitted.");
@@ -969,58 +716,6 @@ export default class InternalJobsListWebPart extends BaseClientSideWebPart<IInte
       alert("Error submitting your application. Please try again.");
     }
   }
-
-  // private async _submitApplication(
-  //   job: IJobItem,
-  //   reason: string,
-  //   why: string,
-  //   cvInput: HTMLInputElement,
-  //   attachmentsInput: HTMLInputElement
-  // ): Promise<void> {
-  //   const me = await this._sp.profiles.myProperties();
-  //   const profile: Record<string, string> = {};
-  //   const fullName = me.DisplayName || profile.PreferredName || "";
-  //   const jobTitle = profile["SPS-JobTitle"] || profile.Title || "";
-  //   const department = profile.Department || "";
-  //   const list = this._sp.web.lists.getByTitle("Job Applications");
-
-  //   const itemAddResult = await list.items.add({
-  //     Title: job.Title,
-  //     ApplicantName: fullName,
-  //     ApplicantEmail: this.context.pageContext.user.email,
-  //     Department: department,
-  //     JobTitle: jobTitle,
-  //     JobId: job.Id,
-  //     Reason_For_Applying: reason,
-  //     Why: why,
-  //     Status: "Submitted",
-  //   });
-
-  //   const itemId: number = itemAddResult.data.Id;
-
-  //   const filesToUpload: File[] = [];
-
-  //   if (cvInput.files && cvInput.files.length > 0) {
-  //     filesToUpload.push(cvInput.files[0]);
-  //   }
-
-  //   if (attachmentsInput.files && attachmentsInput.files.length > 0) {
-  //     for (let i = 0; i < attachmentsInput.files.length; i++) {
-  //       const f = attachmentsInput.files[i];
-  //       if (f) {
-  //         filesToUpload.push(f);
-  //       }
-  //     }
-  //   }
-
-  //   if (filesToUpload.length > 0) {
-  //     const item = list.items.getById(itemId);
-  //     for (const file of filesToUpload) {
-  //       // File extends Blob so we can pass it directly
-  //       await item.attachmentFiles.add(file.name, file);
-  //     }
-  //   }
-  // }
 
   protected async onAfterPropertyPaneChangesApplied(): Promise<void> {
     await this._loadData();

@@ -122,26 +122,26 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
       });
     }
 
-    const itemsEl = this.domElement.querySelector(`#${this._itemsId}`);
-    if (itemsEl) {
-      itemsEl.addEventListener("click", (ev: Event) => {
-        const target = ev.target as HTMLElement;
-        const btn = target.closest(
-          `button.${styles.happinessBtn}`
-        ) as HTMLButtonElement | null;
-        if (!btn) {
-          return;
-        }
+    // const itemsEl = this.domElement.querySelector(`#${this._itemsId}`);
+    // if (itemsEl) {
+    //   itemsEl.addEventListener("click", (ev: Event) => {
+    //     const target = ev.target as HTMLElement;
+    //     const btn = target.closest(
+    //       `button.${styles.happinessBtn}`
+    //     ) as HTMLButtonElement | null;
+    //     if (!btn) {
+    //       return;
+    //     }
 
-        const redirectUrl =
-          this.properties.redirectUrl &&
-          this.properties.redirectUrl.trim().length > 0
-            ? this.properties.redirectUrl
-            : `${this.context.pageContext.web.absoluteUrl}/SitePages/SendGoreatSaasa.aspx`;
+    //     const redirectUrl =
+    //       this.properties.redirectUrl &&
+    //       this.properties.redirectUrl.trim().length > 0
+    //         ? this.properties.redirectUrl
+    //         : `${this.context.pageContext.web.absoluteUrl}/SitePages/SendGoreatSaasa.aspx`;
 
-        window.location.href = redirectUrl;
-      });
-    }
+    //     window.location.href = redirectUrl;
+    //   });
+    // }
   }
 
   private async _loadItems(): Promise<void> {
@@ -349,18 +349,18 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
             <h3 class="${styles.cardTitle}">
               ${this._escape(item.Title)}
             </h3>
-            <button type="button"
+           <!-- <button type="button"
                     class="${styles.favoriteBtn}"
                     aria-label="Add to favorites">
               ★
-            </button>
+            </button>-->
           </div>
           <p class="${styles.cardDescription}">
             ${this._escape(item.Description || "")}
           </p>
-          <button type="button" class="${styles.happinessBtn}" >
+          <!--<button type="button" class="${styles.happinessBtn}" >
             Happiness Dose
-          </button>
+          </button>-->
         </div>
       </div>
     `;
@@ -405,12 +405,12 @@ export default class AnnouncementsListWebPart extends BaseClientSideWebPart<IAnn
                   step: 1,
                   value: 6,
                 }),
-                PropertyPaneTextField("redirectUrl", {
-                  label: "Redirect URL for Happiness Dose",
-                  description:
-                    "Enter a relative or absolute URL to redirect users when they click the Happiness Dose button.",
-                  placeholder: "/SitePages/SendGoreatSaasa.aspx",
-                }),
+                // PropertyPaneTextField("redirectUrl", {
+                //   label: "Redirect URL for Happiness Dose",
+                //   description:
+                //     "Enter a relative or absolute URL to redirect users when they click the Happiness Dose button.",
+                //   placeholder: "/SitePages/SendGoreatSaasa.aspx",
+                // }),
               ],
             },
           ],

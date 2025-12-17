@@ -16,7 +16,7 @@ import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "devextreme";
-import * as $ from "jquery";
+// import * as $ from "jquery";
 import { SPComponentLoader } from "@microsoft/sp-loader";
 
 export interface IAnnouncementsFeedWebPartProps {
@@ -194,18 +194,18 @@ export default class AnnouncementsFeedWebPart extends BaseClientSideWebPart<IAnn
       card.appendChild(body);
       grid.appendChild(card);
 
-      const labels = this.currentLabels;
+      // const labels = this.currentLabels;
       
-      $(btnDiv).dxButton({
-        text: labels.buttonText,
-        type: "default",
-        stylingMode: "outlined",
-        width: "auto",
-        elementAttr: { class: "happinessButton" },
-        onClick: () => {
-          console.log("Announcement clicked:", item.Id);
-        },
-      });
+      // $(btnDiv).dxButton({
+      //   text: labels.buttonText,
+      //   type: "default",
+      //   stylingMode: "outlined",
+      //   width: "auto",
+      //   elementAttr: { class: "happinessButton" },
+      //   onClick: () => {
+      //     console.log("Announcement clicked:", item.Id);
+      //   },
+      // });
     });
   }
 
@@ -222,12 +222,12 @@ export default class AnnouncementsFeedWebPart extends BaseClientSideWebPart<IAnn
       en: {
         sectionTitle: "Announcements",
         viewAll: "View all",
-        buttonText: "Happiness Dose",
+        // buttonText: "Happiness Dose",
       },
       ar: {
         sectionTitle: "الإعلانات",
         viewAll: "عرض الكل",
-        buttonText: "جرعة سعادة",
+        // buttonText: "جرعة سعادة",
       },
     } as const;
   return this.isArabic ? Labels.ar : Labels.en;

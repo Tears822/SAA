@@ -1,11 +1,13 @@
 import * as React from "react";
 import PortalTiles from "../../webparts/portalTiles/components/PortalTiles";
-import NewsBox from "../../webparts/news/newsBox";
+// import NewsBox from "../../webparts/news/newsBox";
+import NewsBox from "../../webparts/news/newsBox1";
 import SurveyBox from "../../webparts/survey/surveyBox";
 import EventsBox from "../../webparts/Events/eventsBox";
 import AskSupport from "../../webparts/askSupport/component/askSupport";
 import ChairmanCard from "../../webparts/chairmanCard/components/ChairmanCard";
 import CurrentUserCard from "../../webparts/currentUserCard/components/CurrentUserCard";
+// import { SPFI } from "@pnp/sp/presets/all";
 
 
 
@@ -53,7 +55,7 @@ export default class HomePage extends React.Component<any, IHomePageState> {
 
                         {/* News Box Row */}
                         <div className="row">
-                                <NewsBox />
+                                <NewsBox sp={this.props.sp} listTitle="Site Pages" top={4}  />
                         </div>
 
                         {/* Portal Tiles Row */}

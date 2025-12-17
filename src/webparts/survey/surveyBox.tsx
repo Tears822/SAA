@@ -15,9 +15,9 @@ const SurveyBox: FC<{ }> = ({ }) => {
   const isAr = window.location.href.toLowerCase().includes("/ar/");
 
   const initialOptions: OptionRating[] = [
-    { key: "Food", text: "Food", textAr: "الطعام", rating: 0 },
-    { key: "Venue", text: "Venue", textAr: "المكان", rating: 0 },
-    { key: "Arrangement", text: "Arrangement", textAr: "التنظيم", rating: 0 },
+    { key: "Design", text: "Design", textAr: "التصميم", rating: 0 },
+    { key: "Services", text: "Services", textAr: "الخدمات", rating: 0 },
+    { key: "Content", text: "Content", textAr: "المحتوي", rating: 0 },
   ];
 
   const [options, setOptions] = useState<OptionRating[]>(initialOptions);
@@ -31,7 +31,7 @@ const SurveyBox: FC<{ }> = ({ }) => {
 
   return (
     <div className={`survey-home-box ${isAr ? "rtl" : ""}`}>
-      <h3>{isAr ? " استطلاعات الرأي" : "Survey Question"}</h3>
+      <h3>{isAr ? " استطلاعات الرأي" : "Intranet Feedback"}</h3>
 
       <Stack
         tokens={{ childrenGap: 20, padding: 20 }}
@@ -39,8 +39,8 @@ const SurveyBox: FC<{ }> = ({ }) => {
       >
         <h3>
           {isAr
-            ? "ما مدى رضاك عن إفطار رمضان في SAA؟"
-            : "How satisfied are you with SAA Ramadan Iftar?"}
+            ? "ما مدى رضاك عن البوابة الداخلية في SAA؟"
+            : "How satisfied are you with SAA Intranet?"}
         </h3>
 
         {options.map((option) => (

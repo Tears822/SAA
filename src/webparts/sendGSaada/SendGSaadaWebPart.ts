@@ -72,6 +72,10 @@ export default class SendGSaadaWebPart extends BaseClientSideWebPart<ISendGSaada
           box-sizing: border-box;
         }
 
+        .gs-card-tile:hover {
+          transform: scale(1.5);
+        }
+
         /* normal card with image */
         .gs-card-tile img {
           width: 100%;

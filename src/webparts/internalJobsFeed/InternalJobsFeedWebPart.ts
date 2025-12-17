@@ -254,12 +254,13 @@ export default class InternalJobsFeedWebPart extends BaseClientSideWebPart<IInte
         }
 
         const $actions = $("<div>").addClass("ijCardActions").appendTo($body);
+        const $detailsContainer = $(".ijJobDetails");
 
         $("<button>")
           .addClass("ijCardApply")
           .text("Apply")
           .on("click", () => openApplyPopup(job))
-          .appendTo($actions);
+          .appendTo($detailsContainer);
 
         $("<button>")
           .addClass("ijCardJobDescription")

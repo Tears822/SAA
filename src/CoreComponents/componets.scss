@@ -1,6 +1,7 @@
-@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
-@import '../theme/grid.scss';
-@import '../theme/variables';
+@import "~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss";
+@import "../theme/grid.scss";
+@import "../theme/variables";
+
 
 
 // SharePoint hide
@@ -23,6 +24,9 @@
   }
 }
 
+#spCommandBar, #SuiteNavWrapper {
+  display: none !important;
+}
 
 h1,
 h2,
@@ -36,7 +40,6 @@ small,
 div {
   font-family: $font-primary;
 }
-
 
 //Loader
 .loading-spinner {
@@ -81,33 +84,32 @@ div {
     transform: rotate(360deg);
   }
 }
-  .tilePurple {
-    background-color: #ABA2D0;
-  }
+.tilePurple {
+  background-color: #aba2d0;
+}
 
-  .tileGreen {
-    background-color: #84AE9A;
-  }
+.tileGreen {
+  background-color: #84ae9a;
+}
 
-  .tileOrange {
-    background-color: #F58B6E;
-  }
+.tileOrange {
+  background-color: #f58b6e;
+}
 
-  .tileBlue {
-    background-color: #89C8E3;
-  }
-  .tilePeach {
-    background-color: #FAB599;
-  }
+.tileBlue {
+  background-color: #89c8e3;
+}
+.tilePeach {
+  background-color: #fab599;
+}
 
-  .tileMint {
-    background-color: #d7e7cf;
-  }
+.tileMint {
+  background-color: #d7e7cf;
+}
 
-  .tileFav {
-    background-color: #ACCDE0;
-  }
-
+.tileFav {
+  background-color: #accde0;
+}
 
 .navigationContainer {
   width: 100%;
@@ -282,7 +284,7 @@ div {
 
   //nav
   .bottom-Bar {
-    background: #C9E4F4;
+    background: #c9e4f4;
     width: 100%;
 
     .navbar {
@@ -338,7 +340,7 @@ div {
             position: absolute;
             top: 100%;
             left: 0;
-            background: #F1F8FC;
+            background: #f1f8fc;
             padding: 5px 0;
             min-width: 300px;
             z-index: 10;
@@ -350,7 +352,7 @@ div {
 
             li {
               width: 100%;
-              border-bottom: 1px solid #C9E4F4;
+              border-bottom: 1px solid #c9e4f4;
 
               a {
                 color: grey;
@@ -371,7 +373,7 @@ div {
             }
           }
 
-          &:hover>ul {
+          &:hover > ul {
             display: block;
           }
         }
@@ -426,7 +428,7 @@ div {
       border-bottom: none;
     }
 
-    >a {
+    > a {
       padding: 12px 0;
       text-decoration: none;
       font-size: 16px;
@@ -475,7 +477,7 @@ div {
       }
     }
 
-    &.submenu-open>ul {
+    &.submenu-open > ul {
       display: flex;
     }
   }
@@ -559,10 +561,10 @@ div {
   }
 
   a {
-    color: #44849E;
+    color: #44849e;
     height: 20px;
     justify-content: center;
-    transition: all .2s;
+    transition: all 0.2s;
     width: 20px;
     background: #fff;
     border-radius: 50%;
@@ -611,7 +613,7 @@ div {
 
   h1 {
     font-size: 36px;
-    color: #44849E;
+    color: #44849e;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -643,12 +645,12 @@ div {
     }
 
     a {
-      color: #44849E;
+      color: #44849e;
       text-decoration: underline;
       font-family: $font-primary;
 
       &:hover {
-        color: #4BA8A5;
+        color: #4ba8a5;
       }
     }
   }
@@ -844,19 +846,19 @@ div {
 
   /* colors */
   .tilePurple {
-    background-color: #ABA2D0;
+    background-color: #aba2d0;
   }
 
   .tileGreen {
-    background-color: #84AE9A;
+    background-color: #84ae9a;
   }
 
   .tileOrange {
-    background-color: #F58B6E;
+    background-color: #f58b6e;
   }
 
   .tilePeach {
-    background-color: #FAB599;
+    background-color: #fab599;
   }
 
   .tileMint {
@@ -864,9 +866,8 @@ div {
   }
 
   .tileFav {
-    background-color: #ACCDE0;
+    background-color: #accde0;
   }
-
 }
 
 .openAppsIcon {
@@ -899,7 +900,6 @@ div {
   }
 }
 
-
 //arabic version
 .arLang {
   direction: rtl;
@@ -921,7 +921,7 @@ div {
     text-align: right;
   }
 
-  .SPPageChrome-app>div {
+  .SPPageChrome-app > div {
     direction: rtl;
   }
 
@@ -945,6 +945,18 @@ div {
 
   .chairman-content {
     direction: rtl;
+  }
+
+  /* remove vertical line from chairman card*/
+  .chairman-content .left {
+    border-left: none !important;
+    padding-left: 0 !important;
+  }
+
+  .chairman-content .left::before,
+  .chairman-content .left::after {
+    display: none !important;
+    content: none !important;
   }
 
   // Navigation Container RTL
@@ -976,7 +988,6 @@ div {
       }
 
       .lang-switcher {
-
         i {
           margin-left: 0;
           margin-right: 5px;
@@ -993,7 +1004,6 @@ div {
         }
       }
     }
-
   }
 
   // Mobile Menu RTL
@@ -1036,7 +1046,8 @@ div {
   .notfoundSection {
     direction: rtl;
 
-    h1, p {
+    h1,
+    p {
       text-align: center;
     }
   }
@@ -1070,7 +1081,8 @@ div {
       div {
         text-align: right;
 
-        h3, h4 {
+        h3,
+        h4 {
           text-align: right;
         }
       }
@@ -1175,13 +1187,15 @@ div {
   table {
     direction: rtl;
 
-    th, td {
+    th,
+    td {
       text-align: right;
     }
   }
 
   // Lists
-  ul, ol {
+  ul,
+  ol {
     padding-right: 20px;
     padding-left: 0;
   }
@@ -1195,7 +1209,6 @@ div {
   .bandLabel {
     margin-right: 0 !important;
     margin-left: 32px;
-        font-size: 16px;
-}
-
+    font-size: 16px;
+  }
 }

@@ -1,7 +1,7 @@
 /* === PROXIMA NOVA FONT === */
-@font-face {
+/* @font-face {
   font-family: 'Proxima Nova';
-  src: url('../assets/fonts/ProximaNova-Regular.ttf') format('truetype');
+  src: url('/SiteAssets/fonts/ProximaNova/ProximaNova-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -9,7 +9,7 @@
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('../assets/fonts/ProximaNova-Semibold.ttf') format('truetype');
+  src: url('/SiteAssets/fonts/ProximaNova/ProximaNova-Semibold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -17,11 +17,11 @@
 
 @font-face {
   font-family: 'Proxima Nova';
-  src: url('../assets/fonts/ProximaNova-Bold.ttf') format('truetype');
+  src: url('/SiteAssets/fonts/ProximaNova/ProximaNova-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
-}
+} */
 
         .gs-cards {
           display: flex;
@@ -779,7 +779,7 @@
 .ijFeed-list .ijCardImage {
   width: 72px;
   height: 72px;
-  border-radius: 16px;
+  /* border-radius: 16px; */
   object-fit: cover;
   flex-shrink: 0;
 }
@@ -1014,6 +1014,9 @@
   height: auto;
 }
 
+.ijJobApplyWrapper {
+  margin-top: 24px;
+}
 
 /* ------------ Responsive tweaks ------------ */
 @media (max-width: 1024px) {
