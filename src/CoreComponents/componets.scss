@@ -24,9 +24,9 @@
   }
 }
 
-#spCommandBar, #SuiteNavWrapper {
-  display: none !important;
-}
+// #spCommandBar, #SuiteNavWrapper {
+//   display: none !important;
+// }
 
 h1,
 h2,
@@ -302,7 +302,7 @@ div {
       .navLinks {
         align-items: center;
         display: flex;
-        gap: 10px;
+        gap: 72px;
         position: relative;
         padding: 0;
         margin: 0;

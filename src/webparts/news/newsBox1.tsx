@@ -27,14 +27,17 @@ interface INewsBoxState {
   error: string | null;
 }
 
-export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxState> {
+export default class NewsBox extends React.Component<
+  INewsBoxProps,
+  INewsBoxState
+> {
   constructor(props: INewsBoxProps) {
     super(props);
 
     this.state = {
       items: [],
       loading: true,
-      error: null
+      error: null,
     };
   }
 
@@ -75,7 +78,10 @@ export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxStat
       const trimmed = raw.trim();
 
       // Try JSON
-      if ((trimmed.startsWith("{") && trimmed.endsWith("}")) || (trimmed.startsWith("[") && trimmed.endsWith("]"))) {
+      if (
+        (trimmed.startsWith("{") && trimmed.endsWith("}")) ||
+        (trimmed.startsWith("[") && trimmed.endsWith("]"))
+      ) {
         try {
           const obj = JSON.parse(trimmed);
           // common shapes
@@ -107,6 +113,10 @@ export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxStat
     );
   }
 
+  private _isArabicPage(): boolean {
+    return window.location.pathname.toLowerCase().includes("/ar/");
+  }
+
   private async loadNews(): Promise<void> {
     const { sp, listTitle } = this.props;
     const top = this.props.top ?? 10;
@@ -116,6 +126,14 @@ export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxStat
     try {
       // For modern news posts, PromotedState is commonly used.
       // If your tenant uses a different pattern, adjust this filter accordingly.
+      const isArabic = this._isArabicPage();
+
+      // English → /SitePages/
+      // Arabic  → /SitePages/ar/
+      const pagePathFilter = isArabic? "and OData__SPTranslationSourceItemId ne null" : "and OData__SPTranslationSourceItemId eq null";
+      //   ? "substringof('/SitePages/ar/', FileRef)"
+      //   : "substringof('/SitePages/', FileRef) and not substringof('/SitePages/ar/', FileRef)";
+
       const rows: any[] = await sp.web.lists
         .getByTitle(listTitle)
         .items
@@ -126,12 +144,13 @@ export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxStat
           "FileRef",
           "PromotedState",
           "FirstPublishedDate",
-          "BannerImageUrl"
+          "BannerImageUrl",
+          "OData__SPTranslationSourceItemId"
         )
-        .filter("PromotedState eq 2")
+        .filter(`PromotedState eq 2 ${pagePathFilter}`)
         .orderBy("FirstPublishedDate", false)
         .top(top)();
-
+// console.log(rows);
       const items: INewsItem[] = rows.map((r) => {
         const fileRef = this._safeText(r?.FileRef);
         const image = this._parseBannerImageUrl(r?.BannerImageUrl);
@@ -143,7 +162,7 @@ export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxStat
           description: this._safeText(r?.Description),
           date: this._formatDate(r?.FirstPublishedDate),
           image: image || "", // you can set a fallback image below in render
-          url: fileRef || "#"
+          url: fileRef || "#",
         };
       });
 
@@ -152,7 +171,7 @@ export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxStat
       this.setState({
         items: [],
         loading: false,
-        error: this._safeText(e?.message || e)
+        error: this._safeText(e?.message || e),
       });
       // optional console log
       // console.log("[News] Error:", e);
@@ -169,12 +188,27 @@ export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxStat
     // Fallback image if BannerImageUrl is missing
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     // const fallbackImg = require("../../theme/images/newsSide.jpg");
-    const fallbackImg = items[0].image;
+    // console.log(items);
+    const fallbackImg = featuredNews?.image;
 
     return (
       <>
         <div className="col-12 col-md-6 col-lg-5">
-          <img className="newsBigImg" src={fallbackImg} alt="news" />
+          {featuredNews ? (
+            <a
+              href={featuredNews.url}
+              target="_blank"
+              rel="noopener noreferrer" className="titleLink"
+            >
+              <img
+                className="newsBigImg"
+                src={fallbackImg}
+                alt={featuredNews.title || "news"}
+              />
+            </a>
+          ) : (
+            <img className="newsBigImg" src={fallbackImg} alt="news" />
+          )}
         </div>
 
         <div className="col-12 col-md-6 col-lg-7">
@@ -201,11 +235,23 @@ export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxStat
               <>
                 {/* Featured Big News */}
                 <div className="news-home-big">
-                  <h5>{featuredNews.title}</h5>
-                  {featuredNews.subtitle ? <h3>{featuredNews.subtitle}</h3> : null}
+                  <a
+                    href={featuredNews.url}
+                    target="_blank"
+                    rel="noopener noreferrer" className="titleLink"
+                  >
+                    <h3>{featuredNews.title}</h3>
+                  </a>
+                  {featuredNews.subtitle ? (
+                    <h3>{featuredNews.subtitle}</h3>
+                  ) : null}
 
                   {/* If you don't need HTML, replace this with: <p>{featuredNews.description}</p> */}
-                  <p dangerouslySetInnerHTML={{ __html: featuredNews.description }} />
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: featuredNews.description,
+                    }}
+                  />
 
                   <small>{featuredNews.date}</small>
 
@@ -217,18 +263,29 @@ export default class NewsBox extends React.Component<INewsBoxProps, INewsBoxStat
                 <div className="news-list-home">
                   {newsList.map((item) => (
                     <div className="news-item-home" key={item.id}>
-                      <img src={item.image || fallbackImg} alt="news" />
-
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer" 
+                      >
+                        <img src={item.image || fallbackImg} alt="news" />
+                      </a>
                       <div>
-                        <h5>{item.title}</h5>
-
                         <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer" className="titleLink"
+                        >
+                          <div>{item.title}</div>
+                        </a>
+                        {/* <a
                           href={item.url}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          {item.subtitle || (isAr ? "اقرأ المزيد" : "Read more")}
-                        </a>
+                          {item.subtitle ||
+                            (isAr ? "اقرأ المزيد" : "Read more")}
+                        </a> */}
                       </div>
                     </div>
                   ))}

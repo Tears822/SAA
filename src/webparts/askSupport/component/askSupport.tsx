@@ -16,12 +16,46 @@ const isAr = window.location.href.toLowerCase().includes("/ar/");
     }
   };
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [modalUrl, setModalUrl] = React.useState<string | undefined>(undefined);
+  const [modalTitle, setModalTitle] = React.useState<string>('');
+
+  const openModal = (url?: string, title?: string) => {
+    // if (!url) return;
+    // setModalUrl(url);
+    setModalTitle(title || '');
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalUrl(undefined);
+    setModalTitle('');
+  };
+
+  React.useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeModal();
+    };
+
+    if (isModalOpen) {
+      document.addEventListener('keydown', onKeyDown);
+      document.body.style.overflow = 'hidden'; // prevent background scroll
+    }
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
+
   return (
     <div className="fullWidthWrapper">
       <div className="bar">
         <button
           className="askSupporttile askIt"
-          onClick={() => handleClick(askItUrl)}
+          // onClick={() => handleClick(askItUrl)}
+          onClick={() => openModal(askItUrl, isAr ? 'اسأل قسم تكنولوجيا المعلومات' : 'ASK IT')}
         >
           <span className="icon">
             <img
@@ -30,12 +64,13 @@ const isAr = window.location.href.toLowerCase().includes("/ar/");
               alt="Ask IT"
             />
           </span>
-          <span className="label">{isAr ? "اسأل الموارد البشرية" : "ASK IT"}</span>
+          <span className="label">{isAr ? "اسأل قسم تكنولوجيا المعلومات" : "ASK IT"}</span>
         </button>
 
         <button
           className="askSupporttile askAdmin"
           onClick={() => handleClick(askAdminUrl)}
+          // onClick={() => openModal(askAdminUrl, isAr ? 'اسأل الموارد البشرية' : 'ASK Admin')}
         >
           <span className="icon">
             <img
@@ -44,9 +79,41 @@ const isAr = window.location.href.toLowerCase().includes("/ar/");
               alt="Ask Admin"
             />
           </span>
-          <span className="label">{isAr ? "اسأل قسم تكنولوجيا المعلومات" : "ASK Admin"}</span>
+          <span className="label">{isAr ? "اسأل الموارد البشرية" : "ASK Admin"}</span>
         </button>
       </div>
+
+      {isModalOpen && (
+        <div
+          className="askitModalOverlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label={modalTitle || 'Support'}
+          onClick={closeModal}
+        >
+          <div className="askitModal" onClick={(e) => e.stopPropagation()}>
+            <div className="askitModalHeader">
+              <div className="askitModalTitle">{modalTitle}</div>
+
+              <button className="askitModalClose" type="button" onClick={closeModal} aria-label="Close">
+                ×
+              </button>
+            </div>
+
+            <div className="askitModalBody">
+              {modalUrl ? (
+                <iframe
+                  className="askitModalFrame"
+                  src={modalUrl}
+                  title={modalTitle || 'Support'}
+                  frameBorder={0}
+                />
+              ) : null}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

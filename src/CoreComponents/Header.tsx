@@ -50,7 +50,7 @@ const getNavigationNodesStatic = (siteUrl: string): INavigationNode[] => [
     Id: 2,
     Title: "Tawasul",
     TitleAr: "تواصل",
-    Url: "#",
+    Url: siteUrl + "/SitePages/Tawasul.aspx",
     IsExternal: false,
     Children: [
       {

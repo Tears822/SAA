@@ -230,3 +230,83 @@
     }
   }
 }
+
+/* Event description – 2 lines max with ellipsis */
+.event-item-home p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #8a8a8a;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;     /* 👈 limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  line-height: 1.4;
+  max-height: calc(1.4em * 2); /* fallback safety */
+}
+.event-item-home p:hover {
+  overflow: visible;
+  white-space: normal;
+  -webkit-line-clamp: unset;
+}
+
+.events-list-home .event-item-home div h3 { 
+    margin-top: 0 !important;
+}
+
+
+
+/* Allow event popup to overflow outside calendar */
+.brdr-lft-rgt {
+  overflow: visible !important;
+}
+
+.react-calendar {
+  overflow: visible !important;
+}
+
+.react-calendar__month-view {
+  overflow: visible !important;
+}
+
+.react-calendar__month-view__days {
+  overflow: visible !important;
+}
+
+.react-calendar__tile {
+  position: relative;
+  overflow: visible !important;
+}
+
+.day-events-popup {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%, -8px);
+
+  min-width: 200px;
+  max-width: 260px;
+  max-height: 200px;
+
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px 12px;
+
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+
+  overflow-y: auto;
+}
+
+.day-events-popup::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}

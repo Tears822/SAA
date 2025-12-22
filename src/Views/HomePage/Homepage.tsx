@@ -3,11 +3,14 @@ import PortalTiles from "../../webparts/portalTiles/components/PortalTiles";
 // import NewsBox from "../../webparts/news/newsBox";
 import NewsBox from "../../webparts/news/newsBox1";
 import SurveyBox from "../../webparts/survey/surveyBox";
-import EventsBox from "../../webparts/Events/eventsBox";
+import EventsBox from "../../webparts/Events/eventsBox1";
 import AskSupport from "../../webparts/askSupport/component/askSupport";
 import ChairmanCard from "../../webparts/chairmanCard/components/ChairmanCard";
 import CurrentUserCard from "../../webparts/currentUserCard/components/CurrentUserCard";
 // import { SPFI } from "@pnp/sp/presets/all";
+// import { graphfi, GraphFI } from "@pnp/graph";
+// import { SPFx as graphSPFx } from "@pnp/graph";
+// import "@pnp/graph/calendars";
 
 
 
@@ -18,9 +21,11 @@ export interface IHomePageState {
 
 export default class HomePage extends React.Component<any, IHomePageState> {
 
+// private _graph: GraphFI;
 
     constructor(props: any) {
         super(props);
+        // this._graph = graphfi().using(graphSPFx(this.props.context));
         this.state = {
             Fullheight: 700,
         };
@@ -32,6 +37,7 @@ export default class HomePage extends React.Component<any, IHomePageState> {
 
 
     public render() {
+        // console.log("HomePage props.context:", this.props.context);
         return (
             <>
                 <div className="sectionContent">
@@ -49,7 +55,7 @@ export default class HomePage extends React.Component<any, IHomePageState> {
                         {/* Ask Support Row */}
                         <div className="row">
                             <div className="col-12">
-                                <AskSupport />
+                                <AskSupport askAdminUrl= "https://v0tq5.sharepoint.com/sites/HubSite/SitePages/Ask-Admin.aspx" />
                             </div>
                         </div>
 
@@ -71,7 +77,7 @@ export default class HomePage extends React.Component<any, IHomePageState> {
                                 <SurveyBox />
                             </div>
                            
-                                <EventsBox />
+                                <EventsBox context={this.props.context} />
                         </div>
 
                     </div>

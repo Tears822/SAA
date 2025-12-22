@@ -65,7 +65,7 @@ const SurveyBox: FC<{ }> = ({ }) => {
           </div>
         ))}
 
-        <Link to="/" className="viewAllBtn">
+        <Link to={isAr ? "https://v0tq5.sharepoint.com/sites/HubSite/SitePages/ar/Intranet-Survey.aspx":"https://v0tq5.sharepoint.com/sites/HubSite/SitePages/Intranet-Survey.aspx"} className="viewAllBtn">
           {isAr ? "عرض الكل" : "View all"}
           <Icon iconName={isAr ? "ChevronLeftMed" : "ChevronRightMed"} />
         </Link>
