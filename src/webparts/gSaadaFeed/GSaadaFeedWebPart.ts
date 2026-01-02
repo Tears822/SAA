@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="../../../node_modules/@types/devextreme/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/bundles/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/integration/jquery.d.ts" />
 import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
 import { spfi, SPFI } from "@pnp/sp/presets/all";
 import { SPFx } from "@pnp/sp/behaviors/spfx";

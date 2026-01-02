@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="../../../node_modules/@types/devextreme/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/bundles/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/integration/jquery.d.ts" />
 import { Version } from "@microsoft/sp-core-library";
 import {
   type IPropertyPaneConfiguration,

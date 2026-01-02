@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="../../../node_modules/@types/devextreme/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/bundles/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/integration/jquery.d.ts" />
+import DevExpress from "devextreme/bundles/dx.all";
 import { Version } from '@microsoft/sp-core-library';
 import {
   type IPropertyPaneConfiguration,
@@ -274,7 +276,7 @@ export default class MccRequesterViewWebPart extends BaseClientSideWebPart<IMccR
             form.getEditor("ProposedDateRange")?.reset();       // use dataField (no group prefix)
           }
         },
-        onRowUpdating: (e) => {
+        onRowUpdating: (e: DevExpress.ui.dxDataGrid.RowUpdatingEvent) => {
           
           // if ("SpecialistDecision" in e.newData) {
           //   e.newData.SpecialistApprovalDate = new Date().toISOString();

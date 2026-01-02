@@ -1,3 +1,5 @@
+/// <reference path="../../node_modules/devextreme/bundles/dx.all.d.ts" />
+import DevExpress from "devextreme/bundles/dx.all";
 import { SPFI } from "@pnp/sp";
 import { searchPeople, IPeoplePickerUser } from "./PeopleService";
 

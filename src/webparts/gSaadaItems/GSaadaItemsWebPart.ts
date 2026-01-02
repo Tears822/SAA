@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="../../../node_modules/@types/devextreme/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/bundles/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/integration/jquery.d.ts" />
+import DevExpress from "devextreme/bundles/dx.all";
 // import { Version } from '@microsoft/sp-core-library';
 import {
   type IPropertyPaneConfiguration,
@@ -99,11 +101,11 @@ export default class GSaadaItemsWebPart extends BaseClientSideWebPart<IGSaadaIte
 
         // this.gridData = result;
       },
-      insert: async (values) => {
+      insert: async (values: any) => {
         values.Title = `Goreat Saada ${new Date().toISOString()}`;
         return await sp.web.lists.getByTitle("GSaada_Doses").items.add(values);
       },
-      update: async (key, values) => {
+      update: async (key: any, values: any) => {
         return await sp.web.lists
           .getByTitle("GSaada_Doses")
           .items.getById(key)
@@ -433,7 +435,7 @@ export default class GSaadaItemsWebPart extends BaseClientSideWebPart<IGSaadaIte
       //      this.onGiftTypeChanged(options.value);
       //   }
       // },
-      onInitNewRow: (e) => {
+      onInitNewRow: (e: DevExpress.ui.dxDataGrid.InitNewRowEvent) => {
         const form = $("#saadaForm").dxForm("instance") as
           | DevExpress.ui.dxForm
           | undefined;
@@ -441,7 +443,7 @@ export default class GSaadaItemsWebPart extends BaseClientSideWebPart<IGSaadaIte
         e.data.GiftType = "Card";
         e.data.Status = "Submitted";
       },
-      onEditCanceled(e) {
+      onEditCanceled(e: DevExpress.ui.dxDataGrid.EditCanceledEvent) {
         const form = $("#saadaForm").dxForm("instance") as
           | DevExpress.ui.dxForm
           | undefined;

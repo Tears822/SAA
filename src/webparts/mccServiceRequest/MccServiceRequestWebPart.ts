@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="../../../node_modules/@types/devextreme/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/bundles/dx.all.d.ts" />
+/// <reference path="../../../node_modules/devextreme/integration/jquery.d.ts" />
+import DevExpress from "devextreme/bundles/dx.all";
 import { Version } from '@microsoft/sp-core-library';
 import {
   type IPropertyPaneConfiguration,
@@ -9,6 +11,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 // import type { IReadonlyTheme } from '@microsoft/sp-component-base';
 // import { escape } from '@microsoft/sp-lodash-subset';
 import "devextreme";
+import "devextreme/integration/jquery";
 import * as $ from "jquery";
 import styles from './MccServiceRequestWebPart.module.scss';
 import * as strings from 'MccServiceRequestWebPartStrings';
@@ -68,7 +71,9 @@ export interface IMccServiceRequestWebPartProps {
   description: string;
 }
 
-export let fileUploadPR: DevExpress.ui.dxFileUploader;
+// The variable is module-scoped, used for file upload reference
+// @ts-ignore - variable is assigned but not read in this file (potential future use)
+let fileUploadPR: DevExpress.ui.dxFileUploader;
 
 export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMccServiceRequestWebPartProps> {
   private _sp: SPFI;
@@ -126,7 +131,7 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
       EndDate: undefined,
     };
 
-      $('#dxFormContainer').dxForm({
+      ($('#dxFormContainer') as any).dxForm({
         formData: vm,
         labelMode: 'floating',
         colCount: 2,
@@ -210,7 +215,7 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
                 type: "custom",
                 reevaluate: true,
                 message: "End date must be on/after start date.",
-                validationCallback: ({ value }) => {
+                validationCallback: ({ value }: { value: any }) => {
                   const [s, e] = value || [];
                   return !s || !e ? false : new Date(e) >= new Date(s);
                 }
@@ -267,7 +272,7 @@ export default class MccServiceRequestWebPart extends BaseClientSideWebPart<IMcc
             horizontalAlignment: 'left',
             buttonOptions: {
               type: 'success', text: 'Submit', 
-              onClick: async (e) => {
+              onClick: async (e: DevExpress.ui.dxButton.ClickEvent) => {
                 e.validationGroup.validate();
                 await this._onSubmit(vm);
               },
